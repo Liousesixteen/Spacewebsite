@@ -1,0 +1,14 @@
+{
+  "site": {
+    "title": "Space Data Website",
+    "description": "Comprehensive space data platform"
+  },
+  "nav": {
+    "home": "Home",
+    "launches": "Launches",
+    "spacecraft": "Spacecraft",
+    "astronauts": "Astronauts",
+    "explore": "3D Explore",
+    "industry": "Industry"
+  }
+}

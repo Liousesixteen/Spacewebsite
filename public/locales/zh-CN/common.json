@@ -1,0 +1,14 @@
+{
+  "site": {
+    "title": "航天数据网站",
+    "description": "全面的航天数据平台"
+  },
+  "nav": {
+    "home": "首页",
+    "launches": "发射数据",
+    "spacecraft": "航天器",
+    "astronauts": "宇航员",
+    "explore": "3D探索",
+    "industry": "产业链"
+  }
+}
