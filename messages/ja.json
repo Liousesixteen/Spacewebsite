@@ -2,5 +2,13 @@
   "site": {
     "title": "宇宙データウェブサイト",
     "description": "総合宇宙データプラットフォーム"
+  },
+  "nav": {
+    "home": "ホーム",
+    "launches": "打ち上げ",
+    "spacecraft": "宇宙船",
+    "astronauts": "宇宙飛行士",
+    "explore": "宇宙探査",
+    "industry": "産業"
   }
 }

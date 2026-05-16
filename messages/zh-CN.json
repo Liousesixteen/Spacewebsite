@@ -2,5 +2,13 @@
   "site": {
     "title": "太空数据网站",
     "description": "综合太空数据平台"
+  },
+  "nav": {
+    "home": "首页",
+    "launches": "发射数据",
+    "spacecraft": "航天器",
+    "astronauts": "宇航员",
+    "explore": "深空探索",
+    "industry": "产业链"
   }
 }

@@ -1,0 +1,99 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Rocket, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui';
+import { MobileNav } from './mobile-nav';
+
+interface NavbarProps {
+  locale: string;
+}
+
+export function Navbar({ locale }: NavbarProps) {
+  const t = useTranslations('nav');
+  const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    { href: `/${locale}`, label: t('home') },
+    { href: `/${locale}/launches`, label: t('launches') },
+    { href: `/${locale}/spacecraft`, label: t('spacecraft') },
+    { href: `/${locale}/astronauts`, label: t('astronauts') },
+    { href: `/${locale}/explore`, label: t('explore') },
+    { href: `/${locale}/industry`, label: t('industry') },
+  ];
+
+  const isActive = (href: string) => {
+    if (href === `/${locale}`) {
+      return pathname === href;
+    }
+    return pathname.startsWith(href);
+  };
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-space-900/80 backdrop-blur-md border-b border-space-700">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <Link href={`/${locale}`} className="flex items-center gap-2 group">
+            <Rocket className="w-8 h-8 text-cosmic-blue group-hover:animate-float" />
+            <span className="text-xl font-bold text-gradient">SpaceData</span>
+          </Link>
+
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                  isActive(item.href)
+                    ? 'text-white bg-space-700'
+                    : 'text-star-dim hover:text-white hover:bg-space-800'
+                )}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden md:flex items-center gap-4">
+            <select
+              value={locale}
+              onChange={(e) => {
+                const newLocale = e.target.value;
+                const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+                window.location.href = newPath;
+              }}
+              className="bg-space-700 border border-space-500 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cosmic-blue"
+            >
+              <option value="zh-CN">中文</option>
+              <option value="en">English</option>
+              <option value="ru">Русский</option>
+              <option value="ja">日本語</option>
+            </select>
+            <Button size="sm">登录</Button>
+          </div>
+
+          <button
+            className="md:hidden p-2 text-star-dim hover:text-white"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </nav>
+
+      <MobileNav
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+        navItems={navItems}
+        locale={locale}
+        pathname={pathname}
+      />
+    </header>
+  );
+}
