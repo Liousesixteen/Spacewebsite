@@ -1,7 +1,7 @@
 {
   "site": {
-    "title": "宇宙データウェブサイト",
-    "description": "総合宇宙データプラットフォーム"
+    "title": "SpaceData - 宇宙データプラットフォーム",
+    "description": "打ち上げ、宇宙船、宇宙飛行士、産業情報を網羅した総合宇宙データプラットフォーム"
   },
   "nav": {
     "home": "ホーム",
@@ -10,5 +10,171 @@
     "astronauts": "宇宙飛行士",
     "explore": "宇宙探査",
     "industry": "産業"
+  },
+  "home": {
+    "hero": {
+      "title": "宇宙のフロンティアを探検",
+      "subtitle": "世界で最も包括的な宇宙データプラットフォーム",
+      "description": "ロケットの打ち上げ、宇宙船、宇宙飛行士、宇宙産業をリアルタイムで追跡",
+      "ctaLaunches": "打ち上げを見る",
+      "ctaIndustry": "産業チェーン"
+    },
+    "countdown": {
+      "badge": "次の打ち上げ",
+      "title": "打ち上げカウントダウン",
+      "viewDetails": "詳細を見る",
+      "empty": "予定された打ち上げはありません",
+      "days": "日",
+      "hours": "時間",
+      "minutes": "分",
+      "seconds": "秒"
+    },
+    "stats": {
+      "title": "データ概要",
+      "subtitle": "リアルタイム宇宙統計",
+      "launches": "総打ち上げ数",
+      "spacecraft": "稼働中の宇宙船",
+      "astronauts": "宇宙飛行士",
+      "companies": "企業"
+    },
+    "quickNav": {
+      "title": "クイックナビ",
+      "subtitle": "主要モジュールへ移動",
+      "explore": "今すぐ探索",
+      "launches": {
+        "title": "打ち上げ",
+        "description": "世界のロケット打ち上げ記録、ステータス、詳細"
+      },
+      "spacecraft": {
+        "title": "宇宙船",
+        "description": "衛星・宇宙ステーション・探査機の軌道とミッション"
+      },
+      "astronauts": {
+        "title": "宇宙飛行士",
+        "description": "各国の宇宙飛行士とミッション履歴"
+      },
+      "industry": {
+        "title": "産業",
+        "description": "宇宙産業の企業、技術、材料、機器"
+      },
+      "explore": {
+        "title": "宇宙探査",
+        "description": "衛星軌道と太陽系の3D可視化"
+      },
+      "profile": {
+        "title": "プロフィール",
+        "description": "お気に入り、コメント、個人設定の管理"
+      }
+    },
+    "recentLaunches": {
+      "title": "最近の打ち上げ",
+      "subtitle": "最新6件のミッション",
+      "viewAll": "すべて表示",
+      "empty": "打ち上げ記録がありません"
+    }
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "読み込みに失敗しました",
+    "viewMore": "もっと見る",
+    "viewAll": "すべて表示",
+    "viewDetails": "詳細",
+    "search": "検索",
+    "filter": "フィルター",
+    "reset": "リセット",
+    "submit": "送信",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "save": "保存",
+    "delete": "削除",
+    "edit": "編集",
+    "back": "戻る",
+    "next": "次へ",
+    "previous": "前へ",
+    "page": "ページ",
+    "of": "/",
+    "noData": "データなし",
+    "all": "すべて",
+    "tryAgain": "再試行"
+  },
+  "auth": {
+    "login": "ログイン",
+    "register": "登録",
+    "logout": "ログアウト",
+    "email": "メール",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "name": "名前",
+    "loginTitle": "アカウントにログイン",
+    "loginSubtitle": "宇宙の探査を続ける",
+    "registerTitle": "アカウント作成",
+    "registerSubtitle": "宇宙コミュニティに参加",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "registerNow": "今すぐ登録",
+    "loginNow": "今すぐログイン",
+    "loginWithGoogle": "Googleでログイン",
+    "loginWithGithub": "GitHubでログイン",
+    "loginError": "ログイン失敗。メールとパスワードを確認してください",
+    "registerError": "登録に失敗しました。もう一度お試しください",
+    "passwordMismatch": "パスワードが一致しません",
+    "loggingIn": "ログイン中...",
+    "registering": "登録中..."
+  },
+  "profile": {
+    "title": "プロフィール",
+    "subtitle": "アカウントとお気に入りの管理",
+    "tabs": {
+      "info": "プロフィール",
+      "favorites": "お気に入り",
+      "comments": "コメント",
+      "settings": "設定"
+    },
+    "labels": {
+      "name": "名前",
+      "email": "メール",
+      "role": "ロール",
+      "joinedAt": "登録日",
+      "preferredLocale": "優先言語"
+    },
+    "empty": {
+      "favorites": "お気に入りがありません",
+      "comments": "コメントがありません"
+    }
+  },
+  "launches": {
+    "title": "打ち上げ",
+    "subtitle": "世界のロケット打ち上げ記録",
+    "stats": "打ち上げ統計",
+    "status": {
+      "all": "すべてのステータス",
+      "SUCCESS": "成功",
+      "FAILURE": "失敗",
+      "PLANNED": "予定",
+      "POSTPONED": "延期",
+      "IN_FLIGHT": "飛行中"
+    }
+  },
+  "spacecraft": {
+    "title": "宇宙船",
+    "subtitle": "衛星、宇宙ステーション、探査機、有人宇宙船"
+  },
+  "astronauts": {
+    "title": "宇宙飛行士",
+    "subtitle": "宇宙の英雄たちの物語"
+  },
+  "industry": {
+    "title": "宇宙産業",
+    "subtitle": "企業・技術・材料・機器",
+    "companies": "企業",
+    "technologies": "技術",
+    "materials": "材料",
+    "equipment": "機器"
+  },
+  "explore": {
+    "title": "宇宙探査",
+    "subtitle": "衛星軌道と太陽系の可視化",
+    "satellites": "衛星軌道",
+    "solarSystem": "太陽系"
   }
 }

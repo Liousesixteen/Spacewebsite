@@ -1,7 +1,7 @@
 {
   "site": {
-    "title": "太空数据网站",
-    "description": "综合太空数据平台"
+    "title": "SpaceData - 航天数据网站",
+    "description": "全面的航天数据平台，涵盖发射数据、航天器、宇航员和产业链信息"
   },
   "nav": {
     "home": "首页",
@@ -10,5 +10,171 @@
     "astronauts": "宇航员",
     "explore": "深空探索",
     "industry": "产业链"
+  },
+  "home": {
+    "hero": {
+      "title": "探索宇宙的边界",
+      "subtitle": "全球最全面的航天数据平台",
+      "description": "实时追踪火箭发射、航天器、宇航员和航天产业链的最新动态",
+      "ctaLaunches": "探索发射数据",
+      "ctaIndustry": "了解产业链"
+    },
+    "countdown": {
+      "badge": "下次发射",
+      "title": "即将发射倒计时",
+      "viewDetails": "查看详情",
+      "empty": "暂无即将发射任务",
+      "days": "天",
+      "hours": "时",
+      "minutes": "分",
+      "seconds": "秒"
+    },
+    "stats": {
+      "title": "数据概览",
+      "subtitle": "实时统计航天数据",
+      "launches": "总发射数",
+      "spacecraft": "在轨航天器",
+      "astronauts": "宇航员",
+      "companies": "企业"
+    },
+    "quickNav": {
+      "title": "快速导航",
+      "subtitle": "前往各个核心模块",
+      "explore": "立即探索",
+      "launches": {
+        "title": "发射数据",
+        "description": "实时查看全球火箭发射记录、状态与详情"
+      },
+      "spacecraft": {
+        "title": "航天器",
+        "description": "了解卫星、空间站、探测器的轨道与任务"
+      },
+      "astronauts": {
+        "title": "宇航员",
+        "description": "认识各国宇航员及其太空任务履历"
+      },
+      "industry": {
+        "title": "产业链",
+        "description": "解析航天产业上下游、企业、技术与材料"
+      },
+      "explore": {
+        "title": "深空探索",
+        "description": "卫星轨道与太阳系 3D 可视化"
+      },
+      "profile": {
+        "title": "个人中心",
+        "description": "管理收藏、评论与个人偏好设置"
+      }
+    },
+    "recentLaunches": {
+      "title": "最新发射",
+      "subtitle": "查看最近 6 次发射任务",
+      "viewAll": "查看全部",
+      "empty": "暂无发射记录"
+    }
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "加载失败",
+    "viewMore": "查看更多",
+    "viewAll": "查看全部",
+    "viewDetails": "查看详情",
+    "search": "搜索",
+    "filter": "筛选",
+    "reset": "重置",
+    "submit": "提交",
+    "cancel": "取消",
+    "confirm": "确认",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "back": "返回",
+    "next": "下一页",
+    "previous": "上一页",
+    "page": "第",
+    "of": "页/共",
+    "noData": "暂无数据",
+    "all": "全部",
+    "tryAgain": "重试"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "logout": "退出登录",
+    "email": "邮箱",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "name": "姓名",
+    "loginTitle": "登录账户",
+    "loginSubtitle": "继续探索浩瀚宇宙",
+    "registerTitle": "创建账户",
+    "registerSubtitle": "加入我们的航天社区",
+    "noAccount": "还没有账户？",
+    "hasAccount": "已有账户？",
+    "registerNow": "立即注册",
+    "loginNow": "立即登录",
+    "loginWithGoogle": "使用 Google 登录",
+    "loginWithGithub": "使用 GitHub 登录",
+    "loginError": "登录失败，请检查邮箱和密码",
+    "registerError": "注册失败，请重试",
+    "passwordMismatch": "两次输入的密码不一致",
+    "loggingIn": "登录中...",
+    "registering": "注册中..."
+  },
+  "profile": {
+    "title": "个人中心",
+    "subtitle": "管理你的账户与收藏",
+    "tabs": {
+      "info": "个人信息",
+      "favorites": "我的收藏",
+      "comments": "我的评论",
+      "settings": "设置"
+    },
+    "labels": {
+      "name": "姓名",
+      "email": "邮箱",
+      "role": "身份",
+      "joinedAt": "注册时间",
+      "preferredLocale": "首选语言"
+    },
+    "empty": {
+      "favorites": "暂无收藏内容",
+      "comments": "暂无评论"
+    }
+  },
+  "launches": {
+    "title": "发射数据",
+    "subtitle": "全球火箭发射记录",
+    "stats": "发射统计",
+    "status": {
+      "all": "全部状态",
+      "SUCCESS": "成功",
+      "FAILURE": "失败",
+      "PLANNED": "计划中",
+      "POSTPONED": "推迟",
+      "IN_FLIGHT": "飞行中"
+    }
+  },
+  "spacecraft": {
+    "title": "航天器",
+    "subtitle": "卫星、空间站、探测器与载人飞船"
+  },
+  "astronauts": {
+    "title": "宇航员",
+    "subtitle": "走进太空英雄的故事"
+  },
+  "industry": {
+    "title": "航天产业链",
+    "subtitle": "上下游企业、技术、材料与设备",
+    "companies": "企业",
+    "technologies": "技术",
+    "materials": "材料",
+    "equipment": "设备"
+  },
+  "explore": {
+    "title": "深空探索",
+    "subtitle": "可视化卫星轨道与太阳系",
+    "satellites": "卫星轨道",
+    "solarSystem": "太阳系"
   }
 }

@@ -1,7 +1,7 @@
 {
   "site": {
-    "title": "Space Data Website",
-    "description": "Comprehensive space data platform"
+    "title": "SpaceData - Aerospace Data Platform",
+    "description": "Comprehensive aerospace data platform with launches, spacecraft, astronauts, and industry chain information"
   },
   "nav": {
     "home": "Home",
@@ -10,5 +10,171 @@
     "astronauts": "Astronauts",
     "explore": "Explore",
     "industry": "Industry"
+  },
+  "home": {
+    "hero": {
+      "title": "Explore the Final Frontier",
+      "subtitle": "The world's most comprehensive aerospace data platform",
+      "description": "Track rocket launches, spacecraft, astronauts, and the global space industry in real time",
+      "ctaLaunches": "Explore Launches",
+      "ctaIndustry": "Industry Chain"
+    },
+    "countdown": {
+      "badge": "Next Launch",
+      "title": "Upcoming Launch Countdown",
+      "viewDetails": "View details",
+      "empty": "No upcoming launches",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds"
+    },
+    "stats": {
+      "title": "Data Overview",
+      "subtitle": "Real-time aerospace statistics",
+      "launches": "Total Launches",
+      "spacecraft": "Active Spacecraft",
+      "astronauts": "Astronauts",
+      "companies": "Companies"
+    },
+    "quickNav": {
+      "title": "Quick Navigation",
+      "subtitle": "Jump to any core module",
+      "explore": "Explore now",
+      "launches": {
+        "title": "Launches",
+        "description": "Real-time global rocket launch records, statuses, and details"
+      },
+      "spacecraft": {
+        "title": "Spacecraft",
+        "description": "Satellites, space stations, and probes — orbits and missions"
+      },
+      "astronauts": {
+        "title": "Astronauts",
+        "description": "Meet astronauts from every nation and their space missions"
+      },
+      "industry": {
+        "title": "Industry",
+        "description": "Companies, technologies, materials, and equipment of the space supply chain"
+      },
+      "explore": {
+        "title": "Deep Space Explore",
+        "description": "Satellite orbit and solar system 3D visualizations"
+      },
+      "profile": {
+        "title": "Profile",
+        "description": "Manage favorites, comments, and personal preferences"
+      }
+    },
+    "recentLaunches": {
+      "title": "Recent Launches",
+      "subtitle": "The 6 latest launch missions",
+      "viewAll": "View all",
+      "empty": "No launch records yet"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Failed to load",
+    "viewMore": "View more",
+    "viewAll": "View all",
+    "viewDetails": "View details",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "page": "Page",
+    "of": "of",
+    "noData": "No data",
+    "all": "All",
+    "tryAgain": "Try again"
+  },
+  "auth": {
+    "login": "Sign in",
+    "register": "Sign up",
+    "logout": "Sign out",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "name": "Name",
+    "loginTitle": "Sign in to your account",
+    "loginSubtitle": "Continue exploring the cosmos",
+    "registerTitle": "Create your account",
+    "registerSubtitle": "Join our space community",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "registerNow": "Sign up now",
+    "loginNow": "Sign in now",
+    "loginWithGoogle": "Sign in with Google",
+    "loginWithGithub": "Sign in with GitHub",
+    "loginError": "Sign in failed. Please check your email and password",
+    "registerError": "Registration failed. Please try again",
+    "passwordMismatch": "Passwords do not match",
+    "loggingIn": "Signing in...",
+    "registering": "Registering..."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account and favorites",
+    "tabs": {
+      "info": "Profile",
+      "favorites": "Favorites",
+      "comments": "Comments",
+      "settings": "Settings"
+    },
+    "labels": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "joinedAt": "Joined",
+      "preferredLocale": "Preferred language"
+    },
+    "empty": {
+      "favorites": "No favorites yet",
+      "comments": "No comments yet"
+    }
+  },
+  "launches": {
+    "title": "Launches",
+    "subtitle": "Global rocket launch records",
+    "stats": "Launch statistics",
+    "status": {
+      "all": "All statuses",
+      "SUCCESS": "Success",
+      "FAILURE": "Failure",
+      "PLANNED": "Planned",
+      "POSTPONED": "Postponed",
+      "IN_FLIGHT": "In flight"
+    }
+  },
+  "spacecraft": {
+    "title": "Spacecraft",
+    "subtitle": "Satellites, space stations, probes, and crewed vessels"
+  },
+  "astronauts": {
+    "title": "Astronauts",
+    "subtitle": "Stories of space heroes"
+  },
+  "industry": {
+    "title": "Aerospace Industry",
+    "subtitle": "Companies, technologies, materials, and equipment",
+    "companies": "Companies",
+    "technologies": "Technologies",
+    "materials": "Materials",
+    "equipment": "Equipment"
+  },
+  "explore": {
+    "title": "Deep Space Explore",
+    "subtitle": "Visualize satellite orbits and the solar system",
+    "satellites": "Satellite Orbits",
+    "solarSystem": "Solar System"
   }
 }
