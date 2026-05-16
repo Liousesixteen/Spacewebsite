@@ -15,6 +15,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
+import { FavoriteButton } from '@/components/common/favorite-button';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   ACTIVE: 'success',
@@ -112,12 +113,20 @@ export default async function AstronautDetailPage({
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2 mb-3">
             <h1 className="text-3xl font-bold text-white">{astronaut.name}</h1>
-            <Badge
-              variant={statusColors[astronaut.status] || 'default'}
-              className="text-base px-4 py-1"
-            >
-              {statusLabels[astronaut.status] || astronaut.status}
-            </Badge>
+            <div className="flex items-center gap-3">
+              <Badge
+                variant={statusColors[astronaut.status] || 'default'}
+                className="text-base px-4 py-1"
+              >
+                {statusLabels[astronaut.status] || astronaut.status}
+              </Badge>
+              <FavoriteButton
+                targetType="ASTRONAUT"
+                targetId={astronaut.id}
+                locale={locale}
+                size="sm"
+              />
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-star-dim">
             <div className="flex items-center gap-2">

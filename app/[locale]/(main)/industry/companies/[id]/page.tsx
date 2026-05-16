@@ -15,6 +15,7 @@ import {
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
+import { FavoriteButton } from '@/components/common/favorite-button';
 
 const typeColors: Record<string, BadgeProps['variant']> = {
   STATE_OWNED: 'info',
@@ -83,7 +84,15 @@ export default async function CompanyDetailPage({
           )}
         </div>
         <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white">{company.name}</h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-3xl font-bold text-white">{company.name}</h1>
+            <FavoriteButton
+              targetType="COMPANY"
+              targetId={company.id}
+              locale={locale}
+              size="sm"
+            />
+          </div>
           <div className="mt-3 flex items-center gap-2 flex-wrap">
             <Badge
               variant={typeColors[company.type] || 'default'}

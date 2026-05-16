@@ -12,6 +12,7 @@ import {
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
+import { FavoriteButton } from '@/components/common/favorite-button';
 
 const maturityColors: Record<string, BadgeProps['variant']> = {
   RESEARCH: 'info',
@@ -75,12 +76,20 @@ export default async function TechnologyDetailPage({
             </div>
           </div>
         </div>
-        <Badge
-          variant={maturityColors[technology.maturityLevel] || 'default'}
-          className="text-base px-4 py-1"
-        >
-          {maturityLabels[technology.maturityLevel] || technology.maturityLevel}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={maturityColors[technology.maturityLevel] || 'default'}
+            className="text-base px-4 py-1"
+          >
+            {maturityLabels[technology.maturityLevel] || technology.maturityLevel}
+          </Badge>
+          <FavoriteButton
+            targetType="TECHNOLOGY"
+            targetId={technology.id}
+            locale={locale}
+            size="sm"
+          />
+        </div>
       </div>
 
       <Card className="mb-8">

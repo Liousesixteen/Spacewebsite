@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
+import { FavoriteButton } from '@/components/common/favorite-button';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   SUCCESS: 'success',
@@ -50,14 +51,22 @@ export default async function LaunchDetailPage({
         </Button>
       </Link>
 
-      <div className="flex items-start justify-between mb-6">
+      <div className="flex items-start justify-between mb-6 gap-4">
         <h1 className="text-3xl font-bold text-white">{launch.name}</h1>
-        <Badge
-          variant={statusColors[launch.status] || 'default'}
-          className="text-base px-4 py-1"
-        >
-          {launch.status}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={statusColors[launch.status] || 'default'}
+            className="text-base px-4 py-1"
+          >
+            {launch.status}
+          </Badge>
+          <FavoriteButton
+            targetType="LAUNCH"
+            targetId={launch.id}
+            locale={locale}
+            size="sm"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

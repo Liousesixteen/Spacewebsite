@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
+import { FavoriteButton } from '@/components/common/favorite-button';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   OPERATIONAL: 'success',
@@ -66,12 +67,20 @@ export default async function SpacecraftDetailPage({
             </div>
           </div>
         </div>
-        <Badge
-          variant={statusColors[spacecraft.status] || 'default'}
-          className="text-base px-4 py-1"
-        >
-          {statusLabels[spacecraft.status] || spacecraft.status}
-        </Badge>
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={statusColors[spacecraft.status] || 'default'}
+            className="text-base px-4 py-1"
+          >
+            {statusLabels[spacecraft.status] || spacecraft.status}
+          </Badge>
+          <FavoriteButton
+            targetType="SPACECRAFT"
+            targetId={spacecraft.id}
+            locale={locale}
+            size="sm"
+          />
+        </div>
       </div>
 
       {spacecraft.images.length > 0 && (
