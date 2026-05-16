@@ -6,6 +6,7 @@ import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
+import { CommentSection } from '@/components/common/comment-section';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   SUCCESS: 'success',
@@ -180,6 +181,10 @@ export default async function LaunchDetailPage({
           </CardContent>
         </Card>
       )}
+
+      <div className="mt-8">
+        <CommentSection targetType="LAUNCH" targetId={launch.id} locale={locale} />
+      </div>
     </div>
   );
 }

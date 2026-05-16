@@ -16,6 +16,7 @@ import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
+import { CommentSection } from '@/components/common/comment-section';
 
 const typeColors: Record<string, BadgeProps['variant']> = {
   STATE_OWNED: 'info',
@@ -223,6 +224,14 @@ export default async function CompanyDetailPage({
           </CardContent>
         </Card>
       )}
+
+      <div className="mt-8">
+        <CommentSection
+          targetType="COMPANY"
+          targetId={company.id}
+          locale={locale}
+        />
+      </div>
     </div>
   );
 }

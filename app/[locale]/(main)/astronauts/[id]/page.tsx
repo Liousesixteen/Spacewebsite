@@ -16,6 +16,7 @@ import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
+import { CommentSection } from '@/components/common/comment-section';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   ACTIVE: 'success',
@@ -237,6 +238,14 @@ export default async function AstronautDetailPage({
           )}
         </CardContent>
       </Card>
+
+      <div className="mt-8">
+        <CommentSection
+          targetType="ASTRONAUT"
+          targetId={astronaut.id}
+          locale={locale}
+        />
+      </div>
     </div>
   );
 }

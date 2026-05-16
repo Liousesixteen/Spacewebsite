@@ -13,6 +13,7 @@ import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
+import { CommentSection } from '@/components/common/comment-section';
 
 const maturityColors: Record<string, BadgeProps['variant']> = {
   RESEARCH: 'info',
@@ -191,6 +192,14 @@ export default async function TechnologyDetailPage({
           </CardContent>
         </Card>
       )}
+
+      <div className="mt-8">
+        <CommentSection
+          targetType="TECHNOLOGY"
+          targetId={technology.id}
+          locale={locale}
+        />
+      </div>
     </div>
   );
 }
