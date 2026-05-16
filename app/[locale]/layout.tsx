@@ -3,11 +3,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/lib/i18n/config';
+import { Navbar, Starfield } from '@/components/layout';
 import '../globals.css';
 
 export const metadata: Metadata = {
-  title: 'Space Data Website',
-  description: 'Comprehensive space data platform',
+  title: 'SpaceData - 航天数据网站',
+  description: '全面的航天数据平台，包含发射数据、航天器、宇航员和产业链信息',
 };
 
 type Props = {
@@ -29,9 +30,13 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="min-h-screen bg-space-900">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <Starfield />
+          <Navbar locale={locale} />
+          <main className="pt-16">
+            {children}
+          </main>
         </NextIntlClientProvider>
       </body>
     </html>
