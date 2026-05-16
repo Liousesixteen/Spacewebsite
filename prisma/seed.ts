@@ -7,6 +7,9 @@ import {
   AstronautStatus,
   SpacecraftType,
   SpacecraftStatus,
+  IndustryLevel,
+  CompanyType,
+  TechnologyMaturity,
 } from '@prisma/client';
 
 const prisma = new PrismaClient();
