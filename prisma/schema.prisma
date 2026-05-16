@@ -178,3 +178,131 @@ model LaunchCrew {
 
   @@unique([launchId, astronautId])
 }
+
+// 产业链相关枚举
+enum IndustryLevel {
+  UPSTREAM
+  MIDSTREAM
+  DOWNSTREAM
+}
+
+enum CompanyType {
+  STATE_OWNED
+  PRIVATE
+  PUBLIC
+  STARTUP
+}
+
+enum TechnologyMaturity {
+  RESEARCH
+  EXPERIMENTAL
+  APPLIED
+  MATURE
+}
+
+model IndustrySegment {
+  id           String           @id @default(cuid())
+  name         String
+  level        IndustryLevel
+  category     String
+  description  String           @db.Text
+  technologies String[]
+  marketSize   Float?
+  growthRate   Float?
+  challenges   String[]
+  trends       String[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  companies    CompanySegment[]
+
+  @@index([level])
+  @@index([category])
+}
+
+model Company {
+  id           String           @id @default(cuid())
+  name         String
+  country      String
+  type         CompanyType
+  foundedYear  Int
+  headquarters String
+  employees    Int?
+  revenue      Float?
+  products     String[]
+  achievements String[]
+  website      String?
+  stockCode    String?
+  description  String           @db.Text
+  logo         String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  segments     CompanySegment[]
+
+  @@index([country])
+  @@index([type])
+  @@index([name])
+}
+
+model CompanySegment {
+  id        String          @id @default(cuid())
+  companyId String
+  company   Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  segmentId String
+  segment   IndustrySegment @relation(fields: [segmentId], references: [id], onDelete: Cascade)
+  createdAt DateTime        @default(now())
+
+  @@unique([companyId, segmentId])
+  @@index([companyId])
+  @@index([segmentId])
+}
+
+model Technology {
+  id            String             @id @default(cuid())
+  name          String
+  category      String
+  maturityLevel TechnologyMaturity
+  description   String             @db.Text
+  applications  String[]
+  keyPlayers    String[]
+  challenges    String[]
+  breakthroughs Json
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@index([category])
+  @@index([maturityLevel])
+  @@index([name])
+}
+
+model Material {
+  id            String   @id @default(cuid())
+  name          String
+  category      String
+  properties    Json
+  applications  String[]
+  manufacturers String[]
+  description   String   @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([category])
+  @@index([name])
+}
+
+model Equipment {
+  id             String   @id @default(cuid())
+  name           String
+  category       String
+  manufacturer   String
+  specifications Json
+  applications   String[]
+  description    String   @db.Text
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([category])
+  @@index([manufacturer])
+  @@index([name])
+}
