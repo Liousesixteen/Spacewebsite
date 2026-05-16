@@ -12,7 +12,8 @@
     "sync:launch-sites": "tsx scripts/sync/sync-launch-sites.ts",
     "sync:astronauts": "tsx scripts/sync/sync-astronauts.ts",
     "sync:spacecraft": "tsx scripts/sync/sync-spacecraft.ts",
-    "sync:launches": "tsx scripts/sync/sync-launches.ts"
+    "sync:launches": "tsx scripts/sync/sync-launches.ts",
+    "make-admin": "tsx scripts/make-admin.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
-import { User, LogOut, Heart, MessageSquare, Settings } from 'lucide-react';
+import { User, LogOut, Heart, MessageSquare, Settings, Shield } from 'lucide-react';
 import { Button } from '@/components/ui';
 
 interface UserNavProps {
@@ -101,6 +101,16 @@ export function UserNav({ locale }: UserNavProps) {
             <Settings className="w-4 h-4" />
             设置
           </Link>
+          {session.user.role === 'ADMIN' && (
+            <Link
+              href={`/${locale}/admin`}
+              className="flex items-center gap-2 px-4 py-2 text-sm text-cosmic-blue hover:bg-space-700"
+              onClick={() => setOpen(false)}
+            >
+              <Shield className="w-4 h-4" />
+              管理后台
+            </Link>
+          )}
           <div className="border-t border-space-700 mt-2 pt-2">
             <button
               type="button"

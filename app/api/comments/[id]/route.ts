@@ -16,8 +16,16 @@ export async function DELETE(
   if (!comment) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
+
+  // Admins can moderate any comment; regular users can only delete their own.
   if (comment.userId !== session.user.id) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const me = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { role: true },
+    });
+    if (me?.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
   }
 
   await prisma.comment.delete({ where: { id } });
