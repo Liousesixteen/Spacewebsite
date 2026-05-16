@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
-  Building2,
   MapPin,
   Calendar,
   Users,
@@ -13,10 +12,11 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button } from '@/components/ui';
+import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import { getCompanyImage } from '@/lib/image-fallbacks';
 
 const typeColors: Record<string, BadgeProps['variant']> = {
   STATE_OWNED: 'info',
@@ -72,17 +72,16 @@ export default async function CompanyDetailPage({
       </Link>
 
       <div className="flex items-start gap-6 mb-8">
-        <div className="w-20 h-20 shrink-0 rounded-xl bg-space-700 flex items-center justify-center overflow-hidden">
-          {company.logo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={company.logo}
-              alt={company.name}
-              className="w-full h-full object-contain"
-            />
-          ) : (
-            <Building2 className="w-10 h-10 text-star-dim" />
-          )}
+        <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-space-700">
+          <SmartImage
+            src={getCompanyImage(company.id, company.logo, company.name)}
+            alt={company.name}
+            fallback="company"
+            fill
+            priority
+            sizes="80px"
+            className="object-contain"
+          />
         </div>
         <div className="flex-1">
           <div className="flex items-start justify-between gap-4">

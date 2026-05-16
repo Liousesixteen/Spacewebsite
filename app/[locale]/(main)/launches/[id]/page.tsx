@@ -3,10 +3,14 @@ import { format } from 'date-fns';
 import { Rocket, MapPin, Calendar, Users, Video, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button } from '@/components/ui';
+import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import {
+  getAstronautImage,
+  getLaunchImage,
+} from '@/lib/image-fallbacks';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   SUCCESS: 'success',
@@ -43,6 +47,12 @@ export default async function LaunchDetailPage({
     ? (launch.payloads as unknown as PayloadItem[])
     : [];
 
+  const heroImage = getLaunchImage(
+    launch.id,
+    launch.images,
+    launch.rocket.name
+  );
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       <Link href={`/${locale}/launches`}>
@@ -69,6 +79,19 @@ export default async function LaunchDetailPage({
           />
         </div>
       </div>
+
+      <Card className="mb-8 overflow-hidden">
+        <div className="relative w-full aspect-[16/9]">
+          <SmartImage
+            src={heroImage}
+            alt={launch.name}
+            fallback="launch"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 896px"
+          />
+        </div>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
@@ -141,17 +164,15 @@ export default async function LaunchDetailPage({
                   href={`/${locale}/astronauts/${crew.astronaut.id}`}
                 >
                   <div className="text-center p-4 bg-space-700 rounded-lg hover:bg-space-600 transition-colors">
-                    <div className="w-16 h-16 mx-auto mb-2 rounded-full bg-space-600 flex items-center justify-center">
-                      {crew.astronaut.photo ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={crew.astronaut.photo}
-                          alt={crew.astronaut.name}
-                          className="w-full h-full rounded-full object-cover"
-                        />
-                      ) : (
-                        <Users className="w-8 h-8 text-star-dim" />
-                      )}
+                    <div className="relative w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden bg-space-600">
+                      <SmartImage
+                        src={getAstronautImage(crew.astronaut.photo)}
+                        alt={crew.astronaut.name}
+                        fallback="astronaut"
+                        fill
+                        sizes="64px"
+                        className="rounded-full"
+                      />
                     </div>
                     <p className="text-white text-sm">{crew.astronaut.name}</p>
                     <p className="text-star-dim text-xs">{crew.role}</p>

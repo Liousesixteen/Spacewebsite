@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Satellite, Calendar, Building2, Orbit } from 'lucide-react';
-import { Card, CardContent, Badge } from '@/components/ui';
+import { Calendar, Building2, Orbit } from 'lucide-react';
+import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
 import type { Spacecraft } from '@/lib/api/spacecraft';
+import { getSpacecraftImage } from '@/lib/image-fallbacks';
 
 const statusColors = {
   OPERATIONAL: 'success',
@@ -30,17 +31,29 @@ interface SpacecraftCardProps {
 }
 
 export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
+  const image = getSpacecraftImage(
+    spacecraft.id,
+    spacecraft.images,
+    spacecraft.name
+  );
+
   return (
     <Link href={`/${locale}/spacecraft/${spacecraft.id}`}>
-      <Card variant="glow" className="h-full cursor-pointer">
+      <Card variant="glow" className="h-full cursor-pointer overflow-hidden">
+        <div className="relative w-full aspect-[16/9]">
+          <SmartImage
+            src={image}
+            alt={spacecraft.name}
+            fallback="satellite"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
         <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-start gap-2">
-              <Satellite className="w-5 h-5 text-cosmic-blue mt-1 shrink-0" />
-              <h3 className="text-lg font-semibold text-white line-clamp-2">
-                {spacecraft.name}
-              </h3>
-            </div>
+          <div className="flex items-start justify-between mb-4 gap-2">
+            <h3 className="text-lg font-semibold text-white line-clamp-2">
+              {spacecraft.name}
+            </h3>
             <Badge variant={statusColors[spacecraft.status]}>
               {statusLabels[spacecraft.status]}
             </Badge>

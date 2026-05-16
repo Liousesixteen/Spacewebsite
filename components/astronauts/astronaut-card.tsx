@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import { User, Flag, Building2, Plane, Clock } from 'lucide-react';
-import { Card, CardContent, Badge } from '@/components/ui';
+import { Flag, Building2, Plane, Clock } from 'lucide-react';
+import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
 import { formatTimeInSpace, type Astronaut } from '@/lib/api/astronauts';
+import { getAstronautImage } from '@/lib/image-fallbacks';
 
 const statusColors = {
   ACTIVE: 'success',
@@ -26,17 +27,15 @@ export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
       <Card variant="glow" className="h-full cursor-pointer">
         <CardContent className="p-6">
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full bg-space-700 flex items-center justify-center shrink-0 overflow-hidden">
-              {astronaut.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={astronaut.photo}
-                  alt={astronaut.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <User className="w-8 h-8 text-star-dim" />
-              )}
+            <div className="relative w-16 h-16 rounded-full bg-space-700 shrink-0 overflow-hidden">
+              <SmartImage
+                src={getAstronautImage(astronaut.photo)}
+                alt={astronaut.name}
+                fallback="astronaut"
+                fill
+                sizes="64px"
+                className="rounded-full"
+              />
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">

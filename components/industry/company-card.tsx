@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { Building2, MapPin, Calendar } from 'lucide-react';
-import { Card, CardContent, Badge } from '@/components/ui';
+import { MapPin, Calendar } from 'lucide-react';
+import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import type { Company } from '@/lib/api/industry';
+import { getCompanyImage } from '@/lib/image-fallbacks';
 
 const typeColors: Record<string, BadgeProps['variant']> = {
   STATE_OWNED: 'info',
@@ -29,17 +30,15 @@ export function CompanyCard({ company, locale }: CompanyCardProps) {
       <Card variant="glow" className="h-full cursor-pointer">
         <CardContent className="p-6">
           <div className="flex items-start gap-4 mb-4">
-            <div className="w-12 h-12 shrink-0 rounded-lg bg-space-700 flex items-center justify-center overflow-hidden">
-              {company.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={company.logo}
-                  alt={company.name}
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <Building2 className="w-6 h-6 text-star-dim" />
-              )}
+            <div className="relative w-12 h-12 shrink-0 rounded-lg bg-space-700 overflow-hidden">
+              <SmartImage
+                src={getCompanyImage(company.id, company.logo, company.name)}
+                alt={company.name}
+                fallback="company"
+                fill
+                sizes="48px"
+                className="object-contain"
+              />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-lg font-semibold text-white line-clamp-1">

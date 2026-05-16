@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Rocket, MapPin, Calendar } from 'lucide-react';
-import { Card, CardContent, Badge } from '@/components/ui';
+import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
 import type { Launch } from '@/lib/api/launches';
+import { getLaunchImage } from '@/lib/image-fallbacks';
 
 const statusColors = {
   SUCCESS: 'success',
@@ -26,9 +27,20 @@ interface LaunchCardProps {
 }
 
 export function LaunchCard({ launch, locale }: LaunchCardProps) {
+  const image = getLaunchImage(launch.id, launch.images, launch.rocket.name);
+
   return (
     <Link href={`/${locale}/launches/${launch.id}`}>
-      <Card variant="glow" className="h-full cursor-pointer">
+      <Card variant="glow" className="h-full cursor-pointer overflow-hidden">
+        <div className="relative w-full aspect-[16/9]">
+          <SmartImage
+            src={image}
+            alt={launch.name}
+            fallback="launch"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        </div>
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
             <h3 className="text-lg font-semibold text-white line-clamp-2">

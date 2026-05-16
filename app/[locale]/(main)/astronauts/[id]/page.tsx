@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import {
-  User,
   Flag,
   Building2,
   Cake,
@@ -13,10 +12,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button } from '@/components/ui';
+import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import { getAstronautImage } from '@/lib/image-fallbacks';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   ACTIVE: 'success',
@@ -98,17 +98,15 @@ export default async function AstronautDetailPage({
       </Link>
 
       <div className="flex flex-col md:flex-row items-start gap-6 mb-8">
-        <div className="w-32 h-32 rounded-2xl bg-space-700 flex items-center justify-center overflow-hidden shrink-0">
-          {astronaut.photo ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={astronaut.photo}
-              alt={astronaut.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <User className="w-16 h-16 text-star-dim" />
-          )}
+        <div className="relative w-32 h-32 rounded-2xl overflow-hidden shrink-0 bg-space-700">
+          <SmartImage
+            src={getAstronautImage(astronaut.photo)}
+            alt={astronaut.name}
+            fallback="astronaut"
+            fill
+            priority
+            sizes="128px"
+          />
         </div>
 
         <div className="flex-1">

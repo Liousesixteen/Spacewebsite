@@ -11,10 +11,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button } from '@/components/ui';
+import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import { getSpacecraftImage } from '@/lib/image-fallbacks';
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   OPERATIONAL: 'success',
@@ -48,6 +49,14 @@ export default async function SpacecraftDetailPage({
   });
 
   if (!spacecraft) notFound();
+
+  const validImages = spacecraft.images.filter(
+    (img) => img && !img.includes('example.com') && !img.startsWith('http://')
+  );
+  const heroImage =
+    getSpacecraftImage(spacecraft.id, spacecraft.images, spacecraft.name) ??
+    validImages[0];
+  const extraImages = validImages.filter((img) => img !== heroImage);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -84,18 +93,36 @@ export default async function SpacecraftDetailPage({
         </div>
       </div>
 
-      {spacecraft.images.length > 0 && (
+      <Card className="mb-8 overflow-hidden">
+        <div className="relative w-full aspect-[16/9]">
+          <SmartImage
+            src={heroImage}
+            alt={spacecraft.name}
+            fallback="satellite"
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 896px"
+          />
+        </div>
+      </Card>
+
+      {extraImages.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {spacecraft.images.map((image, index) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+              {extraImages.map((image, index) => (
+                <div
                   key={index}
-                  src={image}
-                  alt={`${spacecraft.name} ${index + 1}`}
-                  className="w-full h-64 object-cover rounded"
-                />
+                  className="relative w-full h-64 overflow-hidden rounded"
+                >
+                  <SmartImage
+                    src={image}
+                    alt={`${spacecraft.name} ${index + 1}`}
+                    fallback="satellite"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
               ))}
             </div>
           </CardContent>
