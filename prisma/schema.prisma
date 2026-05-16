@@ -1,13 +1,180 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// 枚举类型
+enum LaunchStatus {
+  SUCCESS
+  FAILURE
+  PLANNED
+  POSTPONED
+  IN_FLIGHT
+}
+
+enum RocketStatus {
+  ACTIVE
+  RETIRED
+  IN_DEVELOPMENT
+}
+
+enum SpacecraftType {
+  SPACE_STATION
+  SATELLITE
+  PROBE
+  CREWED_SPACECRAFT
+  CARGO_SPACECRAFT
+}
+
+enum SpacecraftStatus {
+  OPERATIONAL
+  RETIRED
+  LOST
+}
+
+enum AstronautStatus {
+  ACTIVE
+  RETIRED
+  DECEASED
+}
+
+enum LaunchSiteStatus {
+  ACTIVE
+  INACTIVE
+  UNDER_CONSTRUCTION
+}
+
+model Rocket {
+  id            String       @id @default(cuid())
+  name          String
+  manufacturer  String
+  country       String
+  height        Float
+  diameter      Float
+  mass          Float
+  payloadToLEO  Float
+  payloadToGTO  Float
+  stages        Int
+  firstFlight   DateTime?
+  status        RocketStatus
+  successRate   Float        @default(0)
+  description   String       @db.Text
+  images        String[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  launches      Launch[]
+
+  @@index([country])
+  @@index([status])
+}
+
+model LaunchSite {
+  id          String           @id @default(cuid())
+  name        String
+  country     String
+  region      String
+  latitude    Float
+  longitude   Float
+  operator    String
+  status      LaunchSiteStatus
+  pads        Json
+  description String           @db.Text
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  launches    Launch[]
+
+  @@index([country])
+  @@index([status])
+}
+
+model Astronaut {
+  id               String          @id @default(cuid())
+  name             String
+  nationality      String
+  agency           String
+  birthDate        DateTime
+  status           AstronautStatus
+  spaceFlights     Int             @default(0)
+  totalTimeInSpace Int             @default(0)
+  bio              String          @db.Text
+  photo            String?
+  socialLinks      Json?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  launchCrews      LaunchCrew[]
+
+  @@index([nationality])
+  @@index([agency])
+  @@index([status])
+}
+
+model Spacecraft {
+  id               String           @id @default(cuid())
+  name             String
+  type             SpacecraftType
+  operator         String
+  launchDate       DateTime
+  status           SpacecraftStatus
+  orbitType        String
+  orbitAltitude    Float?
+  orbitInclination Float?
+  orbitPeriod      Float?
+  mass             Float
+  dimensions       String
+  mission          String           @db.Text
+  description      String           @db.Text
+  images           String[]
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([operator])
+}
+
+model Launch {
+  id                 String       @id @default(cuid())
+  name               String
+  date               DateTime
+  status             LaunchStatus
+  missionDescription String       @db.Text
+  payloads           Json
+  videoUrl           String?
+  images             String[]
+  externalId         String?      @unique
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  rocketId           String
+  rocket             Rocket       @relation(fields: [rocketId], references: [id])
+
+  launchSiteId       String
+  launchSite         LaunchSite   @relation(fields: [launchSiteId], references: [id])
+
+  crews              LaunchCrew[]
+
+  @@index([date])
+  @@index([status])
+  @@index([rocketId])
+  @@index([launchSiteId])
+}
+
+model LaunchCrew {
+  id          String    @id @default(cuid())
+  launchId    String
+  launch      Launch    @relation(fields: [launchId], references: [id], onDelete: Cascade)
+  astronautId String
+  astronaut   Astronaut @relation(fields: [astronautId], references: [id])
+  role        String
+
+  @@unique([launchId, astronautId])
 }
