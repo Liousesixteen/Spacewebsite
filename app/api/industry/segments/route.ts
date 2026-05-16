@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 
+export const revalidate = 60;
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const level = searchParams.get('level');
@@ -17,5 +19,12 @@ export async function GET(request: NextRequest) {
     orderBy: [{ level: 'asc' }, { category: 'asc' }],
   });
 
-  return NextResponse.json({ data: segments });
+  return NextResponse.json(
+    { data: segments },
+    {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+      },
+    }
+  );
 }

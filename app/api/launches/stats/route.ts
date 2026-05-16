@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 interface YearStat {
   year: number;
@@ -44,10 +44,17 @@ export async function GET() {
     count: Number(d.count),
   }));
 
-  return NextResponse.json({
-    byYear,
-    byCountry,
-    byStatus: byStatus.map((s) => ({ status: s.status, count: s._count })),
-    total,
-  });
+  return NextResponse.json(
+    {
+      byYear,
+      byCountry,
+      byStatus: byStatus.map((s) => ({ status: s.status, count: s._count })),
+      total,
+    },
+    {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+      },
+    }
+  );
 }

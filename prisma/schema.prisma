@@ -116,6 +116,7 @@ model Astronaut {
   @@index([nationality])
   @@index([agency])
   @@index([status])
+  @@index([totalTimeInSpace(sort: Desc)])
 }
 
 model Spacecraft {
@@ -140,6 +141,7 @@ model Spacecraft {
   @@index([type])
   @@index([status])
   @@index([operator])
+  @@index([launchDate(sort: Desc)])
 }
 
 model Launch {
@@ -167,6 +169,7 @@ model Launch {
   @@index([status])
   @@index([rocketId])
   @@index([launchSiteId])
+  @@index([date(sort: Desc)], map: "Launch_date_desc_idx")
 }
 
 model LaunchCrew {

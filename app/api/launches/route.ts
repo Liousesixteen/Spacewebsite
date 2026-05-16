@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 
+export const revalidate = 60;
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const page = parseInt(searchParams.get('page') || '1');
@@ -33,13 +35,20 @@ export async function GET(request: NextRequest) {
     prisma.launch.count({ where }),
   ]);
 
-  return NextResponse.json({
-    data: launches,
-    pagination: {
-      page,
-      limit,
-      total,
-      totalPages: Math.ceil(total / limit),
+  return NextResponse.json(
+    {
+      data: launches,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     },
-  });
+    {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+      },
+    }
+  );
 }
