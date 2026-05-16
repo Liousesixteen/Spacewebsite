@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { locales } from '@/lib/i18n/config';
 import { Navbar, Starfield } from '@/components/layout';
 import { QueryProvider } from '@/components/providers/query-provider';
+import { AuthProvider } from '@/components/providers/auth-provider';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -33,13 +34,15 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="min-h-screen bg-space-900">
         <NextIntlClientProvider messages={messages}>
-          <QueryProvider>
-            <Starfield />
-            <Navbar locale={locale} />
-            <main className="pt-16">
-              {children}
-            </main>
-          </QueryProvider>
+          <AuthProvider>
+            <QueryProvider>
+              <Starfield />
+              <Navbar locale={locale} />
+              <main className="pt-16">
+                {children}
+              </main>
+            </QueryProvider>
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
