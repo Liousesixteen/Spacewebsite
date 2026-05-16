@@ -1,0 +1,141 @@
+'use client';
+
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
+import { Beaker, Tag, Factory } from 'lucide-react';
+import { getMaterials } from '@/lib/api/industry';
+import { Card, CardContent, Badge, Button } from '@/components/ui';
+
+interface MaterialFilters {
+  category?: string;
+}
+
+export default function MaterialsPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<MaterialFilters>({});
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['materials', page, filters],
+    queryFn: () => getMaterials({ page, limit: 12, ...filters }),
+  });
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="flex items-center gap-3 mb-8">
+        <Beaker className="w-8 h-8 text-cosmic-blue" />
+        <h1 className="text-3xl font-bold text-white">材料库</h1>
+      </div>
+
+      <div className="flex flex-wrap gap-4 p-4 bg-space-800 rounded-xl border border-space-600">
+        <select
+          value={filters.category || ''}
+          onChange={(e) => {
+            setFilters({ category: e.target.value || undefined });
+            setPage(1);
+          }}
+          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-white"
+        >
+          <option value="">全部分类</option>
+          <option value="金属合金">金属合金</option>
+          <option value="复合材料">复合材料</option>
+          <option value="陶瓷材料">陶瓷材料</option>
+          <option value="高分子材料">高分子材料</option>
+          <option value="隔热材料">隔热材料</option>
+          <option value="推进剂">推进剂</option>
+          <option value="电子材料">电子材料</option>
+          <option value="光学材料">光学材料</option>
+        </select>
+
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setFilters({});
+            setPage(1);
+          }}
+        >
+          重置
+        </Button>
+      </div>
+
+      {isLoading && (
+        <div className="text-center py-12 text-star-dim">加载中...</div>
+      )}
+
+      {error && (
+        <div className="text-center py-12 text-red-400">加载失败</div>
+      )}
+
+      {data && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            {data.data.map((material) => (
+              <Link
+                key={material.id}
+                href={`/${locale}/industry/materials/${material.id}`}
+              >
+                <Card variant="glow" className="h-full cursor-pointer">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-2 mb-3">
+                      <Beaker className="w-5 h-5 text-cosmic-blue mt-1 shrink-0" />
+                      <h3 className="text-lg font-semibold text-white line-clamp-2">
+                        {material.name}
+                      </h3>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <Tag className="w-4 h-4 text-star-dim" />
+                      <Badge variant="default">{material.category}</Badge>
+                    </div>
+                    <p className="text-sm text-star-dim line-clamp-3">
+                      {material.description}
+                    </p>
+                    {material.manufacturers.length > 0 && (
+                      <div className="mt-4 flex items-center gap-2 text-xs text-star-dim">
+                        <Factory className="w-3 h-3" />
+                        <span className="line-clamp-1">
+                          {material.manufacturers.slice(0, 2).join('、')}
+                          {material.manufacturers.length > 2 &&
+                            ` 等${material.manufacturers.length}家`}
+                        </span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+
+          {data.data.length === 0 && (
+            <div className="text-center py-12 text-star-dim">暂无数据</div>
+          )}
+
+          {data.pagination.totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-8">
+              <Button
+                variant="outline"
+                disabled={page === 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                上一页
+              </Button>
+              <span className="px-4 py-2 text-star-dim">
+                {page} / {data.pagination.totalPages}
+              </span>
+              <Button
+                variant="outline"
+                disabled={page === data.pagination.totalPages}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                下一页
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
