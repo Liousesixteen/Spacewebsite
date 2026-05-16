@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -14,6 +15,37 @@ import { Card, CardContent, Badge, Button } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const technology = await prisma.technology.findUnique({
+      where: { id },
+      select: { name: true, description: true, category: true },
+    });
+    if (!technology) return { title: '未找到 - SpaceData' };
+
+    const description =
+      technology.description?.slice(0, 160) ??
+      `${technology.name} - ${technology.category}`;
+
+    return {
+      title: `${technology.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: technology.name,
+        description,
+      },
+    };
+  } catch (error) {
+    console.error('[technology metadata] failed:', error);
+    return { title: '技术详情 - SpaceData' };
+  }
+}
 
 const maturityColors: Record<string, BadgeProps['variant']> = {
   RESEARCH: 'info',

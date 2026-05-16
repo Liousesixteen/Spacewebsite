@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -17,6 +18,38 @@ import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getCompanyImage } from '@/lib/image-fallbacks';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const company = await prisma.company.findUnique({
+      where: { id },
+      select: { name: true, description: true, logo: true, country: true },
+    });
+    if (!company) return { title: '未找到 - SpaceData' };
+
+    const description =
+      company.description?.slice(0, 160) ??
+      `${company.name} - ${company.country} 航天企业`;
+
+    return {
+      title: `${company.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: company.name,
+        description,
+        images: company.logo ? [company.logo] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('[company metadata] failed:', error);
+    return { title: '企业详情 - SpaceData' };
+  }
+}
 
 const typeColors: Record<string, BadgeProps['variant']> = {
   STATE_OWNED: 'info',

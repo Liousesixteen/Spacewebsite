@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import {
@@ -17,6 +18,38 @@ import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getAstronautImage } from '@/lib/image-fallbacks';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const astronaut = await prisma.astronaut.findUnique({
+      where: { id },
+      select: { name: true, bio: true, photo: true, nationality: true },
+    });
+    if (!astronaut) return { title: '未找到 - SpaceData' };
+
+    const description =
+      astronaut.bio?.slice(0, 160) ??
+      `${astronaut.name} - ${astronaut.nationality} 宇航员`;
+
+    return {
+      title: `${astronaut.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: astronaut.name,
+        description,
+        images: astronaut.photo ? [astronaut.photo] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('[astronaut metadata] failed:', error);
+    return { title: '宇航员详情 - SpaceData' };
+  }
+}
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   ACTIVE: 'success',

@@ -1,8 +1,45 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Wrench, Tag, Factory, Target, ArrowLeft } from 'lucide-react';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const equipment = await prisma.equipment.findUnique({
+      where: { id },
+      select: {
+        name: true,
+        description: true,
+        category: true,
+        manufacturer: true,
+      },
+    });
+    if (!equipment) return { title: '未找到 - SpaceData' };
+
+    const description =
+      equipment.description?.slice(0, 160) ??
+      `${equipment.name} - ${equipment.manufacturer}`;
+
+    return {
+      title: `${equipment.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: equipment.name,
+        description,
+      },
+    };
+  } catch (error) {
+    console.error('[equipment metadata] failed:', error);
+    return { title: '设备详情 - SpaceData' };
+  }
+}
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return (

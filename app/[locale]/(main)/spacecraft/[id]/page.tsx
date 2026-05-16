@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import {
@@ -16,6 +17,40 @@ import type { BadgeProps } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getSpacecraftImage } from '@/lib/image-fallbacks';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const spacecraft = await prisma.spacecraft.findUnique({
+      where: { id },
+      select: { name: true, description: true, images: true },
+    });
+    if (!spacecraft) return { title: '未找到 - SpaceData' };
+
+    const description = spacecraft.description?.slice(0, 160) ?? '航天器详情';
+    const image =
+      spacecraft.images && spacecraft.images.length > 0
+        ? spacecraft.images[0]
+        : undefined;
+
+    return {
+      title: `${spacecraft.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: spacecraft.name,
+        description,
+        images: image ? [image] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('[spacecraft metadata] failed:', error);
+    return { title: '航天器详情 - SpaceData' };
+  }
+}
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   OPERATIONAL: 'success',

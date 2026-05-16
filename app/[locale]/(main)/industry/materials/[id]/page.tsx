@@ -1,8 +1,40 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Beaker, Tag, Target, Factory, ArrowLeft } from 'lucide-react';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Badge, Button } from '@/components/ui';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const material = await prisma.material.findUnique({
+      where: { id },
+      select: { name: true, description: true, category: true },
+    });
+    if (!material) return { title: '未找到 - SpaceData' };
+
+    const description =
+      material.description?.slice(0, 160) ??
+      `${material.name} - ${material.category}`;
+
+    return {
+      title: `${material.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: material.name,
+        description,
+      },
+    };
+  } catch (error) {
+    console.error('[material metadata] failed:', error);
+    return { title: '材料详情 - SpaceData' };
+  }
+}
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return (

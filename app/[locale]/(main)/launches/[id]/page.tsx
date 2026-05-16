@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import { Rocket, MapPin, Calendar, Users, Video, ArrowLeft } from 'lucide-react';
@@ -11,6 +12,39 @@ import {
   getAstronautImage,
   getLaunchImage,
 } from '@/lib/image-fallbacks';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  try {
+    const launch = await prisma.launch.findUnique({
+      where: { id },
+      select: { name: true, missionDescription: true, images: true },
+    });
+    if (!launch) return { title: '未找到 - SpaceData' };
+
+    const description =
+      launch.missionDescription?.slice(0, 160) ?? '航天发射详情';
+    const image =
+      launch.images && launch.images.length > 0 ? launch.images[0] : undefined;
+
+    return {
+      title: `${launch.name} - SpaceData`,
+      description,
+      openGraph: {
+        title: launch.name,
+        description,
+        images: image ? [image] : undefined,
+      },
+    };
+  } catch (error) {
+    console.error('[launch metadata] failed:', error);
+    return { title: '航天发射详情 - SpaceData' };
+  }
+}
 
 const statusColors: Record<string, BadgeProps['variant']> = {
   SUCCESS: 'success',
