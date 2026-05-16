@@ -52,6 +52,9 @@ export async function fetchLL2<T = unknown>(
 /**
  * Fetch an LL2 list endpoint, automatically following `next` pagination URLs
  * until either there is no next page or we collect at least `maxItems` results.
+ *
+ * On 429 (rate limited), returns whatever has been collected so far rather than
+ * throwing — partial data is still useful.
  */
 export async function fetchLL2List<T = unknown>(
   endpoint: string,
@@ -69,9 +72,18 @@ export async function fetchLL2List<T = unknown>(
   let nextUrl: string | null = url.toString();
   while (nextUrl && all.length < maxItems) {
     await sleep(DELAY_MS);
-    const page = await getJson<LL2Page<T>>(nextUrl);
-    all.push(...page.results);
-    nextUrl = page.next;
+    try {
+      const page = await getJson<LL2Page<T>>(nextUrl);
+      all.push(...page.results);
+      nextUrl = page.next;
+    } catch (err) {
+      const msg = (err as Error).message;
+      if (msg.includes('429')) {
+        console.warn(`[LL2] Rate limited after ${all.length} items; returning partial results`);
+        break;
+      }
+      throw err;
+    }
   }
   return all.slice(0, maxItems);
 }

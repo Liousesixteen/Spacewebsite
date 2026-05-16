@@ -149,14 +149,14 @@ export async function syncLaunches(): Promise<{ added: number; updated: number; 
   console.log('[launches] Fetching upcoming launches from LL2...');
   const upcoming = await fetchLL2List<LL2Launch>(
     '/launch/upcoming/',
-    { limit: 50, mode: 'detailed' },
-    50
+    { limit: 100, mode: 'detailed' },
+    100
   );
   console.log('[launches] Fetching previous launches from LL2...');
   const previous = await fetchLL2List<LL2Launch>(
     '/launch/previous/',
     { limit: 100, mode: 'detailed', ordering: '-net' },
-    100
+    500
   );
   const all = [...upcoming, ...previous];
   console.log(`[launches] Got ${all.length} launches total (upcoming=${upcoming.length}, previous=${previous.length})`);
