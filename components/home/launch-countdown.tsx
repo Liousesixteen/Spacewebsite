@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { Rocket, Calendar } from 'lucide-react';
@@ -41,7 +41,10 @@ function calcTimeLeft(target: Date): TimeLeft {
 
 export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
   const t = useTranslations('home.countdown');
-  const targetDate = nextLaunch ? new Date(nextLaunch.date) : null;
+  const targetDate = useMemo(
+    () => (nextLaunch ? new Date(nextLaunch.date) : null),
+    [nextLaunch]
+  );
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
     targetDate ? calcTimeLeft(targetDate) : { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 }
   );
