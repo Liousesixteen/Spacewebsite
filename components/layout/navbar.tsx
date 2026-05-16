@@ -6,8 +6,8 @@ import { useTranslations } from 'next-intl';
 import { Rocket, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui';
 import { MobileNav } from './mobile-nav';
+import { UserNav } from '@/components/auth/user-nav';
 
 interface NavbarProps {
   locale: string;
@@ -75,7 +75,7 @@ export function Navbar({ locale }: NavbarProps) {
               <option value="ru">Русский</option>
               <option value="ja">日本語</option>
             </select>
-            <Button size="sm">登录</Button>
+            <UserNav locale={locale} />
           </div>
 
           <button
