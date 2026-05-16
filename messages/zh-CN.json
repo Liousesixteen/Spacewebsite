@@ -176,5 +176,21 @@
     "subtitle": "可视化卫星轨道与太阳系",
     "satellites": "卫星轨道",
     "solarSystem": "太阳系"
+  },
+  "legal": {
+    "about": "关于我们",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "dataSources": "数据来源",
+    "contact": "联系我们"
+  },
+  "footer": {
+    "tagline": "全面的航天数据平台",
+    "product": "产品",
+    "company": "公司",
+    "legal": "法律",
+    "follow": "关注我们",
+    "copyright": "© 2026 SpaceData. 版权所有。",
+    "madeWith": "用 ❤ 制作"
   }
 }

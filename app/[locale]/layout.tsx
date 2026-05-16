@@ -3,7 +3,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/lib/i18n/config';
-import { Navbar, Starfield } from '@/components/layout';
+import { Navbar, Starfield, Footer } from '@/components/layout';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { AuthProvider } from '@/components/providers/auth-provider';
 import '../globals.css';
@@ -64,6 +64,7 @@ export default async function RootLayout({
               <main className="pt-16">
                 {children}
               </main>
+              <Footer locale={locale} />
             </QueryProvider>
           </AuthProvider>
         </NextIntlClientProvider>

@@ -176,5 +176,21 @@
     "subtitle": "Визуализация орбит спутников и Солнечной системы",
     "satellites": "Орбиты спутников",
     "solarSystem": "Солнечная система"
+  },
+  "legal": {
+    "about": "About Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "dataSources": "Data Sources",
+    "contact": "Contact Us"
+  },
+  "footer": {
+    "tagline": "Comprehensive aerospace data platform",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "follow": "Follow Us",
+    "copyright": "© 2026 SpaceData. All rights reserved.",
+    "madeWith": "Made with ❤"
   }
 }

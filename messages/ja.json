@@ -176,5 +176,21 @@
     "subtitle": "衛星軌道と太陽系の可視化",
     "satellites": "衛星軌道",
     "solarSystem": "太陽系"
+  },
+  "legal": {
+    "about": "About Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "dataSources": "Data Sources",
+    "contact": "Contact Us"
+  },
+  "footer": {
+    "tagline": "Comprehensive aerospace data platform",
+    "product": "Product",
+    "company": "Company",
+    "legal": "Legal",
+    "follow": "Follow Us",
+    "copyright": "© 2026 SpaceData. All rights reserved.",
+    "madeWith": "Made with ❤"
   }
 }
