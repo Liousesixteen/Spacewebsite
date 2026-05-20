@@ -8,12 +8,20 @@ import {
   Orbit,
   Ruler,
   Weight,
-  ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
-import type { BadgeProps } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  StatusBadge,
+  SmartImage,
+  ImageLightbox,
+  Breadcrumbs,
+} from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getSpacecraftImage } from '@/lib/image-fallbacks';
@@ -52,18 +60,6 @@ export async function generateMetadata({
   }
 }
 
-const statusColors: Record<string, BadgeProps['variant']> = {
-  OPERATIONAL: 'success',
-  RETIRED: 'default',
-  LOST: 'error',
-};
-
-const statusLabels: Record<string, string> = {
-  OPERATIONAL: '运行中',
-  RETIRED: '已退役',
-  LOST: '已失联',
-};
-
 const typeLabels: Record<string, string> = {
   SPACE_STATION: '空间站',
   SATELLITE: '卫星',
@@ -91,16 +87,80 @@ export default async function SpacecraftDetailPage({
   const heroImage =
     getSpacecraftImage(spacecraft.id, spacecraft.images, spacecraft.name) ??
     validImages[0];
-  const extraImages = validImages.filter((img) => img !== heroImage);
+  const seenImages = new Set<string>();
+  if (heroImage) seenImages.add(heroImage);
+  validImages.forEach((img) => seenImages.add(img));
+  const allImages = Array.from(seenImages);
+
+  // Related: spacecraft of same type
+  const sameTypeSpacecraft = await prisma.spacecraft.findMany({
+    where: {
+      id: { not: spacecraft.id },
+      type: spacecraft.type,
+    },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      operator: true,
+    },
+    orderBy: { launchDate: 'desc' },
+    take: 3,
+  });
+
+  // Related: spacecraft by same operator
+  const sameOperatorSpacecraft = await prisma.spacecraft.findMany({
+    where: {
+      id: { not: spacecraft.id },
+      operator: spacecraft.operator,
+    },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      type: true,
+    },
+    orderBy: { launchDate: 'desc' },
+    take: 3,
+  });
+
+  // Related: launches that deployed this spacecraft (find by name in payloads)
+  // Since payloads is JSON, we search for launches where the spacecraft name appears in any payload name
+  const spacecraftNameLower = spacecraft.name.toLowerCase();
+  const allLaunches = await prisma.launch.findMany({
+    where: {
+      missionDescription: { not: '' },
+    },
+    select: {
+      id: true,
+      name: true,
+      date: true,
+      status: true,
+      payloads: true,
+    },
+    orderBy: { date: 'desc' },
+    take: 50, // reasonable limit to search through
+  });
+
+  const relatedLaunches = allLaunches.filter((l) => {
+    const payloads = l.payloads as unknown as Array<{ name: string }> | null;
+    if (!payloads || !Array.isArray(payloads)) return false;
+    return payloads.some((p) =>
+      p.name?.toLowerCase().includes(spacecraftNameLower)
+    );
+  }).slice(0, 3);
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href={`/${locale}/spacecraft`}>
-        <Button variant="ghost" className="mb-6">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回列表
-        </Button>
-      </Link>
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        className="mb-6"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '航天器', href: `/${locale}/spacecraft` },
+          { label: spacecraft.name },
+        ]}
+      />
 
       <div className="flex items-start justify-between mb-6">
         <div className="flex items-start gap-3">
@@ -113,12 +173,10 @@ export default async function SpacecraftDetailPage({
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Badge
-            variant={statusColors[spacecraft.status] || 'default'}
+          <StatusBadge
+            status={spacecraft.status}
             className="text-base px-4 py-1"
-          >
-            {statusLabels[spacecraft.status] || spacecraft.status}
-          </Badge>
+          />
           <FavoriteButton
             targetType="SPACECRAFT"
             targetId={spacecraft.id}
@@ -128,41 +186,10 @@ export default async function SpacecraftDetailPage({
         </div>
       </div>
 
+      {/* Image lightbox */}
       <Card className="mb-8 overflow-hidden">
-        <div className="relative w-full aspect-[16/9]">
-          <SmartImage
-            src={heroImage}
-            alt={spacecraft.name}
-            fallback="satellite"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 896px"
-          />
-        </div>
+        <ImageLightbox images={allImages} alt={spacecraft.name} />
       </Card>
-
-      {extraImages.length > 0 && (
-        <Card className="mb-8">
-          <CardContent className="p-0">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              {extraImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative w-full h-64 overflow-hidden rounded"
-                >
-                  <SmartImage
-                    src={image}
-                    alt={`${spacecraft.name} ${index + 1}`}
-                    fallback="satellite"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
@@ -240,7 +267,7 @@ export default async function SpacecraftDetailPage({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="mb-8">
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold text-white mb-4">详细描述</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
@@ -248,6 +275,103 @@ export default async function SpacecraftDetailPage({
           </p>
         </CardContent>
       </Card>
+
+      {/* Related Content */}
+      <div className="space-y-6 mb-8">
+        {/* Related Launches */}
+        {relatedLaunches.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Ruler className="w-5 h-5 text-cosmic-blue" />
+                发射任务
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {relatedLaunches.map((rl) => (
+                  <Link
+                    key={rl.id}
+                    href={`/${locale}/launches/${rl.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {rl.name}
+                      </span>
+                      <StatusBadge status={rl.status} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">
+                      {format(new Date(rl.date), 'yyyy-MM-dd')}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Same Type Spacecraft */}
+        {sameTypeSpacecraft.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Satellite className="w-5 h-5 text-cosmic-blue" />
+                同类型航天器
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {sameTypeSpacecraft.map((sc) => (
+                  <Link
+                    key={sc.id}
+                    href={`/${locale}/spacecraft/${sc.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {sc.name}
+                      </span>
+                      <StatusBadge status={sc.status} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">{sc.operator}</span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Same Operator Spacecraft */}
+        {sameOperatorSpacecraft.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-cosmic-blue" />
+                同运营商航天器
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {sameOperatorSpacecraft.map((sc) => (
+                  <Link
+                    key={sc.id}
+                    href={`/${locale}/spacecraft/${sc.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {sc.name}
+                      </span>
+                      <Badge variant="info">{sc.type}</Badge>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <div className="mt-8">
         <CommentSection

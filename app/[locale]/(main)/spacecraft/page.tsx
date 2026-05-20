@@ -9,7 +9,7 @@ import {
   SpacecraftFilters,
   type SpacecraftFilterValues,
 } from '@/components/spacecraft/spacecraft-filters';
-import { Button } from '@/components/ui';
+import { Button, Breadcrumbs } from '@/components/ui';
 
 export default function SpacecraftPage({
   params: { locale },
@@ -26,6 +26,13 @@ export default function SpacecraftPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '航天器' },
+        ]}
+      />
       <div className="flex items-center gap-3 mb-8">
         <Satellite className="w-8 h-8 text-cosmic-blue" />
         <h1 className="text-3xl font-bold text-white">航天器</h1>

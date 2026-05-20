@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { Wrench, Tag, Factory } from 'lucide-react';
 import { getEquipment } from '@/lib/api/industry';
-import { Card, CardContent, Badge, Button, Input } from '@/components/ui';
+import { Card, CardContent, Badge, Button, Input, Breadcrumbs } from '@/components/ui';
 
 interface EquipmentFilters {
   category?: string;
@@ -28,6 +28,14 @@ export default function EquipmentPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '产业链', href: `/${locale}/industry` },
+          { label: '设备库' },
+        ]}
+      />
       <div className="flex items-center gap-3 mb-8">
         <Wrench className="w-8 h-8 text-cosmic-blue" />
         <h1 className="text-3xl font-bold text-white">设备库</h1>

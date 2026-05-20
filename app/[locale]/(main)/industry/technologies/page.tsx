@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Cpu } from 'lucide-react';
 import { getTechnologies } from '@/lib/api/industry';
 import { TechnologyCard } from '@/components/industry/technology-card';
-import { Button } from '@/components/ui';
+import { Button, Breadcrumbs } from '@/components/ui';
 
 interface TechnologyFilters {
   category?: string;
@@ -27,6 +27,14 @@ export default function TechnologiesPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '产业链', href: `/${locale}/industry` },
+          { label: '技术库' },
+        ]}
+      />
       <div className="flex items-center gap-3 mb-8">
         <Cpu className="w-8 h-8 text-cosmic-blue" />
         <h1 className="text-3xl font-bold text-white">技术库</h1>

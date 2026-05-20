@@ -6,6 +6,7 @@ import { locales } from '@/lib/i18n/config';
 import { Navbar, Starfield, Footer } from '@/components/layout';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { AuthProvider } from '@/components/providers/auth-provider';
+import { BackToTop } from '@/components/ui';
 import '../globals.css';
 
 export async function generateMetadata({
@@ -65,6 +66,7 @@ export default async function RootLayout({
                 {children}
               </main>
               <Footer locale={locale} />
+              <BackToTop />
             </QueryProvider>
           </AuthProvider>
         </NextIntlClientProvider>

@@ -10,7 +10,7 @@ import {
   type LaunchFilterValues,
 } from '@/components/launches/launch-filters';
 import { LaunchCalendar } from '@/components/launches/launch-calendar';
-import { Button } from '@/components/ui';
+import { Button, Breadcrumbs } from '@/components/ui';
 import { cn } from '@/lib/utils';
 
 type ViewMode = '列表' | '日历';
@@ -31,6 +31,13 @@ export default function LaunchesPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '发射数据' },
+        ]}
+      />
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <Rocket className="w-8 h-8 text-cosmic-blue" />

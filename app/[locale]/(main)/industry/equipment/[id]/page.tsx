@@ -1,9 +1,21 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Wrench, Tag, Factory, Target, ArrowLeft } from 'lucide-react';
+import {
+  Wrench,
+  Tag,
+  Factory,
+  Target,
+} from 'lucide-react';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  StatusBadge,
+  Breadcrumbs,
+} from '@/components/ui';
 
 export async function generateMetadata({
   params,
@@ -75,14 +87,33 @@ export default async function EquipmentDetailPage({
     : {};
   const specEntries = Object.entries(specifications);
 
+  // Related: equipment in same category
+  const sameCategoryEquipment = await prisma.equipment.findMany({
+    where: {
+      id: { not: equipment.id },
+      category: equipment.category,
+    },
+    select: {
+      id: true,
+      name: true,
+      category: true,
+      manufacturer: true,
+    },
+    take: 3,
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href={`/${locale}/industry/equipment`}>
-        <Button variant="ghost" className="mb-6">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回列表
-        </Button>
-      </Link>
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        className="mb-6"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '产业链', href: `/${locale}/industry` },
+          { label: '设备', href: `/${locale}/industry/equipment` },
+          { label: equipment.name },
+        ]}
+      />
 
       <div className="flex items-start gap-3 mb-6">
         <Wrench className="w-8 h-8 text-cosmic-blue mt-1" />
@@ -91,7 +122,7 @@ export default async function EquipmentDetailPage({
           <div className="mt-2 flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
               <Tag className="w-4 h-4 text-star-dim" />
-              <Badge variant="default">{equipment.category}</Badge>
+              <StatusBadge status="default" label={equipment.category} />
             </div>
             <div className="flex items-center gap-2 text-sm text-star-dim">
               <Factory className="w-4 h-4" />
@@ -132,7 +163,7 @@ export default async function EquipmentDetailPage({
       )}
 
       {equipment.applications.length > 0 && (
-        <Card>
+        <Card className="mb-8">
           <CardContent className="p-6">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-cosmic-blue" />
@@ -140,9 +171,39 @@ export default async function EquipmentDetailPage({
             </h2>
             <div className="flex flex-wrap gap-2">
               {equipment.applications.map((app, index) => (
-                <Badge key={index} variant="info">
-                  {app}
-                </Badge>
+                <StatusBadge key={index} status="default" label={app} />
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Related Content */}
+      {sameCategoryEquipment.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Wrench className="w-5 h-5 text-cosmic-blue" />
+              同类设备
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              {sameCategoryEquipment.map((e) => (
+                <Link
+                  key={e.id}
+                  href={`/${locale}/industry/equipment/${e.id}`}
+                  className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                >
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      {e.name}
+                    </span>
+                  </div>
+                  <span className="text-xs text-star-dim">
+                    {e.manufacturer}
+                  </span>
+                </Link>
               ))}
             </div>
           </CardContent>

@@ -7,14 +7,23 @@ import {
   Cake,
   Plane,
   Clock,
+  User,
+  Users,
   Rocket,
   Calendar,
-  ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
-import type { BadgeProps } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  StatusBadge,
+  SmartImage,
+  Breadcrumbs,
+} from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getAstronautImage } from '@/lib/image-fallbacks';
@@ -51,32 +60,10 @@ export async function generateMetadata({
   }
 }
 
-const statusColors: Record<string, BadgeProps['variant']> = {
-  ACTIVE: 'success',
-  RETIRED: 'default',
-  DECEASED: 'warning',
-};
-
 const statusLabels: Record<string, string> = {
   ACTIVE: '现役',
   RETIRED: '已退役',
   DECEASED: '已故',
-};
-
-const launchStatusColors: Record<string, BadgeProps['variant']> = {
-  SUCCESS: 'success',
-  FAILURE: 'error',
-  PLANNED: 'info',
-  POSTPONED: 'warning',
-  IN_FLIGHT: 'info',
-};
-
-const launchStatusLabels: Record<string, string> = {
-  SUCCESS: '成功',
-  FAILURE: '失败',
-  PLANNED: '计划中',
-  POSTPONED: '推迟',
-  IN_FLIGHT: '飞行中',
 };
 
 function formatTimeInSpace(minutes: number): string {
@@ -121,14 +108,49 @@ export default async function AstronautDetailPage({
   const socialLinks =
     (astronaut.socialLinks as SocialLinksMap | null) ?? null;
 
+  // Related: astronauts from same agency
+  const sameAgencyAstronauts = await prisma.astronaut.findMany({
+    where: {
+      id: { not: astronaut.id },
+      agency: astronaut.agency,
+    },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      nationality: true,
+    },
+    orderBy: { totalTimeInSpace: 'desc' },
+    take: 3,
+  });
+
+  // Related: astronauts with same nationality
+  const sameNationalityAstronauts = await prisma.astronaut.findMany({
+    where: {
+      id: { not: astronaut.id },
+      nationality: astronaut.nationality,
+    },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      agency: true,
+    },
+    orderBy: { totalTimeInSpace: 'desc' },
+    take: 3,
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href={`/${locale}/astronauts`}>
-        <Button variant="ghost" className="mb-6">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回列表
-        </Button>
-      </Link>
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        className="mb-6"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '宇航员', href: `/${locale}/astronauts` },
+          { label: astronaut.name },
+        ]}
+      />
 
       <div className="flex flex-col md:flex-row items-start gap-6 mb-8">
         <div className="relative w-32 h-32 rounded-2xl overflow-hidden shrink-0 bg-space-700">
@@ -146,12 +168,11 @@ export default async function AstronautDetailPage({
           <div className="flex items-start justify-between gap-2 mb-3">
             <h1 className="text-3xl font-bold text-white">{astronaut.name}</h1>
             <div className="flex items-center gap-3">
-              <Badge
-                variant={statusColors[astronaut.status] || 'default'}
+              <StatusBadge
+                status={astronaut.status}
+                label={statusLabels[astronaut.status]}
                 className="text-base px-4 py-1"
-              >
-                {statusLabels[astronaut.status] || astronaut.status}
-              </Badge>
+              />
               <FavoriteButton
                 targetType="ASTRONAUT"
                 targetId={astronaut.id}
@@ -217,7 +238,8 @@ export default async function AstronautDetailPage({
         </CardContent>
       </Card>
 
-      <Card>
+      {/* Mission History */}
+      <Card className="mb-8">
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
             <Rocket className="w-5 h-5 text-cosmic-blue" />
@@ -243,14 +265,10 @@ export default async function AstronautDetailPage({
                           {crew.role}
                         </p>
                       </div>
-                      <Badge
-                        variant={
-                          launchStatusColors[crew.launch.status] || 'default'
-                        }
-                      >
-                        {launchStatusLabels[crew.launch.status] ||
-                          crew.launch.status}
-                      </Badge>
+                      <StatusBadge
+                        status={crew.launch.status}
+                        className="text-xs"
+                      />
                     </div>
                     <div className="flex flex-wrap gap-4 text-sm text-star-dim">
                       <div className="flex items-center gap-1">
@@ -269,6 +287,71 @@ export default async function AstronautDetailPage({
           )}
         </CardContent>
       </Card>
+
+      {/* Related Content */}
+      <div className="space-y-6 mb-8">
+        {/* Same Agency Astronauts */}
+        {sameAgencyAstronauts.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-cosmic-blue" />
+                同机构宇航员
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {sameAgencyAstronauts.map((a) => (
+                  <Link
+                    key={a.id}
+                    href={`/${locale}/astronauts/${a.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {a.name}
+                      </span>
+                      <StatusBadge status={a.status} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">{a.nationality}</span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Same Nationality Astronauts */}
+        {sameNationalityAstronauts.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Flag className="w-5 h-5 text-cosmic-blue" />
+                同国籍宇航员
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {sameNationalityAstronauts.map((a) => (
+                  <Link
+                    key={a.id}
+                    href={`/${locale}/astronauts/${a.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {a.name}
+                      </span>
+                      <StatusBadge status={a.status} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">{a.agency}</span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <div className="mt-8">
         <CommentSection

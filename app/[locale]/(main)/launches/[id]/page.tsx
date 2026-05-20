@@ -1,11 +1,20 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
-import { Rocket, MapPin, Calendar, Users, Video, ArrowLeft } from 'lucide-react';
+import { Rocket, MapPin, Calendar, Users, Video } from 'lucide-react';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
-import type { BadgeProps } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  StatusBadge,
+  SmartImage,
+  ImageLightbox,
+  Breadcrumbs,
+} from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import {
@@ -46,14 +55,6 @@ export async function generateMetadata({
   }
 }
 
-const statusColors: Record<string, BadgeProps['variant']> = {
-  SUCCESS: 'success',
-  FAILURE: 'error',
-  PLANNED: 'info',
-  POSTPONED: 'warning',
-  IN_FLIGHT: 'info',
-};
-
 interface PayloadItem {
   name: string;
   type: string;
@@ -87,24 +88,67 @@ export default async function LaunchDetailPage({
     launch.rocket.name
   );
 
+  // Collect all valid images for the lightbox
+  const validImages = launch.images.filter(
+    (img) => img && !img.includes('example.com') && !img.startsWith('http://')
+  );
+  const seen = new Set<string>();
+  if (heroImage) seen.add(heroImage);
+  validImages.forEach((img) => seen.add(img));
+  const allImages = Array.from(seen);
+
+  // Related: similar launches (same rocket or same launch site)
+  const relatedLaunches = await prisma.launch.findMany({
+    where: {
+      id: { not: launch.id },
+      OR: [
+        { rocketId: launch.rocketId },
+        { launchSiteId: launch.launchSiteId },
+      ],
+    },
+    select: {
+      id: true,
+      name: true,
+      date: true,
+      status: true,
+    },
+    orderBy: { date: 'desc' },
+    take: 3,
+  });
+
+  // Related spacecraft: find spacecraft whose names appear in payload names
+  const payloadNames = payloads.map((p) => p.name).filter(Boolean);
+  let relatedSpacecraft: { id: string; name: string; type: string }[] = [];
+  if (payloadNames.length > 0) {
+    relatedSpacecraft = await prisma.spacecraft.findMany({
+      where: {
+        name: { in: payloadNames },
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+      },
+      take: 4,
+    });
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href={`/${locale}/launches`}>
-        <Button variant="ghost" className="mb-6">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回列表
-        </Button>
-      </Link>
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        className="mb-6"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '发射数据', href: `/${locale}/launches` },
+          { label: launch.name },
+        ]}
+      />
 
       <div className="flex items-start justify-between mb-6 gap-4">
         <h1 className="text-3xl font-bold text-white">{launch.name}</h1>
         <div className="flex items-center gap-3">
-          <Badge
-            variant={statusColors[launch.status] || 'default'}
-            className="text-base px-4 py-1"
-          >
-            {launch.status}
-          </Badge>
+          <StatusBadge status={launch.status} className="text-base px-4 py-1" />
           <FavoriteButton
             targetType="LAUNCH"
             targetId={launch.id}
@@ -114,17 +158,9 @@ export default async function LaunchDetailPage({
         </div>
       </div>
 
+      {/* Hero image with lightbox */}
       <Card className="mb-8 overflow-hidden">
-        <div className="relative w-full aspect-[16/9]">
-          <SmartImage
-            src={heroImage}
-            alt={launch.name}
-            fallback="launch"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 896px"
-          />
-        </div>
+        <ImageLightbox images={allImages} alt={launch.name} />
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -219,7 +255,7 @@ export default async function LaunchDetailPage({
       )}
 
       {payloads.length > 0 && (
-        <Card>
+        <Card className="mb-8">
           <CardContent className="p-6">
             <h2 className="text-lg font-semibold text-white mb-4">载荷信息</h2>
             <div className="space-y-2">
@@ -236,6 +272,106 @@ export default async function LaunchDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Related Content */}
+      <div className="space-y-6 mb-8">
+        {/* Related Rocket */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Rocket className="w-5 h-5 text-cosmic-blue" />
+              相关火箭
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
+              <span className="text-white">{launch.rocket.name}</span>
+              <span className="text-star-dim text-sm">
+                {launch.rocket.manufacturer} · {launch.rocket.country}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Related Launch Site */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-cosmic-blue" />
+              相关发射场
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
+              <span className="text-white">{launch.launchSite.name}</span>
+              <span className="text-star-dim text-sm">
+                {launch.launchSite.country} · {launch.launchSite.region}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Related Spacecraft */}
+        {relatedSpacecraft.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Rocket className="w-5 h-5 text-cosmic-blue" />
+                相关航天器
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {relatedSpacecraft.map((sc) => (
+                  <Link
+                    key={sc.id}
+                    href={`/${locale}/spacecraft/${sc.id}`}
+                    className="flex items-center gap-3 p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <span className="text-white group-hover:text-cosmic-blue transition-colors">
+                      {sc.name}
+                    </span>
+                    <Badge variant="default">{sc.type}</Badge>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Similar Launches */}
+        {relatedLaunches.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Rocket className="w-5 h-5 text-cosmic-blue" />
+                更多发射
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {relatedLaunches.map((rl) => (
+                  <Link
+                    key={rl.id}
+                    href={`/${locale}/launches/${rl.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {rl.name}
+                      </span>
+                      <StatusBadge status={rl.status} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">
+                      {format(new Date(rl.date), 'yyyy-MM-dd')}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <div className="mt-8">
         <CommentSection targetType="LAUNCH" targetId={launch.id} locale={locale} />

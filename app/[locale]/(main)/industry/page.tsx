@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Network, Building2, Cpu, Beaker, Wrench } from 'lucide-react';
 import { prisma } from '@/lib/db';
-import { Card, CardContent } from '@/components/ui';
+import { Card, CardContent, Breadcrumbs } from '@/components/ui';
 import { IndustryChainDiagram } from '@/components/industry/industry-chain-diagram';
 import { MarketStats } from '@/components/industry/market-stats';
 import type { IndustrySegment } from '@/lib/api/industry';
@@ -69,6 +69,13 @@ export default async function IndustryOverviewPage({
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '产业链' },
+        ]}
+      />
       <div className="flex items-center gap-3 mb-2">
         <Network className="w-8 h-8 text-cosmic-blue" />
         <h1 className="text-3xl font-bold text-white">航天产业链</h1>

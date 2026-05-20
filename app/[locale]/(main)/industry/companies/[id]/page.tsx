@@ -9,15 +9,25 @@ import {
   Globe,
   Award,
   Package,
-  ArrowLeft,
   ExternalLink,
+  Building2,
+  Cpu,
 } from 'lucide-react';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Badge, Button, SmartImage } from '@/components/ui';
-import type { BadgeProps } from '@/components/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  StatusBadge,
+  SmartImage,
+  Breadcrumbs,
+} from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
 import { getCompanyImage } from '@/lib/image-fallbacks';
+import { companyTypeMap, industryLevelMap } from '@/components/ui/status-badge';
 
 export async function generateMetadata({
   params,
@@ -51,30 +61,11 @@ export async function generateMetadata({
   }
 }
 
-const typeColors: Record<string, BadgeProps['variant']> = {
-  STATE_OWNED: 'info',
-  PRIVATE: 'default',
-  PUBLIC: 'success',
-  STARTUP: 'warning',
-};
-
 const typeLabels: Record<string, string> = {
   STATE_OWNED: '国有企业',
   PRIVATE: '民营企业',
   PUBLIC: '上市公司',
   STARTUP: '初创公司',
-};
-
-const levelColors: Record<string, BadgeProps['variant']> = {
-  UPSTREAM: 'info',
-  MIDSTREAM: 'warning',
-  DOWNSTREAM: 'success',
-};
-
-const levelLabels: Record<string, string> = {
-  UPSTREAM: '上游',
-  MIDSTREAM: '中游',
-  DOWNSTREAM: '下游',
 };
 
 export default async function CompanyDetailPage({
@@ -95,14 +86,47 @@ export default async function CompanyDetailPage({
 
   if (!company) notFound();
 
+  // Related: technologies where keyPlayers includes this company name
+  const relatedTechnologies = await prisma.technology.findMany({
+    where: {
+      keyPlayers: { has: company.name },
+    },
+    select: {
+      id: true,
+      name: true,
+      category: true,
+      maturityLevel: true,
+    },
+    take: 3,
+  });
+
+  // Related: companies from same country
+  const sameCountryCompanies = await prisma.company.findMany({
+    where: {
+      id: { not: company.id },
+      country: company.country,
+    },
+    select: {
+      id: true,
+      name: true,
+      type: true,
+      headquarters: true,
+    },
+    take: 3,
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link href={`/${locale}/industry/companies`}>
-        <Button variant="ghost" className="mb-6">
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          返回列表
-        </Button>
-      </Link>
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        className="mb-6"
+        items={[
+          { label: '航天数据', href: `/${locale}` },
+          { label: '产业链', href: `/${locale}/industry` },
+          { label: '企业', href: `/${locale}/industry/companies` },
+          { label: company.name },
+        ]}
+      />
 
       <div className="flex items-start gap-6 mb-8">
         <div className="relative w-20 h-20 shrink-0 rounded-xl overflow-hidden bg-space-700">
@@ -127,12 +151,11 @@ export default async function CompanyDetailPage({
             />
           </div>
           <div className="mt-3 flex items-center gap-2 flex-wrap">
-            <Badge
-              variant={typeColors[company.type] || 'default'}
+            <StatusBadge
+              status={company.type}
+              statusMap={companyTypeMap}
               className="text-sm px-3 py-1"
-            >
-              {typeLabels[company.type] || company.type}
-            </Badge>
+            />
             {company.stockCode && (
               <Badge variant="default">股票代码: {company.stockCode}</Badge>
             )}
@@ -200,9 +223,10 @@ export default async function CompanyDetailPage({
                     className="flex items-center justify-between p-3 bg-space-700 rounded-lg"
                   >
                     <span className="text-white">{cs.segment.name}</span>
-                    <Badge variant={levelColors[cs.segment.level] || 'default'}>
-                      {levelLabels[cs.segment.level] || cs.segment.level}
-                    </Badge>
+                    <StatusBadge
+                      status={cs.segment.level}
+                      statusMap={industryLevelMap}
+                    />
                   </div>
                 ))}
               </div>
@@ -239,7 +263,7 @@ export default async function CompanyDetailPage({
       )}
 
       {company.achievements.length > 0 && (
-        <Card>
+        <Card className="mb-8">
           <CardContent className="p-6">
             <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
               <Award className="w-5 h-5 text-cosmic-blue" />
@@ -256,6 +280,79 @@ export default async function CompanyDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Related Content */}
+      <div className="space-y-6 mb-8">
+        {/* Related Technologies */}
+        {relatedTechnologies.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Cpu className="w-5 h-5 text-cosmic-blue" />
+                相关技术
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {relatedTechnologies.map((tech) => (
+                  <Link
+                    key={tech.id}
+                    href={`/${locale}/industry/technologies/${tech.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {tech.name}
+                      </span>
+                      <StatusBadge status={tech.maturityLevel} className="text-xs" />
+                    </div>
+                    <span className="text-xs text-star-dim">
+                      {tech.category}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Same Country Companies */}
+        {sameCountryCompanies.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="w-5 h-5 text-cosmic-blue" />
+                同国家企业
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {sameCountryCompanies.map((c) => (
+                  <Link
+                    key={c.id}
+                    href={`/${locale}/industry/companies/${c.id}`}
+                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                  >
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                        {c.name}
+                      </span>
+                      <StatusBadge
+                        status={c.type}
+                        statusMap={companyTypeMap}
+                        className="text-xs"
+                      />
+                    </div>
+                    <span className="text-xs text-star-dim">
+                      {c.headquarters}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       <div className="mt-8">
         <CommentSection
