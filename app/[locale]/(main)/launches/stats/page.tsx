@@ -43,7 +43,7 @@ export default async function LaunchStatsPage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-8">
         <BarChart3 className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">发射统计</h1>
+        <h1 className="text-3xl font-bold text-star-white">发射统计</h1>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -56,7 +56,7 @@ export default async function LaunchStatsPage() {
         {statsData.byStatus.slice(0, 3).map((s) => (
           <Card key={s.status}>
             <CardContent className="p-6 text-center">
-              <p className="text-4xl font-bold text-white">{s.count}</p>
+              <p className="text-4xl font-bold text-star-white">{s.count}</p>
               <p className="text-star-dim mt-2">{s.status}</p>
             </CardContent>
           </Card>

@@ -32,7 +32,7 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
         )}
       </div>
       <div>
-        <h1 className="text-2xl font-bold text-white">{displayName}</h1>
+        <h1 className="text-2xl font-bold text-star-white">{displayName}</h1>
         {user.email && (
           <p className="text-sm text-star-dim mt-0.5">{user.email}</p>
         )}

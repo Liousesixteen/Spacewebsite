@@ -16,10 +16,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'focus:outline-none focus:ring-2 focus:ring-cosmic-blue focus:ring-offset-2 focus:ring-offset-space-900',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           {
-            'bg-cosmic-blue text-white hover:bg-cosmic-blue/90 glow-blue': variant === 'primary',
-            'bg-space-600 text-white hover:bg-space-500': variant === 'secondary',
-            'bg-transparent text-star-dim hover:text-white hover:bg-space-700': variant === 'ghost',
-            'border border-space-500 text-white hover:bg-space-700 hover:border-cosmic-blue': variant === 'outline',
+            'bg-cosmic-blue text-star-white hover:bg-cosmic-blue/90 glow-blue': variant === 'primary',
+            'bg-space-600 text-star-white hover:bg-space-500': variant === 'secondary',
+            'bg-transparent text-star-dim hover:text-star-white hover:bg-space-700': variant === 'ghost',
+            'border border-space-500 text-star-white hover:bg-space-700 hover:border-cosmic-blue': variant === 'outline',
           },
           {
             'px-3 py-1.5 text-sm': size === 'sm',

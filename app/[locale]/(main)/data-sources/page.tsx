@@ -16,7 +16,7 @@ export default async function DataSourcesPage({ params }: PageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">数据来源</h1>
+          <h1 className="text-4xl font-bold text-star-white mb-4">数据来源</h1>
           <p className="text-star-dim">
             SpaceData 整合来自全球领先航天机构和数据提供商的数据
           </p>
@@ -37,7 +37,7 @@ export default async function DataSourcesPage({ params }: PageProps) {
           <Card>
             <CardContent className="pt-8">
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">Launch Library 2</h2>
+                <h2 className="text-2xl font-bold text-star-white">Launch Library 2</h2>
                 <Link
                   href="https://ll.thespacedevs.com"
                   target="_blank"
@@ -63,7 +63,7 @@ export default async function DataSourcesPage({ params }: PageProps) {
           <Card>
             <CardContent className="pt-8">
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">SpaceX API</h2>
+                <h2 className="text-2xl font-bold text-star-white">SpaceX API</h2>
                 <Link
                   href="https://docs.spacexdata.com"
                   target="_blank"
@@ -89,7 +89,7 @@ export default async function DataSourcesPage({ params }: PageProps) {
           <Card>
             <CardContent className="pt-8">
               <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-white">NASA APIs</h2>
+                <h2 className="text-2xl font-bold text-star-white">NASA APIs</h2>
                 <Link
                   href="https://api.nasa.gov"
                   target="_blank"
@@ -115,7 +115,7 @@ export default async function DataSourcesPage({ params }: PageProps) {
         {/* Data Accuracy Notice */}
         <Card className="mt-12">
           <CardContent className="pt-8">
-            <h2 className="text-2xl font-bold text-white mb-4">数据准确性声明</h2>
+            <h2 className="text-2xl font-bold text-star-white mb-4">数据准确性声明</h2>
             <p className="text-star-dim leading-relaxed mb-4">
               虽然我们从可靠的来源获取数据，但我们不能保证所有信息的完全准确性。航天数据可能会因以下原因而变化：
             </p>

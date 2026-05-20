@@ -32,7 +32,7 @@ export function BackToTop() {
         'w-10 h-10 rounded-full',
         'bg-space-700/80 backdrop-blur-sm',
         'border border-space-600/50',
-        'text-star-dim hover:text-white',
+        'text-star-dim hover:text-star-white',
         'hover:bg-space-600 hover:border-cosmic-blue/50',
         'shadow-lg shadow-black/30',
         'transition-all duration-300',

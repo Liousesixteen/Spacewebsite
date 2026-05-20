@@ -158,7 +158,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <CalendarIcon className="w-6 h-6 text-cosmic-blue" />
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-star-white">
             {viewYear} 年 {viewMonth + 1} 月
           </h2>
         </div>
@@ -168,14 +168,14 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
           </Button>
           <button
             onClick={prevMonth}
-            className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
             aria-label="上个月"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextMonth}
-            className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
             aria-label="下个月"
           >
             <ChevronRight className="w-5 h-5" />
@@ -238,7 +238,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
                   className={cn(
                     'inline-flex items-center justify-center w-7 h-7 rounded-full text-sm',
                     isCurrentDay
-                      ? 'bg-cosmic-blue text-white font-bold'
+                      ? 'bg-cosmic-blue text-star-white font-bold'
                       : 'text-star-dim'
                   )}
                 >
@@ -278,7 +278,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
 
       {/* Mobile: vertical list of days */}
       <div className="mt-6 md:hidden">
-        <h3 className="text-lg font-semibold text-white mb-4">每日发射列表</h3>
+        <h3 className="text-lg font-semibold text-star-white mb-4">每日发射列表</h3>
         {grid.flat().some((c) => c && launchesByDay.has(`${c.getFullYear()}-${c.getMonth()}-${c.getDate()}`)) ? (
           grid.flat().map((cell, idx) => {
             if (!cell) return null;
@@ -288,7 +288,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
 
             return (
               <div key={dateKey} className="mb-4 bg-space-800 rounded-xl border border-space-600 p-4">
-                <h4 className="text-sm font-bold text-white mb-2">
+                <h4 className="text-sm font-bold text-star-white mb-2">
                   {cell.getMonth() + 1} 月 {cell.getDate()} 日
                   {isToday(cell) && (
                     <span className="ml-2 px-2 py-0.5 rounded-full bg-cosmic-blue/20 text-cosmic-blue text-xs">
@@ -306,7 +306,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
                         )}
                       />
                       <div className="min-w-0">
-                        <div className="text-sm text-white truncate">{launch.name}</div>
+                        <div className="text-sm text-star-white truncate">{launch.name}</div>
                         <div className="text-xs text-star-dim">
                           {STATUS_LABELS[launch.status] || launch.status}
                           {launch.rocket && ` · ${launch.rocket.name}`}
@@ -332,12 +332,12 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
           />
           <div className="relative bg-space-800 border border-space-600 rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-white">
+              <h3 className="text-lg font-bold text-star-white">
                 {selectedDay.getMonth() + 1} 月 {selectedDay.getDate()} 日 发射任务
               </h3>
               <button
                 onClick={() => setSelectedDay(null)}
-                className="p-1 rounded-lg hover:bg-space-600 text-star-dim hover:text-white transition-colors"
+                className="p-1 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -351,7 +351,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Rocket className="w-4 h-4 text-cosmic-blue" />
-                    <h4 className="font-semibold text-white">{launch.name}</h4>
+                    <h4 className="font-semibold text-star-white">{launch.name}</h4>
                     <span
                       className={cn(
                         'ml-auto px-2 py-0.5 rounded-full text-xs font-medium',

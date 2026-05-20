@@ -51,7 +51,7 @@ export function CommentSection({
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+        <h2 className="text-lg font-semibold text-star-white mb-6 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-cosmic-blue" />
           评论 ({totalCount})
         </h2>
@@ -141,7 +141,7 @@ function CommentItem({
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-white font-medium">{displayName}</span>
+            <span className="text-star-white font-medium">{displayName}</span>
             <span className="text-xs text-star-dim">
               {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
             </span>

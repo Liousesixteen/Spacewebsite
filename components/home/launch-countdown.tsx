@@ -63,7 +63,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
         <Card variant="glow">
           <CardContent className="p-8 text-center">
             <Rocket className="w-12 h-12 mx-auto mb-4 text-star-dim" />
-            <h2 className="text-2xl font-semibold text-white mb-2">{t('title')}</h2>
+            <h2 className="text-2xl font-semibold text-star-white mb-2">{t('title')}</h2>
             <p className="text-star-dim">{t('empty')}</p>
           </CardContent>
         </Card>
@@ -85,7 +85,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
               <Badge variant="info" className="mb-2">{t('badge')}</Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-white">
+              <h2 className="text-2xl md:text-3xl font-bold text-star-white">
                 {t('title')}
               </h2>
             </div>
@@ -96,7 +96,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
 
           <Link href={`/${locale}/launches/${nextLaunch.id}`} className="block group">
             <div className="mb-6">
-              <h3 className="text-xl md:text-2xl font-semibold text-white group-hover:text-cosmic-blue transition mb-2">
+              <h3 className="text-xl md:text-2xl font-semibold text-star-white group-hover:text-cosmic-blue transition mb-2">
                 {nextLaunch.name}
               </h3>
               <div className="flex flex-wrap gap-4 text-sm text-star-dim">
@@ -117,7 +117,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
                 key={u.label}
                 className="rounded-lg bg-space-800/60 border border-space-500/40 p-3 md:p-6 text-center"
               >
-                <div className="text-3xl md:text-5xl font-extrabold text-white tabular-nums">
+                <div className="text-3xl md:text-5xl font-extrabold text-star-white tabular-nums">
                   {String(u.value).padStart(2, '0')}
                 </div>
                 <div className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-wider text-star-dim">

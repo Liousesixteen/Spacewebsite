@@ -65,7 +65,7 @@ export function CommentForm({
         rows={compact ? 2 : 3}
         autoFocus={autoFocus}
         maxLength={2000}
-        className="w-full px-4 py-2 rounded-lg bg-space-700 border border-space-500 text-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue focus:ring-1 focus:ring-cosmic-blue resize-y"
+        className="w-full px-4 py-2 rounded-lg bg-space-700 border border-space-500 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue focus:ring-1 focus:ring-cosmic-blue resize-y"
       />
       {error && <div className="text-xs text-red-400">{error}</div>}
       <div className="flex items-center justify-between">

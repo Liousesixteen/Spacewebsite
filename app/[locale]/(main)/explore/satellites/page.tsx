@@ -97,7 +97,7 @@ export default function SatellitesPage() {
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-4">
         <SatelliteIcon className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">地球卫星轨道</h1>
+        <h1 className="text-3xl font-bold text-star-white">地球卫星轨道</h1>
       </div>
       <p className="text-star-dim mb-6 max-w-3xl">
         以可视化的方式展示低地球轨道（LEO）、中地球轨道（MEO）以及地球同步轨道（GEO）。
@@ -122,7 +122,7 @@ export default function SatellitesPage() {
                 className="inline-block w-3 h-3 rounded-full"
                 style={{ backgroundColor: orbit.color }}
               />
-              <span className="text-white font-semibold">{orbit.label}</span>
+              <span className="text-star-white font-semibold">{orbit.label}</span>
             </div>
             <ul className="text-sm text-star-dim space-y-1">
               {orbit.satellites.map((sat) => (

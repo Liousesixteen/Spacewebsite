@@ -67,7 +67,7 @@ export function IndustryChainDiagram({
                       {meta.label}
                     </Badge>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">
+                      <h3 className="text-xl font-semibold text-star-white">
                         {meta.label}产业 ({items.length})
                       </h3>
                       <p className="text-sm text-star-dim mt-1">
@@ -97,7 +97,7 @@ export function IndustryChainDiagram({
                           className="block p-4 bg-space-700 hover:bg-space-600 rounded-lg border border-space-500 transition-colors"
                         >
                           <div className="flex items-start justify-between mb-2">
-                            <h4 className="text-white font-medium">
+                            <h4 className="text-star-white font-medium">
                               {segment.name}
                             </h4>
                             {segment._count && (

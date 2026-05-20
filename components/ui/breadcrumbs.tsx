@@ -41,7 +41,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
               ) : (
                 <Link
                   href={item.href}
-                  className="text-cosmic-blue hover:text-white transition-colors hover:underline underline-offset-4"
+                  className="text-cosmic-blue hover:text-star-white transition-colors hover:underline underline-offset-4"
                 >
                   {item.label}
                 </Link>
@@ -56,7 +56,7 @@ export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
         {items.length >= 2 && items[items.length - 2].href ? (
           <Link
             href={items[items.length - 2].href!}
-            className="inline-flex items-center gap-1 text-sm text-cosmic-blue hover:text-white transition-colors"
+            className="inline-flex items-center gap-1 text-sm text-cosmic-blue hover:text-star-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             返回 {parentLabel}

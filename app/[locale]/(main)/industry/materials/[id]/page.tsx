@@ -110,7 +110,7 @@ export default async function MaterialDetailPage({
       <div className="flex items-start gap-3 mb-6">
         <Beaker className="w-8 h-8 text-cosmic-blue mt-1" />
         <div>
-          <h1 className="text-3xl font-bold text-white">{material.name}</h1>
+          <h1 className="text-3xl font-bold text-star-white">{material.name}</h1>
           <div className="mt-2 flex items-center gap-2">
             <Tag className="w-4 h-4 text-star-dim" />
             <StatusBadge status="default" label={material.category} />
@@ -120,7 +120,7 @@ export default async function MaterialDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">材料描述</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">材料描述</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {material.description}
           </p>
@@ -130,7 +130,7 @@ export default async function MaterialDetailPage({
       {propertyEntries.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">性能参数</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">性能参数</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {propertyEntries.map(([key, value]) => (
                 <div
@@ -138,7 +138,7 @@ export default async function MaterialDetailPage({
                   className="flex justify-between items-start p-3 bg-space-700 rounded-lg gap-3"
                 >
                   <span className="text-star-dim text-sm">{key}</span>
-                  <span className="text-white text-sm text-right break-all">
+                  <span className="text-star-white text-sm text-right break-all">
                     {formatPropertyValue(value)}
                   </span>
                 </div>
@@ -152,7 +152,7 @@ export default async function MaterialDetailPage({
         {material.applications.length > 0 && (
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-cosmic-blue" />
                 应用领域
               </h2>
@@ -168,7 +168,7 @@ export default async function MaterialDetailPage({
         {material.manufacturers.length > 0 && (
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
                 <Factory className="w-5 h-5 text-cosmic-blue" />
                 主要制造商
               </h2>
@@ -199,7 +199,7 @@ export default async function MaterialDetailPage({
                   href={`/${locale}/industry/materials/${m.id}`}
                   className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                 >
-                  <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                  <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                     {m.name}
                   </span>
                 </Link>

@@ -33,7 +33,7 @@ export function ProfileNav({ locale }: ProfileNavProps) {
             'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
             isActive(item.href, item.exact)
               ? 'bg-cosmic-blue/20 text-cosmic-blue'
-              : 'text-star-dim hover:text-white hover:bg-space-700'
+              : 'text-star-dim hover:text-star-white hover:bg-space-700'
           )}
         >
           {item.label}

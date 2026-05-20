@@ -23,7 +23,7 @@ export default async function ProfileInfoPage() {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-white mb-4">基本信息</h2>
+      <h2 className="text-lg font-semibold text-star-white mb-4">基本信息</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((s) => (
           <div
@@ -31,7 +31,7 @@ export default async function ProfileInfoPage() {
             className="p-4 bg-space-700 rounded-lg border border-space-600"
           >
             <div className="text-xs text-star-dim">{s.label}</div>
-            <div className="mt-1 text-xl font-semibold text-white">{s.value}</div>
+            <div className="mt-1 text-xl font-semibold text-star-white">{s.value}</div>
           </div>
         ))}
       </div>

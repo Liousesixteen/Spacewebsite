@@ -41,7 +41,7 @@ function nationalityName(n: LL2Astronaut['nationality']): string {
 
 export async function syncAstronauts(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[astronauts] Fetching astronauts from LL2...');
-  const astronauts = await fetchLL2List<LL2Astronaut>('/astronaut/', { limit: 100, mode: 'detailed' }, 200);
+  const astronauts = await fetchLL2List<LL2Astronaut>('/astronaut/', { limit: 100, mode: 'detailed' }, 1000);
   console.log(`[astronauts] Got ${astronauts.length} astronauts`);
 
   let added = 0;

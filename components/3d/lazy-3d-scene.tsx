@@ -86,7 +86,7 @@ export function LazyScene({
     return (
       lowEndFallback ?? (
         <div className="w-full h-full rounded-xl bg-space-800 border border-space-600 flex flex-col items-center justify-center text-center p-6">
-          <div className="text-white font-semibold mb-2">3D 场景已暂停</div>
+          <div className="text-star-white font-semibold mb-2">3D 场景已暂停</div>
           <p className="text-star-dim text-sm max-w-xs">
             当前设备性能较低或不支持 WebGL，已自动跳过 3D 渲染。
             建议在桌面端浏览器中获得完整体验。

@@ -142,7 +142,7 @@ export default async function CompanyDetailPage({
         </div>
         <div className="flex-1">
           <div className="flex items-start justify-between gap-4">
-            <h1 className="text-3xl font-bold text-white">{company.name}</h1>
+            <h1 className="text-3xl font-bold text-star-white">{company.name}</h1>
             <FavoriteButton
               targetType="COMPANY"
               targetId={company.id}
@@ -166,7 +166,7 @@ export default async function CompanyDetailPage({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">基本信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">基本信息</h2>
             <div className="space-y-3 text-star-dim">
               <div className="flex items-center gap-3">
                 <MapPin className="w-5 h-5 text-cosmic-blue" />
@@ -213,7 +213,7 @@ export default async function CompanyDetailPage({
         {company.segments.length > 0 && (
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">
+              <h2 className="text-lg font-semibold text-star-white mb-4">
                 所在产业环节
               </h2>
               <div className="space-y-2">
@@ -222,7 +222,7 @@ export default async function CompanyDetailPage({
                     key={cs.id}
                     className="flex items-center justify-between p-3 bg-space-700 rounded-lg"
                   >
-                    <span className="text-white">{cs.segment.name}</span>
+                    <span className="text-star-white">{cs.segment.name}</span>
                     <StatusBadge
                       status={cs.segment.level}
                       statusMap={industryLevelMap}
@@ -237,7 +237,7 @@ export default async function CompanyDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">公司简介</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">公司简介</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {company.description}
           </p>
@@ -247,7 +247,7 @@ export default async function CompanyDetailPage({
       {company.products.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <Package className="w-5 h-5 text-cosmic-blue" />
               主要产品
             </h2>
@@ -265,7 +265,7 @@ export default async function CompanyDetailPage({
       {company.achievements.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <Award className="w-5 h-5 text-cosmic-blue" />
               主要成就
             </h2>
@@ -301,7 +301,7 @@ export default async function CompanyDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {tech.name}
                       </span>
                       <StatusBadge status={tech.maturityLevel} className="text-xs" />
@@ -334,7 +334,7 @@ export default async function CompanyDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {c.name}
                       </span>
                       <StatusBadge

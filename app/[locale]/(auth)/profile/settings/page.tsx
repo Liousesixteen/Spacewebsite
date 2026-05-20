@@ -13,7 +13,7 @@ export default async function ProfileSettingsPage() {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-white mb-4">设置</h2>
+      <h2 className="text-lg font-semibold text-star-white mb-4">设置</h2>
       <SettingsForm
         initialName={user?.name ?? null}
         initialLocale={user?.locale ?? 'zh-CN'}

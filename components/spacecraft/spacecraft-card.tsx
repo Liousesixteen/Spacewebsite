@@ -51,7 +51,7 @@ export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
         </div>
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4 gap-2">
-            <h3 className="text-lg font-semibold text-white line-clamp-2">
+            <h3 className="text-lg font-semibold text-star-white line-clamp-2">
               {spacecraft.name}
             </h3>
             <Badge variant={statusColors[spacecraft.status]}>

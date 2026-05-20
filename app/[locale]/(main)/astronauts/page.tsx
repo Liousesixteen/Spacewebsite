@@ -5,11 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
 import { getAstronauts } from '@/lib/api/astronauts';
 import { AstronautCard } from '@/components/astronauts/astronaut-card';
+import { AstronautTableRow } from '@/components/astronauts/astronaut-table-row';
 import {
   AstronautFilters,
   type AstronautFilterValues,
 } from '@/components/astronauts/astronaut-filters';
-import { Button, Breadcrumbs } from '@/components/ui';
+import { ViewToggle, Pagination, AnimateIn, Breadcrumbs } from '@/components/ui';
+import type { ViewMode } from '@/components/ui/view-toggle';
 
 export default function AstronautsPage({
   params: { locale },
@@ -18,6 +20,7 @@ export default function AstronautsPage({
 }) {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<AstronautFilterValues>({});
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['astronauts', page, filters],
@@ -33,9 +36,12 @@ export default function AstronautsPage({
           { label: '宇航员' },
         ]}
       />
-      <div className="flex items-center gap-3 mb-8">
-        <Users className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">宇航员</h1>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <Users className="w-8 h-8 text-cosmic-blue" />
+          <h1 className="text-3xl font-bold text-star-white">宇航员</h1>
+        </div>
+        <ViewToggle mode={viewMode} onChange={setViewMode} />
       </div>
 
       <AstronautFilters
@@ -56,41 +62,34 @@ export default function AstronautsPage({
 
       {data && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            {data.data.map((astronaut) => (
-              <AstronautCard
-                key={astronaut.id}
-                astronaut={astronaut}
-                locale={locale}
-              />
-            ))}
-          </div>
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {data.data.map((astronaut, index) => (
+                <AnimateIn key={astronaut.id} delay={index * 50}>
+                  <AstronautCard astronaut={astronaut} locale={locale} />
+                </AnimateIn>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 mt-8">
+              {data.data.map((astronaut, index) => (
+                <AnimateIn key={astronaut.id} delay={index * 30}>
+                  <AstronautTableRow astronaut={astronaut} locale={locale} />
+                </AnimateIn>
+              ))}
+            </div>
+          )}
 
           {data.data.length === 0 && (
             <div className="text-center py-12 text-star-dim">暂无数据</div>
           )}
 
-          {data.pagination.totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              <Button
-                variant="outline"
-                disabled={page === 1}
-                onClick={() => setPage((p) => p - 1)}
-              >
-                上一页
-              </Button>
-              <span className="px-4 py-2 text-star-dim">
-                {page} / {data.pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                disabled={page === data.pagination.totalPages}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                下一页
-              </Button>
-            </div>
-          )}
+          <Pagination
+            page={page}
+            totalPages={data.pagination.totalPages}
+            total={data.pagination.total}
+            onPageChange={setPage}
+          />
         </>
       )}
     </div>

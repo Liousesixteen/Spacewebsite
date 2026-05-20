@@ -5,11 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Satellite } from 'lucide-react';
 import { getSpacecraftList } from '@/lib/api/spacecraft';
 import { SpacecraftCard } from '@/components/spacecraft/spacecraft-card';
+import { SpacecraftTableRow } from '@/components/spacecraft/spacecraft-table-row';
 import {
   SpacecraftFilters,
   type SpacecraftFilterValues,
 } from '@/components/spacecraft/spacecraft-filters';
-import { Button, Breadcrumbs } from '@/components/ui';
+import { ViewToggle, Pagination, AnimateIn, Breadcrumbs } from '@/components/ui';
+import type { ViewMode } from '@/components/ui/view-toggle';
 
 export default function SpacecraftPage({
   params: { locale },
@@ -18,6 +20,7 @@ export default function SpacecraftPage({
 }) {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<SpacecraftFilterValues>({});
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['spacecraft', page, filters],
@@ -33,9 +36,12 @@ export default function SpacecraftPage({
           { label: '航天器' },
         ]}
       />
-      <div className="flex items-center gap-3 mb-8">
-        <Satellite className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">航天器</h1>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-3">
+          <Satellite className="w-8 h-8 text-cosmic-blue" />
+          <h1 className="text-3xl font-bold text-star-white">航天器</h1>
+        </div>
+        <ViewToggle mode={viewMode} onChange={setViewMode} />
       </div>
 
       <SpacecraftFilters
@@ -56,41 +62,34 @@ export default function SpacecraftPage({
 
       {data && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-            {data.data.map((spacecraft) => (
-              <SpacecraftCard
-                key={spacecraft.id}
-                spacecraft={spacecraft}
-                locale={locale}
-              />
-            ))}
-          </div>
+          {viewMode === 'grid' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              {data.data.map((spacecraft, index) => (
+                <AnimateIn key={spacecraft.id} delay={index * 50}>
+                  <SpacecraftCard spacecraft={spacecraft} locale={locale} />
+                </AnimateIn>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2 mt-8">
+              {data.data.map((spacecraft, index) => (
+                <AnimateIn key={spacecraft.id} delay={index * 30}>
+                  <SpacecraftTableRow spacecraft={spacecraft} locale={locale} />
+                </AnimateIn>
+              ))}
+            </div>
+          )}
 
           {data.data.length === 0 && (
             <div className="text-center py-12 text-star-dim">暂无数据</div>
           )}
 
-          {data.pagination.totalPages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              <Button
-                variant="outline"
-                disabled={page === 1}
-                onClick={() => setPage((p) => p - 1)}
-              >
-                上一页
-              </Button>
-              <span className="px-4 py-2 text-star-dim">
-                {page} / {data.pagination.totalPages}
-              </span>
-              <Button
-                variant="outline"
-                disabled={page === data.pagination.totalPages}
-                onClick={() => setPage((p) => p + 1)}
-              >
-                下一页
-              </Button>
-            </div>
-          )}
+          <Pagination
+            page={page}
+            totalPages={data.pagination.totalPages}
+            total={data.pagination.total}
+            onPageChange={setPage}
+          />
         </>
       )}
     </div>

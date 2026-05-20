@@ -166,7 +166,7 @@ export default async function SpacecraftDetailPage({
         <div className="flex items-start gap-3">
           <Satellite className="w-8 h-8 text-cosmic-blue mt-1" />
           <div>
-            <h1 className="text-3xl font-bold text-white">{spacecraft.name}</h1>
+            <h1 className="text-3xl font-bold text-star-white">{spacecraft.name}</h1>
             <div className="mt-2 flex items-center gap-2">
               <Badge variant="info">{typeLabels[spacecraft.type]}</Badge>
             </div>
@@ -194,7 +194,7 @@ export default async function SpacecraftDetailPage({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">基本信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">基本信息</h2>
             <div className="space-y-3 text-star-dim">
               <div className="flex items-center gap-3">
                 <Building2 className="w-5 h-5 text-cosmic-blue" />
@@ -220,19 +220,19 @@ export default async function SpacecraftDetailPage({
 
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <Orbit className="w-5 h-5 text-cosmic-blue" />
               轨道参数
             </h2>
             <div className="space-y-2 text-sm text-star-dim">
               <div className="flex justify-between">
                 <span>轨道类型</span>
-                <span className="text-white">{spacecraft.orbitType}</span>
+                <span className="text-star-white">{spacecraft.orbitType}</span>
               </div>
               {spacecraft.orbitAltitude !== null && (
                 <div className="flex justify-between">
                   <span>轨道高度</span>
-                  <span className="text-white">
+                  <span className="text-star-white">
                     {spacecraft.orbitAltitude} km
                   </span>
                 </div>
@@ -240,7 +240,7 @@ export default async function SpacecraftDetailPage({
               {spacecraft.orbitInclination !== null && (
                 <div className="flex justify-between">
                   <span>轨道倾角</span>
-                  <span className="text-white">
+                  <span className="text-star-white">
                     {spacecraft.orbitInclination}°
                   </span>
                 </div>
@@ -248,7 +248,7 @@ export default async function SpacecraftDetailPage({
               {spacecraft.orbitPeriod !== null && (
                 <div className="flex justify-between">
                   <span>轨道周期</span>
-                  <span className="text-white">
+                  <span className="text-star-white">
                     {spacecraft.orbitPeriod} 分钟
                   </span>
                 </div>
@@ -260,7 +260,7 @@ export default async function SpacecraftDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">任务</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">任务</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {spacecraft.mission}
           </p>
@@ -269,7 +269,7 @@ export default async function SpacecraftDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">详细描述</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">详细描述</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {spacecraft.description}
           </p>
@@ -296,7 +296,7 @@ export default async function SpacecraftDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {rl.name}
                       </span>
                       <StatusBadge status={rl.status} className="text-xs" />
@@ -329,7 +329,7 @@ export default async function SpacecraftDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {sc.name}
                       </span>
                       <StatusBadge status={sc.status} className="text-xs" />
@@ -360,7 +360,7 @@ export default async function SpacecraftDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {sc.name}
                       </span>
                       <Badge variant="info">{sc.type}</Badge>

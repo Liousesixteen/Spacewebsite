@@ -80,7 +80,7 @@ export function QuickNav({ locale }: QuickNavProps) {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{t('title')}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-2">{t('title')}</h2>
         <p className="text-star-dim">{t('subtitle')}</p>
       </div>
 
@@ -98,7 +98,7 @@ export function QuickNav({ locale }: QuickNavProps) {
                 <div className="inline-flex p-3 rounded-lg bg-space-900/70 text-cosmic-blue mb-4 group-hover:text-cosmic-cyan transition">
                   <Icon className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2 group-hover:text-cosmic-blue transition">
+                <h3 className="text-xl font-semibold text-star-white mb-2 group-hover:text-cosmic-blue transition">
                   {t(`${item.key}.title`)}
                 </h3>
                 <p className="text-sm text-star-dim leading-relaxed">

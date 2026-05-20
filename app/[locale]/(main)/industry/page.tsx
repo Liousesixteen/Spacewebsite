@@ -78,7 +78,7 @@ export default async function IndustryOverviewPage({
       />
       <div className="flex items-center gap-3 mb-2">
         <Network className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">航天产业链</h1>
+        <h1 className="text-3xl font-bold text-star-white">航天产业链</h1>
       </div>
       <p className="text-star-dim mb-8">
         从原材料到航天应用的完整产业生态全景
@@ -97,12 +97,12 @@ export default async function IndustryOverviewPage({
       </section>
 
       <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-white mb-6">产业链全景</h2>
+        <h2 className="text-2xl font-semibold text-star-white mb-6">产业链全景</h2>
         <IndustryChainDiagram segments={segments} locale={locale} />
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold text-white mb-6">快速导航</h2>
+        <h2 className="text-2xl font-semibold text-star-white mb-6">快速导航</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickLinks.map((link) => {
             const Icon = link.icon;
@@ -111,7 +111,7 @@ export default async function IndustryOverviewPage({
                 <Card variant="glow" className="h-full cursor-pointer">
                   <CardContent className="p-6">
                     <Icon className="w-8 h-8 text-cosmic-blue mb-3" />
-                    <h3 className="text-lg font-semibold text-white mb-1">
+                    <h3 className="text-lg font-semibold text-star-white mb-1">
                       {link.label}
                     </h3>
                     <p className="text-sm text-star-dim">{link.description}</p>

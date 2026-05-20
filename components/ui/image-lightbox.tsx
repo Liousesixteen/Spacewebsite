@@ -97,7 +97,7 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
             sizes="(max-width: 768px) 100vw, 896px"
           />
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-            <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm bg-black/50 px-3 py-1.5 rounded-full">
+            <span className="text-star-white opacity-0 group-hover:opacity-100 transition-opacity text-sm bg-black/50 px-3 py-1.5 rounded-full">
               点击放大
             </span>
           </div>
@@ -115,7 +115,7 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
             aria-label={`${alt} full size`}
           >
             <button
-              className="absolute top-4 right-4 p-2 rounded-full bg-space-700/80 text-white hover:bg-space-600 transition-colors z-10"
+              className="absolute top-4 right-4 p-2 rounded-full bg-space-700/80 text-star-white hover:bg-space-600 transition-colors z-10"
               onClick={close}
               aria-label="Close lightbox"
             >
@@ -162,7 +162,7 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
               sizes="(max-width: 768px) 50vw, 33vw"
             />
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
-              <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity text-sm bg-black/50 px-3 py-1.5 rounded-full">
+              <span className="text-star-white opacity-0 group-hover:opacity-100 transition-opacity text-sm bg-black/50 px-3 py-1.5 rounded-full">
                 点击放大
               </span>
             </div>
@@ -183,7 +183,7 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
         >
           {/* Close button */}
           <button
-            className="absolute top-4 right-4 p-2 rounded-full bg-space-700/80 text-white hover:bg-space-600 transition-colors z-10"
+            className="absolute top-4 right-4 p-2 rounded-full bg-space-700/80 text-star-white hover:bg-space-600 transition-colors z-10"
             onClick={close}
             aria-label="Close lightbox"
           >
@@ -191,13 +191,13 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
           </button>
 
           {/* Image counter */}
-          <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-space-700/80 text-white text-sm z-10">
+          <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-space-700/80 text-star-white text-sm z-10">
             {lightboxIndex + 1} / {images.length}
           </div>
 
           {/* Previous button */}
           <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-space-700/80 text-white hover:bg-space-600 transition-colors z-10"
+            className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-space-700/80 text-star-white hover:bg-space-600 transition-colors z-10"
             onClick={(e) => {
               e.stopPropagation();
               goPrev();
@@ -209,7 +209,7 @@ export function ImageLightbox({ images, alt }: ImageLightboxProps) {
 
           {/* Next button */}
           <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-space-700/80 text-white hover:bg-space-600 transition-colors z-10"
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-space-700/80 text-star-white hover:bg-space-600 transition-colors z-10"
             onClick={(e) => {
               e.stopPropagation();
               goNext();

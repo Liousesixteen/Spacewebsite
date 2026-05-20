@@ -38,7 +38,7 @@ export default function EquipmentPage({
       />
       <div className="flex items-center gap-3 mb-8">
         <Wrench className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">设备库</h1>
+        <h1 className="text-3xl font-bold text-star-white">设备库</h1>
       </div>
 
       <div className="flex flex-wrap gap-4 p-4 bg-space-800 rounded-xl border border-space-600">
@@ -48,7 +48,7 @@ export default function EquipmentPage({
             setFilters({ ...filters, category: e.target.value || undefined });
             setPage(1);
           }}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-white"
+          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
           <option value="">全部分类</option>
           <option value="发射设备">发射设备</option>
@@ -123,7 +123,7 @@ export default function EquipmentPage({
                   <CardContent className="p-6">
                     <div className="flex items-start gap-2 mb-3">
                       <Wrench className="w-5 h-5 text-cosmic-blue mt-1 shrink-0" />
-                      <h3 className="text-lg font-semibold text-white line-clamp-2">
+                      <h3 className="text-lg font-semibold text-star-white line-clamp-2">
                         {item.name}
                       </h3>
                     </div>

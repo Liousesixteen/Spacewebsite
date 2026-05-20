@@ -36,7 +36,7 @@ export default function MaterialsPage({
       />
       <div className="flex items-center gap-3 mb-8">
         <Beaker className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">材料库</h1>
+        <h1 className="text-3xl font-bold text-star-white">材料库</h1>
       </div>
 
       <div className="flex flex-wrap gap-4 p-4 bg-space-800 rounded-xl border border-space-600">
@@ -46,7 +46,7 @@ export default function MaterialsPage({
             setFilters({ category: e.target.value || undefined });
             setPage(1);
           }}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-white"
+          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
           <option value="">全部分类</option>
           <option value="金属合金">金属合金</option>
@@ -90,7 +90,7 @@ export default function MaterialsPage({
                   <CardContent className="p-6">
                     <div className="flex items-start gap-2 mb-3">
                       <Beaker className="w-5 h-5 text-cosmic-blue mt-1 shrink-0" />
-                      <h3 className="text-lg font-semibold text-white line-clamp-2">
+                      <h3 className="text-lg font-semibold text-star-white line-clamp-2">
                         {material.name}
                       </h3>
                     </div>

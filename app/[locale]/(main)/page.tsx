@@ -135,7 +135,7 @@ export default async function HomePage({ params }: PageProps) {
           >
             <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="relative">
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="text-xl font-bold text-star-white mb-2">
                 {locale === 'zh-CN' ? '航天史时间线' : 'Space History Timeline'}
               </h3>
               <p className="text-sm text-star-dim leading-relaxed">
@@ -155,7 +155,7 @@ export default async function HomePage({ params }: PageProps) {
           >
             <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             <div className="relative">
-              <h3 className="text-xl font-bold text-white mb-2">
+              <h3 className="text-xl font-bold text-star-white mb-2">
                 {locale === 'zh-CN' ? '对比工具' : 'Comparison Tool'}
               </h3>
               <p className="text-sm text-star-dim leading-relaxed">

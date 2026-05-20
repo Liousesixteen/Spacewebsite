@@ -89,7 +89,7 @@ export default async function ProfileFavoritesPage({
       {(Object.keys(grouped) as FavoriteType[]).map((type) => (
         <section key={type}>
           <div className="flex items-center gap-3 mb-3">
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-star-white">
               {TYPE_LABELS[type]}
             </h2>
             <Badge variant="default">{grouped[type].length}</Badge>
@@ -102,7 +102,7 @@ export default async function ProfileFavoritesPage({
                     href={TYPE_PATHS[type](locale, fav.targetId)}
                     className="flex items-center justify-between p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors"
                   >
-                    <span className="text-white">{fav.title}</span>
+                    <span className="text-star-white">{fav.title}</span>
                     <span className="text-xs text-star-dim">
                       {format(new Date(fav.createdAt), 'yyyy-MM-dd')}
                     </span>

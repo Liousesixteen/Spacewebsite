@@ -2,9 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ---- Dark theme (default) ---- */
+:root,
+.dark {
   --background: #0a0a0f;
   --foreground: #ffffff;
+
+  /* space palette - dark */
+  --space-900: 10 10 15;
+  --space-800: 18 18 26;
+  --space-700: 26 26 37;
+  --space-600: 37 37 53;
+  --space-500: 53 53 80;
+
+  /* cosmic accents - same across themes */
+  --cosmic-blue: 79 143 255;
+  --cosmic-purple: 139 92 246;
+  --cosmic-cyan: 34 211 238;
+  --cosmic-pink: 236 72 153;
+
+  /* star palette - dark */
+  --star-white: 255 255 255;
+  --star-dim: 161 161 170;
+  --star-glow: 254 240 138;
+}
+
+/* ---- Light theme ---- */
+.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+
+  /* space palette - light */
+  --space-900: 241 245 249;
+  --space-800: 255 255 255;
+  --space-700: 248 250 252;
+  --space-600: 226 232 240;
+  --space-500: 203 213 225;
+
+  /* cosmic accents - slightly adjusted for light bg */
+  --cosmic-blue: 37 99 235;
+  --cosmic-purple: 124 58 237;
+  --cosmic-cyan: 14 165 170;
+  --cosmic-pink: 219 39 119;
+
+  /* star palette - light (dark text on light bg) */
+  --star-white: 15 23 42;
+  --star-dim: 71 85 105;
+  --star-glow: 202 138 4;
 }
 
 * {
@@ -32,21 +76,21 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #12121a;
+  background: rgb(var(--space-800));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #353550;
+  background: rgb(var(--space-500));
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4f8fff;
+  background: rgb(var(--cosmic-blue));
 }
 
 ::selection {
-  background: rgba(79, 143, 255, 0.3);
-  color: #ffffff;
+  background: rgba(var(--cosmic-blue), 0.3);
+  color: var(--foreground);
 }
 
 @layer utilities {
@@ -55,10 +99,10 @@ body {
   }
 
   .glow-blue {
-    box-shadow: 0 0 20px rgba(79, 143, 255, 0.4);
+    box-shadow: 0 0 20px rgba(var(--cosmic-blue), 0.4);
   }
 
   .glow-purple {
-    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 20px rgba(var(--cosmic-purple), 0.4);
   }
 }

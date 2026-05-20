@@ -11,3 +11,6 @@ export {
 export { ImageLightbox, type ImageLightboxProps } from './image-lightbox';
 export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './breadcrumbs';
 export { BackToTop } from './back-to-top';
+export { ViewToggle, type ViewMode } from './view-toggle';
+export { Pagination } from './pagination';
+export { AnimateIn } from './animate-in';

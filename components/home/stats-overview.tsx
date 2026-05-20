@@ -64,7 +64,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
   return (
     <section className="container mx-auto px-4 py-12">
       <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{t('title')}</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-2">{t('title')}</h2>
         <p className="text-star-dim">{t('subtitle')}</p>
       </div>
 
@@ -77,7 +77,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
                 <div className={`inline-flex p-3 rounded-full bg-space-800 mb-4 ${item.color}`}>
                   <Icon className="w-7 h-7" />
                 </div>
-                <div className="text-3xl md:text-4xl font-extrabold text-white mb-1 tabular-nums">
+                <div className="text-3xl md:text-4xl font-extrabold text-star-white mb-1 tabular-nums">
                   <CountUp end={item.value} />
                 </div>
                 <div className="text-sm text-star-dim">{t(item.key)}</div>

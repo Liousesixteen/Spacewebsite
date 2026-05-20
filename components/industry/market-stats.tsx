@@ -70,7 +70,7 @@ export function MarketStats({
                   <Icon className="w-5 h-5 text-cosmic-blue" />
                   <span className="text-sm text-star-dim">{stat.label}</span>
                 </div>
-                <div className="text-2xl font-bold text-white">
+                <div className="text-2xl font-bold text-star-white">
                   {stat.value.toLocaleString()}
                   <span className="text-sm text-star-dim ml-1">
                     {stat.suffix}
@@ -88,7 +88,7 @@ export function MarketStats({
             <Card variant="glow">
               <CardContent className="p-6">
                 <div className="text-sm text-star-dim mb-2">全球市场规模</div>
-                <div className="text-3xl font-bold text-white">
+                <div className="text-3xl font-bold text-star-white">
                   ${marketSize.toLocaleString(undefined, { maximumFractionDigits: 1 })}
                   <span className="text-base text-star-dim ml-2">亿美元</span>
                 </div>

@@ -85,7 +85,7 @@ function SelectionDropdown<T extends { id: string; name: string }>({
         <div className="flex items-center justify-between p-4 rounded-xl border border-cosmic-blue bg-cosmic-blue/5">
           <div>
             <div className="text-sm text-star-dim">{placeholder.replace('选择', '').replace('Select ', '')}</div>
-            <div className="text-white font-semibold">{selected.name}</div>
+            <div className="text-star-white font-semibold">{selected.name}</div>
           </div>
           <button
             type="button"
@@ -93,7 +93,7 @@ function SelectionDropdown<T extends { id: string; name: string }>({
               onSelect(null as unknown as T);
               setSearch('');
             }}
-            className="text-star-dim hover:text-white p-1"
+            className="text-star-dim hover:text-star-white p-1"
           >
             <X className="w-4 h-4" />
           </button>
@@ -111,7 +111,7 @@ function SelectionDropdown<T extends { id: string; name: string }>({
               }}
               onFocus={() => setOpen(true)}
               placeholder={placeholder}
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-space-600 bg-space-800 text-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue transition-colors text-sm"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-space-600 bg-space-800 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue transition-colors text-sm"
             />
           </div>
 
@@ -127,7 +127,7 @@ function SelectionDropdown<T extends { id: string; name: string }>({
                 <button
                   key={item.id}
                   type="button"
-                  className="w-full text-left px-4 py-3 text-sm text-white hover:bg-space-700 transition-colors border-b border-space-700 last:border-0"
+                  className="w-full text-left px-4 py-3 text-sm text-star-white hover:bg-space-700 transition-colors border-b border-space-700 last:border-0"
                   onClick={() => {
                     onSelect(item);
                     setSearch('');
@@ -335,7 +335,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
               'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
               compareType === 'rockets'
                 ? 'bg-cosmic-blue/20 text-cosmic-blue'
-                : 'text-star-dim hover:text-white'
+                : 'text-star-dim hover:text-star-white'
             )}
           >
             <RocketIcon className="w-4 h-4" />
@@ -348,7 +348,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
               'flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors',
               compareType === 'spacecraft'
                 ? 'bg-cosmic-blue/20 text-cosmic-blue'
-                : 'text-star-dim hover:text-white'
+                : 'text-star-dim hover:text-star-white'
             )}
           >
             <Satellite className="w-4 h-4" />
@@ -374,7 +374,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
         <button
           type="button"
           onClick={swap}
-          className="flex items-center justify-center p-3 rounded-xl border border-space-600 bg-space-800 hover:border-cosmic-blue text-star-dim hover:text-white transition-all self-center mx-auto md:mx-0"
+          className="flex items-center justify-center p-3 rounded-xl border border-space-600 bg-space-800 hover:border-cosmic-blue text-star-dim hover:text-star-white transition-all self-center mx-auto md:mx-0"
           disabled={!left || !right}
           title={isZh ? '交换对比' : 'Swap comparison'}
         >
@@ -402,7 +402,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
             <button
               type="button"
               onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-space-600 bg-space-800 text-sm text-star-dim hover:text-white hover:border-cosmic-blue transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-space-600 bg-space-800 text-sm text-star-dim hover:text-star-white hover:border-cosmic-blue transition-all"
             >
               {shared ? (
                 <>
@@ -426,10 +426,10 @@ export function ComparePanel({ locale }: ComparePanelProps) {
                   <th className="text-left p-4 text-star-dim font-medium w-1/4">
                     {isZh ? '属性' : 'Attribute'}
                   </th>
-                  <th className="text-left p-4 text-white font-semibold bg-cosmic-blue/5">
+                  <th className="text-left p-4 text-star-white font-semibold bg-cosmic-blue/5">
                     {rows.a.name}
                   </th>
-                  <th className="text-left p-4 text-white font-semibold bg-cosmic-purple/5">
+                  <th className="text-left p-4 text-star-white font-semibold bg-cosmic-purple/5">
                     {rows.b.name}
                   </th>
                 </tr>
@@ -440,7 +440,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
                     <td className="p-4 text-star-dim">{isZh ? field.labelZh : field.label}</td>
                     <td
                       className={cn(
-                        'p-4 text-white bg-cosmic-blue/[0.02]',
+                        'p-4 text-star-white bg-cosmic-blue/[0.02]',
                         field.highlightA === 'better' && 'text-green-400',
                         field.highlightA === 'worse' && 'text-red-400/80'
                       )}
@@ -452,7 +452,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
                     </td>
                     <td
                       className={cn(
-                        'p-4 text-white bg-cosmic-purple/[0.02]',
+                        'p-4 text-star-white bg-cosmic-purple/[0.02]',
                         field.highlightB === 'better' && 'text-green-400',
                         field.highlightB === 'worse' && 'text-red-400/80'
                       )}
@@ -479,7 +479,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
                       'flex-1 px-3 py-2 rounded bg-cosmic-blue/5 text-sm',
                       field.highlightA === 'better' && 'text-green-400',
                       field.highlightA === 'worse' && 'text-red-400/80',
-                      field.highlightA === 'neutral' && 'text-white'
+                      field.highlightA === 'neutral' && 'text-star-white'
                     )}
                   >
                     <div className="text-[10px] text-star-dim mb-0.5">{rows.a.name}</div>
@@ -493,7 +493,7 @@ export function ComparePanel({ locale }: ComparePanelProps) {
                       'flex-1 px-3 py-2 rounded bg-cosmic-purple/5 text-sm',
                       field.highlightB === 'better' && 'text-green-400',
                       field.highlightB === 'worse' && 'text-red-400/80',
-                      field.highlightB === 'neutral' && 'text-white'
+                      field.highlightB === 'neutral' && 'text-star-white'
                     )}
                   >
                     <div className="text-[10px] text-star-dim mb-0.5">{rows.b.name}</div>

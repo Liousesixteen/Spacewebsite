@@ -65,7 +65,7 @@ export function SettingsForm({ initialName, initialLocale }: SettingsFormProps) 
         <select
           value={locale}
           onChange={(e) => setLocale(e.target.value)}
-          className="w-full px-4 py-2 rounded-lg bg-space-700 border border-space-500 text-white focus:outline-none focus:border-cosmic-blue"
+          className="w-full px-4 py-2 rounded-lg bg-space-700 border border-space-500 text-star-white focus:outline-none focus:border-cosmic-blue"
         >
           {locales.map((l) => (
             <option key={l} value={l}>

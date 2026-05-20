@@ -57,7 +57,7 @@ function num(v: unknown): number | null {
 
 export async function syncLaunchSites(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[launch-sites] Fetching pads from LL2...');
-  const pads = await fetchLL2List<LL2Pad>('/pad/', { limit: 100, mode: 'detailed' }, 200);
+  const pads = await fetchLL2List<LL2Pad>('/pad/', { limit: 100, mode: 'detailed' }, 500);
   console.log(`[launch-sites] Got ${pads.length} pads`);
 
   const sites = new Map<string, SiteAccumulator>();

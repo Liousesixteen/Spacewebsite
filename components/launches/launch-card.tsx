@@ -43,7 +43,7 @@ export function LaunchCard({ launch, locale }: LaunchCardProps) {
         </div>
         <CardContent className="p-6">
           <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white line-clamp-2">
+            <h3 className="text-lg font-semibold text-star-white line-clamp-2">
               {launch.name}
             </h3>
             <Badge

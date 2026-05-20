@@ -67,7 +67,7 @@ export function ApodSection({ apod }: ApodSectionProps) {
           <p className="text-xs uppercase tracking-[0.2em] text-cosmic-blue mb-4">
             NASA Astronomy Picture of the Day
           </p>
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+          <h2 className="text-3xl md:text-5xl font-bold text-star-white mb-6 leading-tight">
             {apod.title}
           </h2>
           <p className="text-star-dim text-base md:text-lg leading-relaxed">

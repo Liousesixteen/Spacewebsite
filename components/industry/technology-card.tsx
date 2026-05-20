@@ -31,7 +31,7 @@ export function TechnologyCard({ technology, locale }: TechnologyCardProps) {
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-start gap-2">
               <Cpu className="w-5 h-5 text-cosmic-blue mt-1 shrink-0" />
-              <h3 className="text-lg font-semibold text-white line-clamp-2">
+              <h3 className="text-lg font-semibold text-star-white line-clamp-2">
                 {technology.name}
               </h3>
             </div>

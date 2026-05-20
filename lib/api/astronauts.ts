@@ -54,6 +54,9 @@ export async function getAstronauts(params?: {
   nationality?: string;
   agency?: string;
   status?: string;
+  name?: string;
+  flightsMin?: string;
+  flightsMax?: string;
 }): Promise<AstronautListResponse> {
   const searchParams = new URLSearchParams();
   if (params?.page) searchParams.set('page', params.page.toString());
@@ -61,6 +64,9 @@ export async function getAstronauts(params?: {
   if (params?.nationality) searchParams.set('nationality', params.nationality);
   if (params?.agency) searchParams.set('agency', params.agency);
   if (params?.status) searchParams.set('status', params.status);
+  if (params?.name) searchParams.set('name', params.name);
+  if (params?.flightsMin) searchParams.set('flightsMin', params.flightsMin);
+  if (params?.flightsMax) searchParams.set('flightsMax', params.flightsMax);
 
   const res = await fetch(`/api/astronauts?${searchParams}`);
   if (!res.ok) throw new Error('Failed to fetch astronauts');

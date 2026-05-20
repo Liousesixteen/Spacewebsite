@@ -118,7 +118,7 @@ export default async function EquipmentDetailPage({
       <div className="flex items-start gap-3 mb-6">
         <Wrench className="w-8 h-8 text-cosmic-blue mt-1" />
         <div>
-          <h1 className="text-3xl font-bold text-white">{equipment.name}</h1>
+          <h1 className="text-3xl font-bold text-star-white">{equipment.name}</h1>
           <div className="mt-2 flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
               <Tag className="w-4 h-4 text-star-dim" />
@@ -134,7 +134,7 @@ export default async function EquipmentDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">设备描述</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">设备描述</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {equipment.description}
           </p>
@@ -144,7 +144,7 @@ export default async function EquipmentDetailPage({
       {specEntries.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">技术规格</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">技术规格</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {specEntries.map(([key, value]) => (
                 <div
@@ -152,7 +152,7 @@ export default async function EquipmentDetailPage({
                   className="flex justify-between items-start p-3 bg-space-700 rounded-lg gap-3"
                 >
                   <span className="text-star-dim text-sm">{key}</span>
-                  <span className="text-white text-sm text-right break-all">
+                  <span className="text-star-white text-sm text-right break-all">
                     {formatSpecValue(value)}
                   </span>
                 </div>
@@ -165,7 +165,7 @@ export default async function EquipmentDetailPage({
       {equipment.applications.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <Target className="w-5 h-5 text-cosmic-blue" />
               应用场景
             </h2>
@@ -196,7 +196,7 @@ export default async function EquipmentDetailPage({
                   className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                 >
                   <div className="flex items-start justify-between gap-2 mb-1">
-                    <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                    <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                       {e.name}
                     </span>
                   </div>

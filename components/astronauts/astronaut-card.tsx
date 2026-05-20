@@ -39,7 +39,7 @@ export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-lg font-semibold text-white line-clamp-2">
+                <h3 className="text-lg font-semibold text-star-white line-clamp-2">
                   {astronaut.name}
                 </h3>
                 <Badge variant={statusColors[astronaut.status]}>

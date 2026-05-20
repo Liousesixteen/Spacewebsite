@@ -41,6 +41,8 @@ export async function getSpacecraftList(params?: {
   type?: string;
   status?: string;
   operator?: string;
+  orbitType?: string;
+  name?: string;
 }): Promise<SpacecraftListResponse> {
   const searchParams = new URLSearchParams();
   if (params?.page) searchParams.set('page', params.page.toString());
@@ -48,6 +50,8 @@ export async function getSpacecraftList(params?: {
   if (params?.type) searchParams.set('type', params.type);
   if (params?.status) searchParams.set('status', params.status);
   if (params?.operator) searchParams.set('operator', params.operator);
+  if (params?.orbitType) searchParams.set('orbitType', params.orbitType);
+  if (params?.name) searchParams.set('name', params.name);
 
   const res = await fetch(`/api/spacecraft?${searchParams}`);
   if (!res.ok) throw new Error('Failed to fetch spacecraft');

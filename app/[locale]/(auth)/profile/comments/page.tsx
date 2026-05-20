@@ -50,7 +50,7 @@ export default async function ProfileCommentsPage({
   return (
     <div>
       <div className="flex items-center gap-3 mb-4">
-        <h2 className="text-lg font-semibold text-white">我的评论</h2>
+        <h2 className="text-lg font-semibold text-star-white">我的评论</h2>
         <Badge variant="default">{comments.length}</Badge>
       </div>
       <ul className="space-y-3">

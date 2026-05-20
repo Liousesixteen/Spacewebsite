@@ -41,7 +41,7 @@ export function CompanyCard({ company, locale }: CompanyCardProps) {
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-white line-clamp-1">
+              <h3 className="text-lg font-semibold text-star-white line-clamp-1">
                 {company.name}
               </h3>
               <div className="mt-1 flex items-center gap-2 flex-wrap">

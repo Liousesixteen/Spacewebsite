@@ -54,7 +54,7 @@ function mapType(typeName: string | null | undefined, crewed: boolean): Spacecra
 
 export async function syncSpacecraft(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[spacecraft] Fetching spacecraft from LL2...');
-  const list = await fetchLL2List<LL2Spacecraft>('/spacecraft/', { limit: 100, mode: 'detailed' }, 200);
+  const list = await fetchLL2List<LL2Spacecraft>('/spacecraft/', { limit: 100, mode: 'detailed' }, 500);
   console.log(`[spacecraft] Got ${list.length} spacecraft`);
 
   let added = 0;

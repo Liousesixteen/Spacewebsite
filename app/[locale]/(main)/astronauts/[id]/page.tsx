@@ -166,7 +166,7 @@ export default async function AstronautDetailPage({
 
         <div className="flex-1">
           <div className="flex items-start justify-between gap-2 mb-3">
-            <h1 className="text-3xl font-bold text-white">{astronaut.name}</h1>
+            <h1 className="text-3xl font-bold text-star-white">{astronaut.name}</h1>
             <div className="flex items-center gap-3">
               <StatusBadge
                 status={astronaut.status}
@@ -209,7 +209,7 @@ export default async function AstronautDetailPage({
       {socialLinks && Object.keys(socialLinks).length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-3">社交媒体</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-3">社交媒体</h2>
             <div className="flex flex-wrap gap-3">
               {Object.entries(socialLinks).map(([platform, url]) =>
                 url ? (
@@ -231,7 +231,7 @@ export default async function AstronautDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">个人简介</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">个人简介</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {astronaut.bio}
           </p>
@@ -241,7 +241,7 @@ export default async function AstronautDetailPage({
       {/* Mission History */}
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
             <Rocket className="w-5 h-5 text-cosmic-blue" />
             任务履历
           </h2>
@@ -258,7 +258,7 @@ export default async function AstronautDetailPage({
                   <div className="p-4 bg-space-700 rounded-lg hover:bg-space-600 transition-colors">
                     <div className="flex items-start justify-between mb-2 gap-2">
                       <div>
-                        <h3 className="text-white font-medium">
+                        <h3 className="text-star-white font-medium">
                           {crew.launch.name}
                         </h3>
                         <p className="text-cosmic-blue text-sm mt-1">
@@ -308,7 +308,7 @@ export default async function AstronautDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {a.name}
                       </span>
                       <StatusBadge status={a.status} className="text-xs" />
@@ -339,7 +339,7 @@ export default async function AstronautDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {a.name}
                       </span>
                       <StatusBadge status={a.status} className="text-xs" />

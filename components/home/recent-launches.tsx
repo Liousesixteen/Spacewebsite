@@ -42,7 +42,7 @@ export async function RecentLaunches({ locale }: RecentLaunchesProps) {
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-end justify-between mb-8">
         <div>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">{t('title')}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-2">{t('title')}</h2>
           <p className="text-star-dim">{t('subtitle')}</p>
         </div>
         <Link href={`/${locale}/launches`} className="hidden md:block">

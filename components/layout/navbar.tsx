@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Rocket, Menu, X, Search } from 'lucide-react';
+import { Rocket, Menu, X, Search, Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
 import { GlobalSearch } from './global-search';
 import { UserNav } from '@/components/auth/user-nav';
+import { useTheme } from '@/components/providers/theme-provider';
 
 interface NavbarProps {
   locale: string;
@@ -20,6 +21,7 @@ export function Navbar({ locale }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [isMac, setIsMac] = useState(false);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     if (typeof navigator !== 'undefined') {
@@ -82,8 +84,8 @@ export function Navbar({ locale }: NavbarProps) {
                 className={cn(
                   'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                   isActive(item.href)
-                    ? 'text-white bg-space-700'
-                    : 'text-star-dim hover:text-white hover:bg-space-800'
+                    ? 'text-star-white bg-space-700'
+                    : 'text-star-dim hover:text-star-white hover:bg-space-800'
                 )}
               >
                 {item.label}
@@ -95,13 +97,25 @@ export function Navbar({ locale }: NavbarProps) {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800 border border-space-600 text-star-dim hover:text-white hover:border-cosmic-blue/60 transition-colors text-sm"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800 border border-space-600 text-star-dim hover:text-star-white hover:border-cosmic-blue/60 transition-colors text-sm"
               aria-label="Open search"
             >
               <Search className="w-4 h-4" />
               <span className="hidden lg:inline text-xs font-mono px-1.5 py-0.5 rounded bg-space-700 border border-space-600">
                 {isMac ? '⌘K' : 'Ctrl K'}
               </span>
+            </button>
+            <button
+              type="button"
+              onClick={toggle}
+              className="p-2 rounded-lg text-star-dim hover:text-star-white hover:bg-space-800 transition-colors"
+              aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4" />
+              ) : (
+                <Moon className="w-4 h-4" />
+              )}
             </button>
             <select
               value={locale}
@@ -110,7 +124,7 @@ export function Navbar({ locale }: NavbarProps) {
                 const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
                 window.location.href = newPath;
               }}
-              className="bg-space-700 border border-space-500 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-cosmic-blue"
+              className="bg-space-700 border border-space-500 rounded-lg px-3 py-1.5 text-sm text-star-white focus:outline-none focus:border-cosmic-blue"
             >
               <option value="zh-CN">中文</option>
               <option value="en">English</option>
@@ -124,13 +138,13 @@ export function Navbar({ locale }: NavbarProps) {
             <button
               type="button"
               onClick={() => setSearchOpen(true)}
-              className="p-2 text-star-dim hover:text-white"
+              className="p-2 text-star-dim hover:text-star-white"
               aria-label="Open search"
             >
               <Search className="w-5 h-5" />
             </button>
             <button
-              className="p-2 text-star-dim hover:text-white"
+              className="p-2 text-star-dim hover:text-star-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

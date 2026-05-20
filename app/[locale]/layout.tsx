@@ -6,6 +6,7 @@ import { locales } from '@/lib/i18n/config';
 import { Navbar, Starfield, Footer } from '@/components/layout';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { AuthProvider } from '@/components/providers/auth-provider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import { BackToTop } from '@/components/ui';
 import '../globals.css';
 
@@ -58,6 +59,7 @@ export default async function RootLayout({
     <html lang={locale}>
       <body className="min-h-screen bg-space-900">
         <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>
           <AuthProvider>
             <QueryProvider>
               <Starfield />
@@ -69,6 +71,7 @@ export default async function RootLayout({
               <BackToTop />
             </QueryProvider>
           </AuthProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

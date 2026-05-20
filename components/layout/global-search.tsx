@@ -295,7 +295,7 @@ export function GlobalSearch({ open, onClose, locale }: GlobalSearchProps) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={labels.placeholder}
-            className="flex-1 bg-transparent text-white placeholder-star-dim/60 focus:outline-none text-base"
+            className="flex-1 bg-transparent text-star-white placeholder-star-dim/60 focus:outline-none text-base"
             autoComplete="off"
             spellCheck={false}
           />
@@ -304,7 +304,7 @@ export function GlobalSearch({ open, onClose, locale }: GlobalSearchProps) {
           )}
           <button
             onClick={onClose}
-            className="p-1 text-star-dim hover:text-white transition-colors"
+            className="p-1 text-star-dim hover:text-star-white transition-colors"
             aria-label="Close search"
           >
             <X className="w-5 h-5" />
@@ -353,7 +353,7 @@ export function GlobalSearch({ open, onClose, locale }: GlobalSearchProps) {
                                 <Icon className="w-4 h-4" />
                               </span>
                               <span className="flex-1 min-w-0">
-                                <span className="block text-sm text-white truncate">
+                                <span className="block text-sm text-star-white truncate">
                                   {item.name}
                                 </span>
                                 <span className="block text-xs text-star-dim truncate">

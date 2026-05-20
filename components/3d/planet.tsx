@@ -121,7 +121,7 @@ export function Planet({ planet, orbitColor, showOrbit = true }: PlanetProps) {
             center
             style={{ pointerEvents: 'none' }}
           >
-            <div className="rounded-md bg-space-900/90 border border-space-600 px-2 py-1 text-xs text-white whitespace-nowrap">
+            <div className="rounded-md bg-space-900/90 border border-space-600 px-2 py-1 text-xs text-star-white whitespace-nowrap">
               <div className="font-semibold">{name}</div>
               {description && (
                 <div className="text-star-dim text-[10px]">{description}</div>

@@ -100,7 +100,7 @@ export default async function TechnologyDetailPage({
         <div className="flex items-start gap-3">
           <Cpu className="w-8 h-8 text-cosmic-blue mt-1" />
           <div>
-            <h1 className="text-3xl font-bold text-white">{technology.name}</h1>
+            <h1 className="text-3xl font-bold text-star-white">{technology.name}</h1>
             <div className="mt-2 flex items-center gap-2 flex-wrap">
               <StatusBadge
                 status="default"
@@ -126,7 +126,7 @@ export default async function TechnologyDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">技术描述</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">技术描述</h2>
           <p className="text-star-dim leading-relaxed whitespace-pre-line">
             {technology.description}
           </p>
@@ -137,7 +137,7 @@ export default async function TechnologyDetailPage({
         {technology.applications.length > 0 && (
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
                 <Target className="w-5 h-5 text-cosmic-blue" />
                 应用领域
               </h2>
@@ -153,7 +153,7 @@ export default async function TechnologyDetailPage({
         {technology.keyPlayers.length > 0 && (
           <Card>
             <CardContent className="p-6">
-              <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-cosmic-blue" />
                 主要参与方
               </h2>
@@ -170,7 +170,7 @@ export default async function TechnologyDetailPage({
       {technology.challenges.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-yellow-400" />
               主要挑战
             </h2>
@@ -189,7 +189,7 @@ export default async function TechnologyDetailPage({
       {breakthroughs.length > 0 && (
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-6 flex items-center gap-2">
               <Clock className="w-5 h-5 text-cosmic-blue" />
               发展历程
             </h2>
@@ -200,7 +200,7 @@ export default async function TechnologyDetailPage({
                   <div className="text-sm text-cosmic-blue font-medium">
                     {item.year || item.date || '—'}
                   </div>
-                  <div className="mt-1 text-white font-medium">
+                  <div className="mt-1 text-star-white font-medium">
                     {item.title || item.event || '里程碑'}
                   </div>
                   {item.description && (

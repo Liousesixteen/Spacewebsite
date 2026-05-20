@@ -42,7 +42,7 @@ export default function CompaniesPage({
       />
       <div className="flex items-center gap-3 mb-8">
         <Building2 className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-white">企业库</h1>
+        <h1 className="text-3xl font-bold text-star-white">企业库</h1>
       </div>
 
       <div className="flex flex-wrap gap-4 p-4 bg-space-800 rounded-xl border border-space-600">
@@ -52,7 +52,7 @@ export default function CompaniesPage({
             setFilters({ ...filters, country: e.target.value || undefined });
             setPage(1);
           }}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-white"
+          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
           <option value="">全部国家</option>
           <option value="China">中国</option>
@@ -69,7 +69,7 @@ export default function CompaniesPage({
             setFilters({ ...filters, type: e.target.value || undefined });
             setPage(1);
           }}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-white"
+          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
           <option value="">全部类型</option>
           <option value="STATE_OWNED">国企</option>

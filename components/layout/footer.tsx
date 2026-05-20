@@ -47,7 +47,7 @@ export function Footer({ locale }: FooterProps) {
 
           {/* Product Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-star-white mb-4 uppercase tracking-wider">
               {t('footer.product')}
             </h3>
             <ul className="space-y-2">
@@ -55,7 +55,7 @@ export function Footer({ locale }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-star-dim hover:text-white transition-colors"
+                    className="text-sm text-star-dim hover:text-star-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -66,7 +66,7 @@ export function Footer({ locale }: FooterProps) {
 
           {/* Company Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-star-white mb-4 uppercase tracking-wider">
               {t('footer.company')}
             </h3>
             <ul className="space-y-2">
@@ -74,7 +74,7 @@ export function Footer({ locale }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-star-dim hover:text-white transition-colors"
+                    className="text-sm text-star-dim hover:text-star-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -85,7 +85,7 @@ export function Footer({ locale }: FooterProps) {
 
           {/* Legal Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-star-white mb-4 uppercase tracking-wider">
               {t('footer.legal')}
             </h3>
             <ul className="space-y-2">
@@ -93,7 +93,7 @@ export function Footer({ locale }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-star-dim hover:text-white transition-colors"
+                    className="text-sm text-star-dim hover:text-star-white transition-colors"
                   >
                     {link.label}
                   </Link>
@@ -104,7 +104,7 @@ export function Footer({ locale }: FooterProps) {
 
           {/* Social Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-star-white mb-4 uppercase tracking-wider">
               {t('footer.follow')}
             </h3>
             <div className="flex gap-4">

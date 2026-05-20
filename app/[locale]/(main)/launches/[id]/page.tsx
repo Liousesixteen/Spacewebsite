@@ -146,7 +146,7 @@ export default async function LaunchDetailPage({
       />
 
       <div className="flex items-start justify-between mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-white">{launch.name}</h1>
+        <h1 className="text-3xl font-bold text-star-white">{launch.name}</h1>
         <div className="flex items-center gap-3">
           <StatusBadge status={launch.status} className="text-base px-4 py-1" />
           <FavoriteButton
@@ -166,7 +166,7 @@ export default async function LaunchDetailPage({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">发射信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">发射信息</h2>
             <div className="space-y-3 text-star-dim">
               <div className="flex items-center gap-3">
                 <Calendar className="w-5 h-5 text-cosmic-blue" />
@@ -195,11 +195,11 @@ export default async function LaunchDetailPage({
 
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">火箭信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">火箭信息</h2>
             <Link href={`/${locale}/rockets/${launch.rocket.id}`} className="block">
               <div className="flex items-center gap-3 mb-3">
                 <Rocket className="w-5 h-5 text-cosmic-blue" />
-                <span className="text-white hover:text-cosmic-blue">
+                <span className="text-star-white hover:text-cosmic-blue">
                   {launch.rocket.name}
                 </span>
               </div>
@@ -215,7 +215,7 @@ export default async function LaunchDetailPage({
 
       <Card className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">任务描述</h2>
+          <h2 className="text-lg font-semibold text-star-white mb-4">任务描述</h2>
           <p className="text-star-dim leading-relaxed">{launch.missionDescription}</p>
         </CardContent>
       </Card>
@@ -223,7 +223,7 @@ export default async function LaunchDetailPage({
       {launch.crews.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
               <Users className="w-5 h-5 text-cosmic-blue" />
               机组成员
             </h2>
@@ -244,7 +244,7 @@ export default async function LaunchDetailPage({
                         className="rounded-full"
                       />
                     </div>
-                    <p className="text-white text-sm">{crew.astronaut.name}</p>
+                    <p className="text-star-white text-sm">{crew.astronaut.name}</p>
                     <p className="text-star-dim text-xs">{crew.role}</p>
                   </div>
                 </Link>
@@ -257,14 +257,14 @@ export default async function LaunchDetailPage({
       {payloads.length > 0 && (
         <Card className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">载荷信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">载荷信息</h2>
             <div className="space-y-2">
               {payloads.map((payload, index) => (
                 <div
                   key={index}
                   className="flex justify-between p-3 bg-space-700 rounded-lg"
                 >
-                  <span className="text-white">{payload.name}</span>
+                  <span className="text-star-white">{payload.name}</span>
                   <span className="text-star-dim">{payload.type}</span>
                 </div>
               ))}
@@ -285,7 +285,7 @@ export default async function LaunchDetailPage({
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
-              <span className="text-white">{launch.rocket.name}</span>
+              <span className="text-star-white">{launch.rocket.name}</span>
               <span className="text-star-dim text-sm">
                 {launch.rocket.manufacturer} · {launch.rocket.country}
               </span>
@@ -303,7 +303,7 @@ export default async function LaunchDetailPage({
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
-              <span className="text-white">{launch.launchSite.name}</span>
+              <span className="text-star-white">{launch.launchSite.name}</span>
               <span className="text-star-dim text-sm">
                 {launch.launchSite.country} · {launch.launchSite.region}
               </span>
@@ -328,7 +328,7 @@ export default async function LaunchDetailPage({
                     href={`/${locale}/spacecraft/${sc.id}`}
                     className="flex items-center gap-3 p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
-                    <span className="text-white group-hover:text-cosmic-blue transition-colors">
+                    <span className="text-star-white group-hover:text-cosmic-blue transition-colors">
                       {sc.name}
                     </span>
                     <Badge variant="default">{sc.type}</Badge>
@@ -357,7 +357,7 @@ export default async function LaunchDetailPage({
                     className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
                   >
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <span className="text-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {rl.name}
                       </span>
                       <StatusBadge status={rl.status} className="text-xs" />

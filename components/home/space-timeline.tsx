@@ -883,7 +883,7 @@ function EventCard({
                 </span>
               )}
             </div>
-            <h3 className="text-base font-semibold text-white">
+            <h3 className="text-base font-semibold text-star-white">
               {zh ? event.titleZh : event.title}
             </h3>
             <p className="text-sm text-star-dim mt-1.5 line-clamp-2">
@@ -1024,7 +1024,7 @@ export function SpaceTimeline() {
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-2 text-cosmic-blue mb-2">
           <Clock className="w-6 h-6" />
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
+          <h2 className="text-3xl md:text-4xl font-bold text-star-white">
             {locale === 'zh' ? '航天史时间线' : 'Space History Timeline'}
           </h2>
         </div>
@@ -1049,7 +1049,7 @@ export function SpaceTimeline() {
               'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all',
               filter === cat.key
                 ? 'border-cosmic-blue bg-cosmic-blue/10 text-cosmic-blue'
-                : 'border-space-600 text-star-dim hover:text-white hover:border-space-500'
+                : 'border-space-600 text-star-dim hover:text-star-white hover:border-space-500'
             )}
           >
             {cat.key !== 'all' && (

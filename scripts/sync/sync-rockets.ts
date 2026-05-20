@@ -44,7 +44,7 @@ export async function syncRockets(): Promise<{ added: number; updated: number; s
   console.log('[rockets] Fetching launcher_config list from LL2...');
   // /config/launcher/ returns rocket configurations (e.g. Falcon 9), which is
   // what we want. /launcher/ returns individual hardware (specific boosters).
-  const launchers = await fetchLL2List<LL2Launcher>('/config/launcher/', { limit: 100, mode: 'detailed' }, 200);
+  const launchers = await fetchLL2List<LL2Launcher>('/config/launcher/', { limit: 100, mode: 'detailed' }, 500);
   console.log(`[rockets] Got ${launchers.length} launcher configs`);
 
   let added = 0;

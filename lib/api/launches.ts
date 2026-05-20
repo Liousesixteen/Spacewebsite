@@ -40,6 +40,8 @@ export async function getLaunches(params?: {
   status?: string;
   country?: string;
   year?: string;
+  rocketName?: string;
+  launchSite?: string;
 }): Promise<LaunchListResponse> {
   const searchParams = new URLSearchParams();
   if (params?.page) searchParams.set('page', params.page.toString());
@@ -47,6 +49,8 @@ export async function getLaunches(params?: {
   if (params?.status) searchParams.set('status', params.status);
   if (params?.country) searchParams.set('country', params.country);
   if (params?.year) searchParams.set('year', params.year);
+  if (params?.rocketName) searchParams.set('rocketName', params.rocketName);
+  if (params?.launchSite) searchParams.set('launchSite', params.launchSite);
 
   const res = await fetch(`/api/launches?${searchParams}`);
   if (!res.ok) throw new Error('Failed to fetch launches');

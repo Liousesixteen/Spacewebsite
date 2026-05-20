@@ -64,14 +64,14 @@ export function UserNav({ locale }: UserNavProps) {
       {open && (
         <div className="absolute right-0 mt-2 w-56 rounded-xl bg-space-800 border border-space-600 shadow-xl py-2 z-50">
           <div className="px-4 py-2 border-b border-space-700">
-            <p className="text-sm font-medium text-white truncate">{displayName}</p>
+            <p className="text-sm font-medium text-star-white truncate">{displayName}</p>
             {session.user.email && (
               <p className="text-xs text-star-dim truncate">{session.user.email}</p>
             )}
           </div>
           <Link
             href={`/${locale}/profile`}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-white hover:bg-space-700"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             onClick={() => setOpen(false)}
           >
             <User className="w-4 h-4" />
@@ -79,7 +79,7 @@ export function UserNav({ locale }: UserNavProps) {
           </Link>
           <Link
             href={`/${locale}/profile/favorites`}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-white hover:bg-space-700"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             onClick={() => setOpen(false)}
           >
             <Heart className="w-4 h-4" />
@@ -87,7 +87,7 @@ export function UserNav({ locale }: UserNavProps) {
           </Link>
           <Link
             href={`/${locale}/profile/comments`}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-white hover:bg-space-700"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             onClick={() => setOpen(false)}
           >
             <MessageSquare className="w-4 h-4" />
@@ -95,7 +95,7 @@ export function UserNav({ locale }: UserNavProps) {
           </Link>
           <Link
             href={`/${locale}/profile/settings`}
-            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-white hover:bg-space-700"
+            className="flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             onClick={() => setOpen(false)}
           >
             <Settings className="w-4 h-4" />
@@ -118,7 +118,7 @@ export function UserNav({ locale }: UserNavProps) {
                 setOpen(false);
                 signOut({ callbackUrl: `/${locale}` });
               }}
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-white hover:bg-space-700"
+              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             >
               <LogOut className="w-4 h-4" />
               退出登录
