@@ -8,6 +8,8 @@
     "launches": "打ち上げ",
     "spacecraft": "宇宙船",
     "astronauts": "宇宙飛行士",
+    "timeline": "年表",
+    "compare": "比較",
     "explore": "宇宙探査",
     "industry": "産業"
   },
@@ -64,6 +66,14 @@
       "profile": {
         "title": "プロフィール",
         "description": "お気に入り、コメント、個人設定の管理"
+      },
+      "timeline": {
+        "title": "宇宙年表",
+        "description": "1957年から現在までの宇宙探査のマイルストーン"
+      },
+      "compare": {
+        "title": "比較ツール",
+        "description": "ロケットと宇宙船の仕様を並べて比較"
       }
     },
     "recentLaunches": {

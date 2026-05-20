@@ -8,6 +8,8 @@
     "launches": "发射数据",
     "spacecraft": "航天器",
     "astronauts": "宇航员",
+    "timeline": "时间线",
+    "compare": "对比",
     "explore": "深空探索",
     "industry": "产业链"
   },
@@ -64,6 +66,14 @@
       "profile": {
         "title": "个人中心",
         "description": "管理收藏、评论与个人偏好设置"
+      },
+      "timeline": {
+        "title": "航天时间线",
+        "description": "从1957年至今的航天探索里程碑，交互式时间线"
+      },
+      "compare": {
+        "title": "对比工具",
+        "description": "并排对比火箭与航天器的详细规格参数"
       }
     },
     "recentLaunches": {

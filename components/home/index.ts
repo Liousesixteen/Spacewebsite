@@ -5,3 +5,4 @@ export { RecentLaunches } from './recent-launches';
 export { QuickNav } from './quick-nav';
 export { ApodSection, type ApodData } from './apod-section';
 export { getApodData } from './apod-section';
+export { SpaceTimeline } from './space-timeline';

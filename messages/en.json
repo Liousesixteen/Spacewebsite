@@ -8,6 +8,8 @@
     "launches": "Launches",
     "spacecraft": "Spacecraft",
     "astronauts": "Astronauts",
+    "timeline": "Timeline",
+    "compare": "Compare",
     "explore": "Explore",
     "industry": "Industry"
   },
@@ -64,6 +66,14 @@
       "profile": {
         "title": "Profile",
         "description": "Manage favorites, comments, and personal preferences"
+      },
+      "timeline": {
+        "title": "Space Timeline",
+        "description": "Interactive timeline of space exploration milestones from 1957 to today"
+      },
+      "compare": {
+        "title": "Comparison Tool",
+        "description": "Compare rockets and spacecraft specifications side by side"
       }
     },
     "recentLaunches": {

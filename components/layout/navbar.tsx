@@ -52,6 +52,8 @@ export function Navbar({ locale }: NavbarProps) {
     { href: `/${locale}/launches`, label: t('launches') },
     { href: `/${locale}/spacecraft`, label: t('spacecraft') },
     { href: `/${locale}/astronauts`, label: t('astronauts') },
+    { href: `/${locale}/timeline`, label: t('timeline') },
+    { href: `/${locale}/compare`, label: t('compare') },
     { href: `/${locale}/explore`, label: t('explore') },
     { href: `/${locale}/industry`, label: t('industry') },
   ];

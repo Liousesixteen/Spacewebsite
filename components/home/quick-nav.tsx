@@ -7,6 +7,8 @@ import {
   Factory,
   Compass,
   User,
+  Clock,
+  ArrowLeftRight,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -60,6 +62,18 @@ export function QuickNav({ locale }: QuickNavProps) {
       href: `/${locale}/profile`,
       icon: User,
       gradient: 'from-cosmic-blue/30 to-cosmic-cyan/20',
+    },
+    {
+      key: 'timeline',
+      href: `/${locale}/timeline`,
+      icon: Clock,
+      gradient: 'from-cosmic-purple/30 to-cosmic-pink/20',
+    },
+    {
+      key: 'compare',
+      href: `/${locale}/compare`,
+      icon: ArrowLeftRight,
+      gradient: 'from-cosmic-cyan/30 to-cosmic-blue/20',
     },
   ];
 
