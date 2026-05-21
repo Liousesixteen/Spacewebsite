@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Network, Building2, Cpu, Beaker, Wrench } from 'lucide-react';
 import { prisma } from '@/lib/db';
-import { Card, CardContent, Breadcrumbs } from '@/components/ui';
+import { Card, CardContent, Breadcrumbs, PageHeader } from '@/components/ui';
 import { IndustryChainDiagram } from '@/components/industry/industry-chain-diagram';
 import { MarketStats } from '@/components/industry/market-stats';
 import type { IndustrySegment } from '@/lib/api/industry';
@@ -43,26 +43,26 @@ export default async function IndustryOverviewPage({
   const quickLinks = [
     {
       href: `/${locale}/industry/companies`,
-      label: '企业库',
-      description: '航天产业链上下游企业',
+      label: 'Companies',
+      description: 'Upstream and downstream companies across the space industry supply chain',
       icon: Building2,
     },
     {
       href: `/${locale}/industry/technologies`,
-      label: '技术库',
-      description: '关键技术与发展现状',
+      label: 'Technologies',
+      description: 'Key technologies and current development status',
       icon: Cpu,
     },
     {
       href: `/${locale}/industry/materials`,
-      label: '材料库',
-      description: '航天材料与性能参数',
+      label: 'Materials',
+      description: 'Aerospace materials and performance parameters',
       icon: Beaker,
     },
     {
       href: `/${locale}/industry/equipment`,
-      label: '设备库',
-      description: '航天装备与关键设备',
+      label: 'Equipment',
+      description: 'Space equipment and critical hardware',
       icon: Wrench,
     },
   ];
@@ -72,17 +72,16 @@ export default async function IndustryOverviewPage({
       <Breadcrumbs
         className="mb-4"
         items={[
-          { label: '航天数据', href: `/${locale}` },
-          { label: '产业链' },
+          { label: 'SpaceData', href: `/${locale}` },
+          { label: 'Industry' },
         ]}
       />
-      <div className="flex items-center gap-3 mb-2">
-        <Network className="w-8 h-8 text-cosmic-blue" />
-        <h1 className="text-3xl font-bold text-star-white">航天产业链</h1>
-      </div>
-      <p className="text-star-dim mb-8">
-        从原材料到航天应用的完整产业生态全景
-      </p>
+
+      <PageHeader
+        icon={Network}
+        title="Space Industry Chain"
+        description="A complete overview of the space industry ecosystem -- from raw materials to space applications."
+      />
 
       <section className="mb-10">
         <MarketStats
@@ -97,24 +96,28 @@ export default async function IndustryOverviewPage({
       </section>
 
       <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-star-white mb-6">产业链全景</h2>
+        <h2 className="text-2xl font-semibold text-star-white mb-6">Industry Chain Overview</h2>
         <IndustryChainDiagram segments={segments} locale={locale} />
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold text-star-white mb-6">快速导航</h2>
+        <h2 className="text-2xl font-semibold text-star-white mb-6">Quick Navigation</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickLinks.map((link) => {
             const Icon = link.icon;
             return (
               <Link key={link.href} href={link.href}>
-                <Card variant="glow" className="h-full cursor-pointer">
+                <Card variant="elevated" className="h-full cursor-pointer group">
                   <CardContent className="p-6">
-                    <Icon className="w-8 h-8 text-cosmic-blue mb-3" />
-                    <h3 className="text-lg font-semibold text-star-white mb-1">
+                    <div className="p-3 rounded-xl frosted-icon text-cosmic-blue mb-4 group-hover:shadow-glow-blue transition-shadow duration-300">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-star-white mb-2 group-hover:text-cosmic-blue transition-colors duration-300">
                       {link.label}
                     </h3>
-                    <p className="text-sm text-star-dim">{link.description}</p>
+                    <p className="text-sm text-star-dim leading-relaxed">
+                      {link.description}
+                    </p>
                   </CardContent>
                 </Card>
               </Link>

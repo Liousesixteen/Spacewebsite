@@ -47,6 +47,34 @@ function ParticleField() {
   );
 }
 
+function ShootingStars() {
+  const stars = useMemo(() => {
+    return [
+      { top: '15%', left: '80%', delay: '0s', duration: '3s' },
+      { top: '25%', left: '70%', delay: '2s', duration: '4s' },
+      { top: '10%', left: '60%', delay: '5s', duration: '3.5s' },
+      { top: '30%', left: '85%', delay: '1s', duration: '5s' },
+    ];
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      {stars.map((s, i) => (
+        <div
+          key={i}
+          className="shooting-star"
+          style={{
+            top: s.top,
+            left: s.left,
+            animationDelay: s.delay,
+            animationDuration: s.duration,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
   const t = useTranslations('home.hero');
 
@@ -60,48 +88,61 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
         />
       )}
 
-      {/* Gradient overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-space-900/90 via-space-900/60 to-space-900/90" />
+      {/* Gradient overlays for depth */}
+      <div className="absolute inset-0 bg-gradient-to-b from-space-900/95 via-space-900/60 to-space-900/95" />
       <div className="absolute inset-0 bg-cosmic-glow pointer-events-none" />
+
+      {/* Nebula background - layered colored blobs */}
+      <div
+        className="absolute inset-0 pointer-events-none nebula-bg animate-nebula-drift"
+        aria-hidden="true"
+      />
+
+      {/* Shooting stars */}
+      <ShootingStars />
 
       {/* Particle twinkle effect */}
       <ParticleField />
 
+      {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <div className="animate-float">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-cosmic-blue via-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent">
+        {/* Title area with glass card */}
+        <div className="mb-8">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight tracking-tight">
+            <span className="bg-gradient-to-r from-cosmic-blue via-cosmic-purple to-cosmic-cyan bg-clip-text text-transparent text-glow">
               {t('title')}
             </span>
           </h1>
+
+          <div className="inline-block">
+            <p className="text-lg md:text-2xl text-star-dim/90 max-w-3xl mx-auto mb-3 font-light">
+              {t('subtitle')}
+            </p>
+            <p className="text-sm md:text-base text-star-dim/60 max-w-2xl mx-auto">
+              {t('description')}
+            </p>
+          </div>
         </div>
 
-        <p className="text-lg md:text-2xl text-star-dim max-w-3xl mx-auto mb-4">
-          {t('subtitle')}
-        </p>
-
-        <p className="text-sm md:text-base text-star-dim/80 max-w-2xl mx-auto mb-10">
-          {t('description')}
-        </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {/* CTA buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link href={`/${locale}/launches`}>
-            <Button variant="primary" size="lg" className="gap-2 min-w-[200px]">
+            <Button variant="primary" size="lg" className="gap-2.5 min-w-[200px] shadow-glow-blue hover:shadow-glow-purple">
               <Rocket className="w-5 h-5" />
               {t('ctaLaunches')}
             </Button>
           </Link>
           <Link href={`/${locale}/industry`}>
-            <Button variant="outline" size="lg" className="gap-2 min-w-[200px]">
+            <Button variant="outline" size="lg" className="gap-2.5 min-w-[200px]">
               <Factory className="w-5 h-5" />
               {t('ctaIndustry')}
             </Button>
           </Link>
           {liveLaunchUrl && (
             <a href={liveLaunchUrl} target="_blank" rel="noopener noreferrer">
-              <Button variant="primary" size="lg" className="gap-2 min-w-[200px] bg-red-600 hover:bg-red-700">
+              <Button variant="primary" size="lg" className="gap-2.5 min-w-[200px] bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-glow-blue">
                 <Play className="w-5 h-5" />
-                观看发射直播
+                Live
               </Button>
             </a>
           )}
@@ -109,16 +150,18 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
 
         {/* APOD attribution when used as background */}
         {apod && (
-          <p className="mt-8 text-xs text-star-dim/50">
+          <p className="text-xs text-star-dim/40 max-w-lg mx-auto">
             Background: NASA APOD &mdash; {apod.title}
             {apod.copyright && ` (${apod.copyright})`}
           </p>
         )}
+      </div>
 
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse-glow rounded-full">
-          <div className="w-6 h-10 rounded-full border-2 border-cosmic-blue/40 flex items-start justify-center p-1">
-            <div className="w-1 h-2 rounded-full bg-cosmic-blue animate-bounce" />
-          </div>
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+        <span className="text-xs text-star-dim/50 uppercase tracking-[0.2em]">Scroll</span>
+        <div className="scroll-indicator">
+          <div className="scroll-indicator-dot" />
         </div>
       </div>
     </section>

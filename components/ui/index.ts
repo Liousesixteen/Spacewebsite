@@ -14,3 +14,5 @@ export { BackToTop } from './back-to-top';
 export { ViewToggle, type ViewMode } from './view-toggle';
 export { Pagination } from './pagination';
 export { AnimateIn } from './animate-in';
+export { PageHeader } from './page-header';
+export { SectionDivider } from './section-divider';

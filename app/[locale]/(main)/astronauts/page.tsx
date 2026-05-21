@@ -10,7 +10,7 @@ import {
   AstronautFilters,
   type AstronautFilterValues,
 } from '@/components/astronauts/astronaut-filters';
-import { ViewToggle, Pagination, AnimateIn, Breadcrumbs } from '@/components/ui';
+import { ViewToggle, Pagination, AnimateIn, Breadcrumbs, PageHeader } from '@/components/ui';
 import type { ViewMode } from '@/components/ui/view-toggle';
 
 export default function AstronautsPage({
@@ -32,17 +32,19 @@ export default function AstronautsPage({
       <Breadcrumbs
         className="mb-4"
         items={[
-          { label: '航天数据', href: `/${locale}` },
-          { label: '宇航员' },
+          { label: 'SpaceData', href: `/${locale}` },
+          { label: 'Astronauts' },
         ]}
       />
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <Users className="w-8 h-8 text-cosmic-blue" />
-          <h1 className="text-3xl font-bold text-star-white">宇航员</h1>
-        </div>
-        <ViewToggle mode={viewMode} onChange={setViewMode} />
-      </div>
+
+      <PageHeader
+        icon={Users}
+        title="Astronauts"
+        description="Profiles of astronauts and cosmonauts who have ventured into space."
+        actions={
+          <ViewToggle mode={viewMode} onChange={setViewMode} />
+        }
+      />
 
       <AstronautFilters
         filters={filters}
@@ -53,17 +55,17 @@ export default function AstronautsPage({
       />
 
       {isLoading && (
-        <div className="text-center py-12 text-star-dim">加载中...</div>
+        <div className="text-center py-12 text-star-dim">Loading...</div>
       )}
 
       {error && (
-        <div className="text-center py-12 text-red-400">加载失败</div>
+        <div className="text-center py-12 text-red-400">Failed to load</div>
       )}
 
       {data && (
         <>
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
               {data.data.map((astronaut, index) => (
                 <AnimateIn key={astronaut.id} delay={index * 50}>
                   <AstronautCard astronaut={astronaut} locale={locale} />
@@ -81,7 +83,7 @@ export default function AstronautsPage({
           )}
 
           {data.data.length === 0 && (
-            <div className="text-center py-12 text-star-dim">暂无数据</div>
+            <div className="text-center py-12 text-star-dim">No data</div>
           )}
 
           <Pagination

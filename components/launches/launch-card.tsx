@@ -1,25 +1,9 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Rocket, MapPin, Calendar } from 'lucide-react';
-import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
+import { Card, CardContent, Badge, SmartImage, StatusBadge } from '@/components/ui';
 import type { Launch } from '@/lib/api/launches';
 import { getLaunchImage } from '@/lib/image-fallbacks';
-
-const statusColors = {
-  SUCCESS: 'success',
-  FAILURE: 'error',
-  PLANNED: 'info',
-  POSTPONED: 'warning',
-  IN_FLIGHT: 'info',
-} as const;
-
-const statusLabels = {
-  SUCCESS: '成功',
-  FAILURE: '失败',
-  PLANNED: '计划中',
-  POSTPONED: '推迟',
-  IN_FLIGHT: '飞行中',
-} as const;
 
 interface LaunchCardProps {
   launch: Launch;
@@ -30,49 +14,49 @@ export function LaunchCard({ launch, locale }: LaunchCardProps) {
   const image = getLaunchImage(launch.id, launch.images, launch.rocket.name);
 
   return (
-    <Link href={`/${locale}/launches/${launch.id}`}>
-      <Card variant="glow" className="h-full cursor-pointer overflow-hidden">
-        <div className="relative w-full aspect-[16/9]">
+    <Link href={`/${locale}/launches/${launch.id}`} className="block group">
+      <Card variant="elevated" className="h-full cursor-pointer overflow-hidden">
+        {/* Image with gradient overlay */}
+        <div className="relative w-full aspect-[16/9] overflow-hidden image-overlay">
           <SmartImage
             src={image}
             alt={launch.name}
             fallback="launch"
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="transition-transform duration-700 group-hover:scale-105"
           />
         </div>
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between mb-4">
-            <h3 className="text-lg font-semibold text-star-white line-clamp-2">
+
+        <CardContent className="p-5">
+          {/* Title and status */}
+          <div className="flex items-start justify-between mb-3 gap-2">
+            <h3 className="text-base font-semibold text-star-white line-clamp-2 group-hover:text-cosmic-blue transition-colors duration-300">
               {launch.name}
             </h3>
-            <Badge
-              variant={
-                statusColors[launch.status as keyof typeof statusColors] ||
-                'default'
-              }
-            >
-              {statusLabels[launch.status as keyof typeof statusLabels] ||
-                launch.status}
-            </Badge>
+            <div className="shrink-0">
+              <StatusBadge status={launch.status} />
+            </div>
           </div>
 
+          {/* Info rows with icons */}
           <div className="space-y-2 text-sm text-star-dim">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              <span>{format(new Date(launch.date), 'yyyy-MM-dd HH:mm')}</span>
+            <div className="flex items-center gap-2.5">
+              <Calendar className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+              <span className="truncate">{format(new Date(launch.date), 'yyyy-MM-dd HH:mm')}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Rocket className="w-4 h-4" />
-              <span>{launch.rocket.name}</span>
+            <div className="flex items-center gap-2.5">
+              <Rocket className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+              <span className="truncate">{launch.rocket.name}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              <span>{launch.launchSite.name}</span>
+            <div className="flex items-center gap-2.5">
+              <MapPin className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+              <span className="truncate">{launch.launchSite.name}</span>
             </div>
           </div>
 
-          <p className="mt-4 text-sm text-star-dim line-clamp-2">
+          {/* Description */}
+          <p className="mt-4 text-sm text-star-dim/70 line-clamp-2 leading-relaxed">
             {launch.missionDescription}
           </p>
         </CardContent>

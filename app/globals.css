@@ -70,6 +70,7 @@ body {
   min-height: 100vh;
 }
 
+/* ---- Custom scrollbar ---- */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -93,16 +94,150 @@ body {
   color: var(--foreground);
 }
 
+/* ---- Premium utility classes ---- */
 @layer utilities {
+  /* Glass morphism */
+  .glass {
+    @apply bg-space-800/80 backdrop-blur-xl border border-space-600/50;
+  }
+  .glass-hover {
+    @apply hover:bg-space-700/80 hover:border-cosmic-blue/30 hover:shadow-glow-blue;
+  }
+  .glass-card {
+    @apply glass rounded-2xl shadow-card transition-all duration-500;
+  }
+  .glass-card:hover {
+    @apply shadow-card-hover -translate-y-0.5 border-cosmic-blue/20;
+  }
+
+  /* Gradient text */
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-cosmic-blue via-cosmic-purple to-cosmic-cyan;
   }
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-cosmic-blue to-cosmic-cyan;
+  }
 
+  /* Text glow */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(79, 143, 255, 0.5);
+  }
+  .text-glow-purple {
+    text-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  }
+
+  /* Gradient border */
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(79, 143, 255, 0.4), rgba(139, 92, 246, 0.4), rgba(34, 211, 238, 0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .gradient-border:hover::before {
+    opacity: 1;
+  }
+  .gradient-border-always::before {
+    opacity: 1 !important;
+  }
+
+  /* Box glow utilities */
   .glow-blue {
     box-shadow: 0 0 20px rgba(var(--cosmic-blue), 0.4);
   }
-
   .glow-purple {
     box-shadow: 0 0 20px rgba(var(--cosmic-purple), 0.4);
   }
+
+  /* Image gradient overlay */
+  .image-overlay {
+    position: relative;
+  }
+  .image-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(var(--space-900)) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* Gradient divider line */
+  .gradient-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--cosmic-blue), 0.4), rgba(var(--cosmic-purple), 0.4), transparent);
+  }
+  .gradient-divider-vertical {
+    width: 1px;
+    background: linear-gradient(180deg, transparent, rgba(var(--cosmic-blue), 0.4), rgba(var(--cosmic-purple), 0.4), transparent);
+  }
+
+  /* Frosted glass circle for icons */
+  .frosted-icon {
+    @apply inline-flex items-center justify-center rounded-full bg-space-800/60 backdrop-blur-md border border-space-600/40;
+  }
+}
+
+/* ---- Nebula animated background ---- */
+.nebula-bg {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 50%, rgba(79, 143, 255, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(139, 92, 246, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 50% 80%, rgba(34, 211, 238, 0.04) 0%, transparent 70%);
+  background-size: 100% 100%;
+}
+
+/* ---- Shooting star ---- */
+.shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 1));
+  border-radius: 100px;
+  pointer-events: none;
+}
+
+.shooting-star::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ---- Scroll indicator ---- */
+.scroll-indicator {
+  @apply w-6 h-10 rounded-full border-2 border-cosmic-blue/40 flex items-start justify-center p-1;
+}
+.scroll-indicator-dot {
+  @apply w-1.5 h-3 rounded-full bg-cosmic-blue;
+  animation: bounce-chevron 2s ease-in-out infinite;
+}
+
+/* ---- Page header underline ---- */
+.page-header-underline {
+  position: relative;
+}
+.page-header-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgb(var(--cosmic-blue)), rgb(var(--cosmic-purple)));
 }

@@ -23,39 +23,45 @@ export function MobileNav({ isOpen, onClose, navItems, locale, pathname }: Mobil
   if (!isOpen) return null;
 
   return (
-    <div className="md:hidden bg-space-800 border-b border-space-700">
-      <div className="px-4 py-4 space-y-2">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            onClick={onClose}
-            className={cn(
-              'block px-4 py-3 rounded-lg text-base font-medium transition-colors',
-              isActive(item.href)
-                ? 'text-star-white bg-space-700'
-                : 'text-star-dim hover:text-star-white hover:bg-space-700'
-            )}
-          >
-            {item.label}
-          </Link>
-        ))}
-        <div className="pt-4 border-t border-space-600 flex items-center justify-between">
-          <select
-            value={locale}
-            onChange={(e) => {
-              const newLocale = e.target.value;
-              const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
-              window.location.href = newPath;
-            }}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-sm text-star-white"
-          >
-            <option value="zh-CN">中文</option>
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-            <option value="ja">日本語</option>
-          </select>
-          <Button size="sm">登录</Button>
+    <div className="md:hidden">
+      {/* Backdrop */}
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
+
+      {/* Panel */}
+      <div className="relative z-50 bg-space-900/95 backdrop-blur-2xl border-b border-space-700/50">
+        <div className="px-4 py-4 space-y-1">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className={cn(
+                'block px-4 py-3 rounded-xl text-base font-medium transition-all duration-200',
+                isActive(item.href)
+                  ? 'text-star-white bg-cosmic-blue/10 border border-cosmic-blue/20'
+                  : 'text-star-dim hover:text-star-white hover:bg-space-800/60'
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+          <div className="pt-4 mt-2 border-t border-space-700/50 flex items-center justify-between">
+            <select
+              value={locale}
+              onChange={(e) => {
+                const newLocale = e.target.value;
+                const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+                window.location.href = newPath;
+              }}
+              className="bg-space-800/60 backdrop-blur-md border border-space-600/50 rounded-lg px-3 py-2 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/50"
+            >
+              <option value="zh-CN">CN</option>
+              <option value="en">EN</option>
+              <option value="ru">RU</option>
+              <option value="ja">JA</option>
+            </select>
+            <Button size="sm" variant="outline">Login</Button>
+          </div>
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ interface StatItem {
   key: keyof StatsOverviewProps['stats'];
   icon: LucideIcon;
   color: string;
+  glowColor: string;
   value: number;
 }
 
@@ -55,32 +56,88 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
   const t = useTranslations('home.stats');
 
   const items: StatItem[] = [
-    { key: 'launches', icon: Rocket, color: 'text-cosmic-blue', value: stats.launches },
-    { key: 'spacecraft', icon: Satellite, color: 'text-cosmic-cyan', value: stats.spacecraft },
-    { key: 'astronauts', icon: Users, color: 'text-cosmic-purple', value: stats.astronauts },
-    { key: 'companies', icon: Building2, color: 'text-cosmic-pink', value: stats.companies },
+    {
+      key: 'launches',
+      icon: Rocket,
+      color: 'text-cosmic-blue',
+      glowColor: 'rgba(79,143,255,0.15)',
+      value: stats.launches,
+    },
+    {
+      key: 'spacecraft',
+      icon: Satellite,
+      color: 'text-cosmic-cyan',
+      glowColor: 'rgba(34,211,238,0.15)',
+      value: stats.spacecraft,
+    },
+    {
+      key: 'astronauts',
+      icon: Users,
+      color: 'text-cosmic-purple',
+      glowColor: 'rgba(139,92,246,0.15)',
+      value: stats.astronauts,
+    },
+    {
+      key: 'companies',
+      icon: Building2,
+      color: 'text-cosmic-pink',
+      glowColor: 'rgba(236,72,153,0.15)',
+      value: stats.companies,
+    },
   ];
 
   return (
-    <section className="container mx-auto px-4 py-12">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-2">{t('title')}</h2>
-        <p className="text-star-dim">{t('subtitle')}</p>
+    <section className="container mx-auto px-4 py-16">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-3">
+          {t('title')}
+        </h2>
+        <p className="text-star-dim text-lg max-w-xl mx-auto">
+          {t('subtitle')}
+        </p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {items.map((item) => {
           const Icon = item.icon;
           return (
-            <Card key={item.key} variant="glow">
-              <CardContent className="p-6 text-center">
-                <div className={`inline-flex p-3 rounded-full bg-space-800 mb-4 ${item.color}`}>
+            <Card
+              key={item.key}
+              variant="elevated"
+              className="group cursor-default"
+              style={{
+                '--stat-glow': item.glowColor,
+              } as React.CSSProperties}
+            >
+              <CardContent className="p-6 md:p-8 text-center">
+                {/* Frosted glass icon circle with hover pulse */}
+                <div
+                  className={`inline-flex p-4 rounded-2xl frosted-icon ${item.color} mb-5 transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow-blue`}
+                >
                   <Icon className="w-7 h-7" />
                 </div>
-                <div className="text-3xl md:text-4xl font-extrabold text-star-white mb-1 tabular-nums">
+
+                {/* Gradient number */}
+                <div
+                  className="text-4xl md:text-5xl font-extrabold mb-2 tabular-nums bg-clip-text text-transparent"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, rgb(var(--cosmic-blue)), rgb(var(--cosmic-purple)))`,
+                  }}
+                >
                   <CountUp end={item.value} />
                 </div>
-                <div className="text-sm text-star-dim">{t(item.key)}</div>
+
+                <div className="text-sm text-star-dim font-medium">
+                  {t(item.key)}
+                </div>
+
+                {/* Subtle hover background pulse */}
+                <div
+                  className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                  style={{
+                    background: `radial-gradient(circle at center, ${item.glowColor} 0%, transparent 70%)`,
+                  }}
+                />
               </CardContent>
             </Card>
           );

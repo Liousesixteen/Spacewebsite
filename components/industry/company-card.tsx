@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { MapPin, Calendar } from 'lucide-react';
-import { Card, CardContent, Badge, SmartImage } from '@/components/ui';
+import { Card, CardContent, Badge, SmartImage, StatusBadge } from '@/components/ui';
 import type { BadgeProps } from '@/components/ui';
 import type { Company } from '@/lib/api/industry';
 import { getCompanyImage } from '@/lib/image-fallbacks';
@@ -13,10 +13,10 @@ const typeColors: Record<string, BadgeProps['variant']> = {
 };
 
 const typeLabels: Record<string, string> = {
-  STATE_OWNED: '国企',
-  PRIVATE: '民营',
-  PUBLIC: '上市',
-  STARTUP: '初创',
+  STATE_OWNED: 'State-Owned',
+  PRIVATE: 'Private',
+  PUBLIC: 'Public',
+  STARTUP: 'Startup',
 };
 
 interface CompanyCardProps {
@@ -26,25 +26,27 @@ interface CompanyCardProps {
 
 export function CompanyCard({ company, locale }: CompanyCardProps) {
   return (
-    <Link href={`/${locale}/industry/companies/${company.id}`}>
-      <Card variant="glow" className="h-full cursor-pointer">
-        <CardContent className="p-6">
+    <Link href={`/${locale}/industry/companies/${company.id}`} className="block group">
+      <Card variant="elevated" className="h-full cursor-pointer">
+        <CardContent className="p-5">
           <div className="flex items-start gap-4 mb-4">
-            <div className="relative w-12 h-12 shrink-0 rounded-lg bg-space-700 overflow-hidden">
+            {/* Logo */}
+            <div className="relative w-14 h-14 shrink-0 rounded-xl bg-space-700 overflow-hidden ring-1 ring-space-600/50 group-hover:ring-cosmic-blue/30 transition-all duration-300">
               <SmartImage
                 src={getCompanyImage(company.id, company.logo, company.name)}
                 alt={company.name}
                 fallback="company"
                 fill
-                sizes="48px"
-                className="object-contain"
+                sizes="56px"
+                className="object-contain p-1"
               />
             </div>
+
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg font-semibold text-star-white line-clamp-1">
+              <h3 className="text-base font-semibold text-star-white line-clamp-1 group-hover:text-cosmic-blue transition-colors duration-300">
                 {company.name}
               </h3>
-              <div className="mt-1 flex items-center gap-2 flex-wrap">
+              <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
                 <Badge variant={typeColors[company.type] || 'default'}>
                   {typeLabels[company.type] || company.type}
                 </Badge>
@@ -55,20 +57,22 @@ export function CompanyCard({ company, locale }: CompanyCardProps) {
             </div>
           </div>
 
-          <div className="space-y-2 text-sm text-star-dim">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4" />
-              <span>
-                {company.country} · {company.headquarters}
+          {/* Info rows */}
+          <div className="space-y-2.5 text-sm text-star-dim">
+            <div className="flex items-center gap-2.5">
+              <MapPin className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+              <span className="truncate">
+                {company.country} / {company.headquarters}
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              <span>成立于 {company.foundedYear}</span>
+            <div className="flex items-center gap-2.5">
+              <Calendar className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+              <span>Founded {company.foundedYear}</span>
             </div>
           </div>
 
-          <p className="mt-4 text-sm text-star-dim line-clamp-2">
+          {/* Description */}
+          <p className="mt-4 text-sm text-star-dim/70 line-clamp-2 leading-relaxed">
             {company.description}
           </p>
         </CardContent>

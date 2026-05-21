@@ -10,7 +10,7 @@ import {
   SpacecraftFilters,
   type SpacecraftFilterValues,
 } from '@/components/spacecraft/spacecraft-filters';
-import { ViewToggle, Pagination, AnimateIn, Breadcrumbs } from '@/components/ui';
+import { ViewToggle, Pagination, AnimateIn, Breadcrumbs, PageHeader } from '@/components/ui';
 import type { ViewMode } from '@/components/ui/view-toggle';
 
 export default function SpacecraftPage({
@@ -32,17 +32,19 @@ export default function SpacecraftPage({
       <Breadcrumbs
         className="mb-4"
         items={[
-          { label: '航天数据', href: `/${locale}` },
-          { label: '航天器' },
+          { label: 'SpaceData', href: `/${locale}` },
+          { label: 'Spacecraft' },
         ]}
       />
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-3">
-          <Satellite className="w-8 h-8 text-cosmic-blue" />
-          <h1 className="text-3xl font-bold text-star-white">航天器</h1>
-        </div>
-        <ViewToggle mode={viewMode} onChange={setViewMode} />
-      </div>
+
+      <PageHeader
+        icon={Satellite}
+        title="Spacecraft"
+        description="Browse satellites, space stations, probes, and crewed spacecraft from space agencies worldwide."
+        actions={
+          <ViewToggle mode={viewMode} onChange={setViewMode} />
+        }
+      />
 
       <SpacecraftFilters
         filters={filters}
@@ -53,17 +55,17 @@ export default function SpacecraftPage({
       />
 
       {isLoading && (
-        <div className="text-center py-12 text-star-dim">加载中...</div>
+        <div className="text-center py-12 text-star-dim">Loading...</div>
       )}
 
       {error && (
-        <div className="text-center py-12 text-red-400">加载失败</div>
+        <div className="text-center py-12 text-red-400">Failed to load</div>
       )}
 
       {data && (
         <>
           {viewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
               {data.data.map((spacecraft, index) => (
                 <AnimateIn key={spacecraft.id} delay={index * 50}>
                   <SpacecraftCard spacecraft={spacecraft} locale={locale} />
@@ -81,7 +83,7 @@ export default function SpacecraftPage({
           )}
 
           {data.data.length === 0 && (
-            <div className="text-center py-12 text-star-dim">暂无数据</div>
+            <div className="text-center py-12 text-star-dim">No data</div>
           )}
 
           <Pagination

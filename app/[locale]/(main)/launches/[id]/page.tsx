@@ -33,10 +33,10 @@ export async function generateMetadata({
       where: { id },
       select: { name: true, missionDescription: true, images: true },
     });
-    if (!launch) return { title: '未找到 - SpaceData' };
+    if (!launch) return { title: 'Not Found - SpaceData' };
 
     const description =
-      launch.missionDescription?.slice(0, 160) ?? '航天发射详情';
+      launch.missionDescription?.slice(0, 160) ?? 'Space launch details';
     const image =
       launch.images && launch.images.length > 0 ? launch.images[0] : undefined;
 
@@ -51,7 +51,7 @@ export async function generateMetadata({
     };
   } catch (error) {
     console.error('[launch metadata] failed:', error);
-    return { title: '航天发射详情 - SpaceData' };
+    return { title: 'Launch Detail - SpaceData' };
   }
 }
 
@@ -88,7 +88,6 @@ export default async function LaunchDetailPage({
     launch.rocket.name
   );
 
-  // Collect all valid images for the lightbox
   const validImages = launch.images.filter(
     (img) => img && !img.includes('example.com') && !img.startsWith('http://')
   );
@@ -97,7 +96,7 @@ export default async function LaunchDetailPage({
   validImages.forEach((img) => seen.add(img));
   const allImages = Array.from(seen);
 
-  // Related: similar launches (same rocket or same launch site)
+  // Related launches
   const relatedLaunches = await prisma.launch.findMany({
     where: {
       id: { not: launch.id },
@@ -116,7 +115,7 @@ export default async function LaunchDetailPage({
     take: 3,
   });
 
-  // Related spacecraft: find spacecraft whose names appear in payload names
+  // Related spacecraft
   const payloadNames = payloads.map((p) => p.name).filter(Boolean);
   let relatedSpacecraft: { id: string; name: string; type: string }[] = [];
   if (payloadNames.length > 0) {
@@ -139,16 +138,21 @@ export default async function LaunchDetailPage({
       <Breadcrumbs
         className="mb-6"
         items={[
-          { label: '航天数据', href: `/${locale}` },
-          { label: '发射数据', href: `/${locale}/launches` },
+          { label: 'SpaceData', href: `/${locale}` },
+          { label: 'Launches', href: `/${locale}/launches` },
           { label: launch.name },
         ]}
       />
 
-      <div className="flex items-start justify-between mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-star-white">{launch.name}</h1>
+      {/* Title + Status + Favorite */}
+      <div className="flex flex-wrap items-start justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-star-white mb-2 page-header-underline pb-2 inline-block">
+            {launch.name}
+          </h1>
+        </div>
         <div className="flex items-center gap-3">
-          <StatusBadge status={launch.status} className="text-base px-4 py-1" />
+          <StatusBadge status={launch.status} className="text-sm px-4 py-1.5" />
           <FavoriteButton
             targetType="LAUNCH"
             targetId={launch.id}
@@ -158,34 +162,38 @@ export default async function LaunchDetailPage({
         </div>
       </div>
 
-      {/* Hero image with lightbox */}
-      <Card className="mb-8 overflow-hidden">
+      {/* Hero image */}
+      <Card variant="elevated" className="mb-8 overflow-hidden">
         <ImageLightbox images={allImages} alt={launch.name} />
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <Card>
+      {/* Info cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+        <Card variant="elevated">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-star-white mb-4">发射信息</h2>
-            <div className="space-y-3 text-star-dim">
-              <div className="flex items-center gap-3">
-                <Calendar className="w-5 h-5 text-cosmic-blue" />
+            <h2 className="text-lg font-semibold text-star-white mb-5 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-cosmic-blue" />
+              Launch Info
+            </h2>
+            <div className="space-y-4 text-star-dim">
+              <div className="flex items-center gap-3 p-3 bg-space-700/50 rounded-lg">
+                <Calendar className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
                 <span>{format(new Date(launch.date), 'yyyy-MM-dd HH:mm:ss')}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="w-5 h-5 text-cosmic-blue" />
+              <div className="flex items-center gap-3 p-3 bg-space-700/50 rounded-lg">
+                <MapPin className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
                 <span>{launch.launchSite.name}</span>
               </div>
               {launch.videoUrl && (
-                <div className="flex items-center gap-3">
-                  <Video className="w-5 h-5 text-cosmic-blue" />
+                <div className="flex items-center gap-3 p-3 bg-space-700/50 rounded-lg">
+                  <Video className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
                   <a
                     href={launch.videoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-cosmic-blue hover:underline"
+                    className="text-cosmic-blue hover:text-cosmic-cyan transition-colors"
                   >
-                    观看视频
+                    Watch Video
                   </a>
                 </div>
               )}
@@ -193,58 +201,82 @@ export default async function LaunchDetailPage({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card variant="elevated">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-star-white mb-4">火箭信息</h2>
-            <Link href={`/${locale}/rockets/${launch.rocket.id}`} className="block">
-              <div className="flex items-center gap-3 mb-3">
-                <Rocket className="w-5 h-5 text-cosmic-blue" />
-                <span className="text-star-white hover:text-cosmic-blue">
-                  {launch.rocket.name}
-                </span>
+            <h2 className="text-lg font-semibold text-star-white mb-5 flex items-center gap-2">
+              <Rocket className="w-5 h-5 text-cosmic-blue" />
+              Rocket Info
+            </h2>
+            <Link href={`/${locale}/rockets/${launch.rocket.id}`} className="block group">
+              <div className="p-3 bg-space-700/50 rounded-lg mb-4">
+                <div className="flex items-center gap-3">
+                  <Rocket className="w-4 h-4 text-cosmic-blue/70" />
+                  <span className="text-star-white group-hover:text-cosmic-blue transition-colors font-medium">
+                    {launch.rocket.name}
+                  </span>
+                </div>
               </div>
             </Link>
-            <div className="text-sm text-star-dim space-y-1">
-              <p>制造商: {launch.rocket.manufacturer}</p>
-              <p>国家: {launch.rocket.country}</p>
-              <p>成功率: {launch.rocket.successRate}%</p>
+            <div className="text-sm text-star-dim space-y-2">
+              <div className="flex justify-between p-2">
+                <span>Manufacturer</span>
+                <span className="text-star-white">{launch.rocket.manufacturer}</span>
+              </div>
+              <div className="flex justify-between p-2">
+                <span>Country</span>
+                <span className="text-star-white">{launch.rocket.country}</span>
+              </div>
+              <div className="flex justify-between p-2">
+                <span>Success Rate</span>
+                <span className="text-emerald-400 font-semibold">{launch.rocket.successRate}%</span>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="mb-8">
+      {/* Mission Description */}
+      <Card variant="elevated" className="mb-8">
         <CardContent className="p-6">
-          <h2 className="text-lg font-semibold text-star-white mb-4">任务描述</h2>
-          <p className="text-star-dim leading-relaxed">{launch.missionDescription}</p>
+          <h2 className="text-lg font-semibold text-star-white mb-4">
+            Mission Description
+          </h2>
+          <div className="gradient-divider mb-4" />
+          <p className="text-star-dim leading-relaxed text-base">
+            {launch.missionDescription || 'No description available.'}
+          </p>
         </CardContent>
       </Card>
 
+      {/* Crew */}
       {launch.crews.length > 0 && (
-        <Card className="mb-8">
+        <Card variant="elevated" className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-star-white mb-4 flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-star-white mb-5 flex items-center gap-2">
               <Users className="w-5 h-5 text-cosmic-blue" />
-              机组成员
+              Crew Members
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {launch.crews.map((crew) => (
                 <Link
                   key={crew.id}
                   href={`/${locale}/astronauts/${crew.astronaut.id}`}
+                  className="group"
                 >
-                  <div className="text-center p-4 bg-space-700 rounded-lg hover:bg-space-600 transition-colors">
-                    <div className="relative w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden bg-space-600">
+                  <div className="text-center p-4 bg-space-700/50 rounded-xl hover:bg-space-700 transition-all duration-300 hover:shadow-card border border-transparent hover:border-cosmic-blue/20">
+                    <div className="relative w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden bg-space-600 ring-2 ring-space-600/50 group-hover:ring-cosmic-blue/40 transition-all duration-300">
                       <SmartImage
                         src={getAstronautImage(crew.astronaut.photo)}
                         alt={crew.astronaut.name}
                         fallback="astronaut"
                         fill
                         sizes="64px"
-                        className="rounded-full"
+                        className="rounded-full transition-transform duration-500 group-hover:scale-110"
                       />
                     </div>
-                    <p className="text-star-white text-sm">{crew.astronaut.name}</p>
+                    <p className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
+                      {crew.astronaut.name}
+                    </p>
                     <p className="text-star-dim text-xs">{crew.role}</p>
                   </div>
                 </Link>
@@ -254,18 +286,21 @@ export default async function LaunchDetailPage({
         </Card>
       )}
 
+      {/* Payloads */}
       {payloads.length > 0 && (
-        <Card className="mb-8">
+        <Card variant="elevated" className="mb-8">
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-star-white mb-4">载荷信息</h2>
+            <h2 className="text-lg font-semibold text-star-white mb-4">
+              Payload Information
+            </h2>
             <div className="space-y-2">
               {payloads.map((payload, index) => (
                 <div
                   key={index}
-                  className="flex justify-between p-3 bg-space-700 rounded-lg"
+                  className="flex justify-between items-center p-3.5 bg-space-700/50 rounded-xl border border-space-600/30"
                 >
-                  <span className="text-star-white">{payload.name}</span>
-                  <span className="text-star-dim">{payload.type}</span>
+                  <span className="text-star-white font-medium">{payload.name}</span>
+                  <Badge variant="default">{payload.type}</Badge>
                 </div>
               ))}
             </div>
@@ -274,38 +309,42 @@ export default async function LaunchDetailPage({
       )}
 
       {/* Related Content */}
-      <div className="space-y-6 mb-8">
+      <div className="space-y-5 mb-8">
         {/* Related Rocket */}
-        <Card>
+        <Card variant="elevated">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Rocket className="w-5 h-5 text-cosmic-blue" />
-              相关火箭
+              Related Rocket
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
-              <span className="text-star-white">{launch.rocket.name}</span>
+            <div className="flex items-center justify-between p-3.5 bg-space-700/50 rounded-xl border border-space-600/30">
+              <span className="text-star-white font-medium">
+                {launch.rocket.name}
+              </span>
               <span className="text-star-dim text-sm">
-                {launch.rocket.manufacturer} · {launch.rocket.country}
+                {launch.rocket.manufacturer} / {launch.rocket.country}
               </span>
             </div>
           </CardContent>
         </Card>
 
         {/* Related Launch Site */}
-        <Card>
+        <Card variant="elevated">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <MapPin className="w-5 h-5 text-cosmic-blue" />
-              相关发射场
+              Related Launch Site
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between p-3 bg-space-700 rounded-lg">
-              <span className="text-star-white">{launch.launchSite.name}</span>
+            <div className="flex items-center justify-between p-3.5 bg-space-700/50 rounded-xl border border-space-600/30">
+              <span className="text-star-white font-medium">
+                {launch.launchSite.name}
+              </span>
               <span className="text-star-dim text-sm">
-                {launch.launchSite.country} · {launch.launchSite.region}
+                {launch.launchSite.country} / {launch.launchSite.region}
               </span>
             </div>
           </CardContent>
@@ -313,11 +352,11 @@ export default async function LaunchDetailPage({
 
         {/* Related Spacecraft */}
         {relatedSpacecraft.length > 0 && (
-          <Card>
+          <Card variant="elevated">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Rocket className="w-5 h-5 text-cosmic-blue" />
-                相关航天器
+                Related Spacecraft
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -326,9 +365,9 @@ export default async function LaunchDetailPage({
                   <Link
                     key={sc.id}
                     href={`/${locale}/spacecraft/${sc.id}`}
-                    className="flex items-center gap-3 p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                    className="flex items-center gap-3 p-3.5 bg-space-700/50 rounded-xl border border-space-600/30 hover:bg-space-700 hover:border-cosmic-blue/30 transition-all duration-300 group"
                   >
-                    <span className="text-star-white group-hover:text-cosmic-blue transition-colors">
+                    <span className="text-star-white group-hover:text-cosmic-blue transition-colors font-medium">
                       {sc.name}
                     </span>
                     <Badge variant="default">{sc.type}</Badge>
@@ -341,11 +380,11 @@ export default async function LaunchDetailPage({
 
         {/* Similar Launches */}
         {relatedLaunches.length > 0 && (
-          <Card>
+          <Card variant="elevated">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Rocket className="w-5 h-5 text-cosmic-blue" />
-                更多发射
+                Similar Launches
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -354,9 +393,9 @@ export default async function LaunchDetailPage({
                   <Link
                     key={rl.id}
                     href={`/${locale}/launches/${rl.id}`}
-                    className="p-3 bg-space-700 rounded-lg hover:bg-space-600 transition-colors group"
+                    className="p-3.5 bg-space-700/50 rounded-xl border border-space-600/30 hover:bg-space-700 hover:border-cosmic-blue/30 transition-all duration-300 group"
                   >
-                    <div className="flex items-start justify-between gap-2 mb-1">
+                    <div className="flex items-start justify-between gap-2 mb-2">
                       <span className="text-star-white text-sm font-medium group-hover:text-cosmic-blue transition-colors">
                         {rl.name}
                       </span>
@@ -373,6 +412,7 @@ export default async function LaunchDetailPage({
         )}
       </div>
 
+      {/* Comments */}
       <div className="mt-8">
         <CommentSection targetType="LAUNCH" targetId={launch.id} locale={locale} />
       </div>

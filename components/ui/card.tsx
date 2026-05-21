@@ -2,7 +2,7 @@ import { forwardRef, HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'glow';
+  variant?: 'default' | 'glow' | 'elevated';
 }
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -11,11 +11,18 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-xl bg-space-800 border border-space-600',
-          'transition-all duration-300',
+          'rounded-2xl bg-space-800/80 backdrop-blur-xl border border-space-600/50',
+          'transition-all duration-500',
           {
-            'hover:border-space-500': variant === 'default',
-            'hover:border-cosmic-blue hover:glow-blue': variant === 'glow',
+            // Default: subtle glass + hover lift
+            'shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-cosmic-blue/20':
+              variant === 'default',
+            // Glow: blue glow on hover
+            'shadow-card hover:shadow-glow-blue hover:border-cosmic-blue/40':
+              variant === 'glow',
+            // Elevated: larger shadow, more lift
+            'shadow-card-elevated hover:shadow-glow-blue hover:-translate-y-1 hover:border-cosmic-blue/30':
+              variant === 'elevated',
           },
           className
         )}

@@ -46,7 +46,9 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
     [nextLaunch]
   );
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
-    targetDate ? calcTimeLeft(targetDate) : { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 }
+    targetDate
+      ? calcTimeLeft(targetDate)
+      : { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 }
   );
 
   useEffect(() => {
@@ -60,10 +62,12 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
   if (!nextLaunch || !targetDate) {
     return (
       <section className="container mx-auto px-4 py-12">
-        <Card variant="glow">
-          <CardContent className="p-8 text-center">
-            <Rocket className="w-12 h-12 mx-auto mb-4 text-star-dim" />
-            <h2 className="text-2xl font-semibold text-star-white mb-2">{t('title')}</h2>
+        <Card variant="elevated">
+          <CardContent className="p-10 text-center">
+            <Rocket className="w-12 h-12 mx-auto mb-4 text-star-dim/40" />
+            <h2 className="text-2xl font-semibold text-star-white mb-2">
+              {t('title')}
+            </h2>
             <p className="text-star-dim">{t('empty')}</p>
           </CardContent>
         </Card>
@@ -80,48 +84,64 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
 
   return (
     <section className="container mx-auto px-4 py-12">
-      <Card variant="glow" className="animate-pulse-glow">
+      <Card variant="elevated" className="animate-border-glow">
         <CardContent className="p-8 md:p-10">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div>
-              <Badge variant="info" className="mb-2">{t('badge')}</Badge>
+              <Badge variant="info" className="mb-3">
+                {t('badge')}
+              </Badge>
               <h2 className="text-2xl md:text-3xl font-bold text-star-white">
                 {t('title')}
               </h2>
             </div>
-            <Link href={`/${locale}/launches/${nextLaunch.id}`} className="text-cosmic-blue hover:underline text-sm">
-              {t('viewDetails')} →
+            <Link
+              href={`/${locale}/launches/${nextLaunch.id}`}
+              className="text-sm text-cosmic-blue hover:text-cosmic-cyan transition-colors font-medium"
+            >
+              {t('viewDetails')} &rarr;
             </Link>
           </div>
 
-          <Link href={`/${locale}/launches/${nextLaunch.id}`} className="block group">
-            <div className="mb-6">
-              <h3 className="text-xl md:text-2xl font-semibold text-star-white group-hover:text-cosmic-blue transition mb-2">
+          <Link
+            href={`/${locale}/launches/${nextLaunch.id}`}
+            className="block group"
+          >
+            <div className="mb-8">
+              <h3 className="text-xl md:text-2xl font-semibold text-star-white group-hover:text-cosmic-blue transition-colors duration-300 mb-3">
                 {nextLaunch.name}
               </h3>
               <div className="flex flex-wrap gap-4 text-sm text-star-dim">
                 {nextLaunch.rocket?.name && (
-                  <span className="flex items-center gap-1.5"><Rocket className="w-4 h-4" />{nextLaunch.rocket.name}</span>
+                  <span className="flex items-center gap-1.5">
+                    <Rocket className="w-4 h-4 text-cosmic-blue/70" />
+                    {nextLaunch.rocket.name}
+                  </span>
                 )}
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4" />
+                  <Calendar className="w-4 h-4 text-cosmic-blue/70" />
                   {targetDate.toISOString().slice(0, 16).replace('T', ' ')}
                 </span>
               </div>
             </div>
           </Link>
 
-          <div className="grid grid-cols-4 gap-2 md:gap-4">
+          {/* Countdown digits */}
+          <div className="grid grid-cols-4 gap-3 md:gap-5">
             {units.map((u) => (
               <div
                 key={u.label}
-                className="rounded-lg bg-space-800/60 border border-space-500/40 p-3 md:p-6 text-center"
+                className="relative rounded-xl bg-space-800/60 backdrop-blur-md border border-space-500/40 p-4 md:p-7 text-center overflow-hidden group/count"
               >
-                <div className="text-3xl md:text-5xl font-extrabold text-star-white tabular-nums">
-                  {String(u.value).padStart(2, '0')}
-                </div>
-                <div className="mt-1 md:mt-2 text-xs md:text-sm uppercase tracking-wider text-star-dim">
-                  {u.label}
+                {/* Hover glow */}
+                <div className="absolute inset-0 bg-cosmic-blue/5 opacity-0 group-hover/count:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className="relative z-10">
+                  <div className="text-3xl md:text-5xl font-extrabold text-gradient-blue tabular-nums">
+                    {String(u.value).padStart(2, '0')}
+                  </div>
+                  <div className="mt-1.5 md:mt-2.5 text-xs md:text-sm uppercase tracking-[0.2em] text-star-dim font-medium">
+                    {u.label}
+                  </div>
                 </div>
               </div>
             ))}

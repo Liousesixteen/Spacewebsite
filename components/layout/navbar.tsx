@@ -68,104 +68,135 @@ export function Navbar({ locale }: NavbarProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-space-900/80 backdrop-blur-md border-b border-space-700">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href={`/${locale}`} className="flex items-center gap-2 group">
-            <Rocket className="w-8 h-8 text-cosmic-blue group-hover:animate-float" />
-            <span className="text-xl font-bold text-gradient">SpaceData</span>
-          </Link>
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* True glass morphism navbar */}
+      <div className="bg-space-900/60 backdrop-blur-2xl border-b border-space-700/50">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <Link
+              href={`/${locale}`}
+              className="flex items-center gap-2.5 group"
+            >
+              <Rocket className="w-8 h-8 text-cosmic-blue transition-all duration-500 group-hover:animate-logo-pulse group-hover:drop-shadow-[0_0_8px_rgba(79,143,255,0.6)]" />
+              <span className="text-xl font-bold text-gradient">SpaceData</span>
+            </Link>
 
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-                  isActive(item.href)
-                    ? 'text-star-white bg-space-700'
-                    : 'text-star-dim hover:text-star-white hover:bg-space-800'
-                )}
+            {/* Desktop nav items */}
+            <div className="hidden md:flex items-center gap-0.5">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    isActive(item.href)
+                      ? 'text-star-white'
+                      : 'text-star-dim hover:text-star-white hover:bg-space-800/60'
+                  )}
+                >
+                  {item.label}
+                  {/* Active gradient underline */}
+                  {isActive(item.href) && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 rounded-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple animate-gradient-underline origin-center" />
+                  )}
+                </Link>
+              ))}
+            </div>
+
+            {/* Right actions */}
+            <div className="hidden md:flex items-center gap-3">
+              {/* Search button - glass style */}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800/60 backdrop-blur-md border border-space-600/50 text-star-dim hover:text-star-white hover:border-cosmic-blue/50 hover:shadow-glow-blue transition-all duration-300 text-sm"
+                aria-label="Open search"
               >
-                {item.label}
-              </Link>
-            ))}
+                <Search className="w-4 h-4" />
+                <span className="hidden lg:inline text-xs font-mono px-1.5 py-0.5 rounded bg-space-700/80 border border-space-600/50">
+                  {isMac ? '⌘K' : 'Ctrl K'}
+                </span>
+              </button>
+
+              {/* Theme toggle with smooth rotation */}
+              <button
+                type="button"
+                onClick={toggle}
+                className="p-2 rounded-lg text-star-dim hover:text-star-white hover:bg-space-800/60 transition-all duration-300"
+                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              >
+                <span className="block transition-transform duration-500 rotate-0 hover:rotate-180">
+                  {theme === 'dark' ? (
+                    <Sun className="w-4 h-4" />
+                  ) : (
+                    <Moon className="w-4 h-4" />
+                  )}
+                </span>
+              </button>
+
+              {/* Language selector */}
+              <select
+                value={locale}
+                onChange={(e) => {
+                  const newLocale = e.target.value;
+                  const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
+                  window.location.href = newPath;
+                }}
+                className="bg-space-800/60 backdrop-blur-md border border-space-600/50 rounded-lg px-3 py-1.5 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/60 transition-colors"
+              >
+                <option value="zh-CN">CN</option>
+                <option value="en">EN</option>
+                <option value="ru">RU</option>
+                <option value="ja">JA</option>
+              </select>
+
+              <UserNav locale={locale} />
+            </div>
+
+            {/* Mobile controls */}
+            <div className="flex items-center gap-2 md:hidden">
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="p-2 text-star-dim hover:text-star-white transition-colors"
+                aria-label="Open search"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+              <button
+                className="p-2 text-star-dim hover:text-star-white transition-colors"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
           </div>
+        </nav>
 
-          <div className="hidden md:flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800 border border-space-600 text-star-dim hover:text-star-white hover:border-cosmic-blue/60 transition-colors text-sm"
-              aria-label="Open search"
-            >
-              <Search className="w-4 h-4" />
-              <span className="hidden lg:inline text-xs font-mono px-1.5 py-0.5 rounded bg-space-700 border border-space-600">
-                {isMac ? '⌘K' : 'Ctrl K'}
-              </span>
-            </button>
-            <button
-              type="button"
-              onClick={toggle}
-              className="p-2 rounded-lg text-star-dim hover:text-star-white hover:bg-space-800 transition-colors"
-              aria-label={theme === 'dark' ? '切换到亮色模式' : '切换到暗色模式'}
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4" />
-              ) : (
-                <Moon className="w-4 h-4" />
-              )}
-            </button>
-            <select
-              value={locale}
-              onChange={(e) => {
-                const newLocale = e.target.value;
-                const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
-                window.location.href = newPath;
-              }}
-              className="bg-space-700 border border-space-500 rounded-lg px-3 py-1.5 text-sm text-star-white focus:outline-none focus:border-cosmic-blue"
-            >
-              <option value="zh-CN">中文</option>
-              <option value="en">English</option>
-              <option value="ru">Русский</option>
-              <option value="ja">日本語</option>
-            </select>
-            <UserNav locale={locale} />
-          </div>
+        <MobileNav
+          isOpen={mobileMenuOpen}
+          onClose={() => setMobileMenuOpen(false)}
+          navItems={navItems}
+          locale={locale}
+          pathname={pathname}
+        />
 
-          <div className="flex items-center gap-2 md:hidden">
-            <button
-              type="button"
-              onClick={() => setSearchOpen(true)}
-              className="p-2 text-star-dim hover:text-star-white"
-              aria-label="Open search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
-            <button
-              className="p-2 text-star-dim hover:text-star-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
-        </div>
-      </nav>
+        <GlobalSearch
+          open={searchOpen}
+          onClose={() => setSearchOpen(false)}
+          locale={locale}
+        />
 
-      <MobileNav
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        navItems={navItems}
-        locale={locale}
-        pathname={pathname}
-      />
-
-      <GlobalSearch
-        open={searchOpen}
-        onClose={() => setSearchOpen(false)}
-        locale={locale}
-      />
+        {/* Subtle gradient bottom border line */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-px pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, rgba(79,143,255,0.3), rgba(139,92,246,0.3), rgba(34,211,238,0.2), transparent)',
+          }}
+        />
+      </div>
     </header>
   );
 }
