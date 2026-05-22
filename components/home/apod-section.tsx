@@ -65,7 +65,7 @@ export function ApodSection({ apod }: ApodSectionProps) {
       <div className="relative z-10 container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-xs uppercase tracking-[0.2em] text-cosmic-blue mb-4">
-            NASA Astronomy Picture of the Day
+            NASA 每日天文图
           </p>
           <h2 className="text-3xl md:text-5xl font-bold text-star-white mb-6 leading-tight">
             {apod.title}
@@ -76,7 +76,7 @@ export function ApodSection({ apod }: ApodSectionProps) {
           </p>
           {apod.copyright && (
             <p className="mt-4 text-xs text-star-dim/60">
-              Image credit: {apod.copyright}
+              图像版权: {apod.copyright}
             </p>
           )}
           <div className="mt-8">
@@ -86,7 +86,7 @@ export function ApodSection({ apod }: ApodSectionProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-cosmic-blue/20 text-cosmic-blue hover:bg-cosmic-blue/30 transition-colors text-sm font-medium"
             >
-              View on NASA APOD
+              在 NASA 查看原图
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>

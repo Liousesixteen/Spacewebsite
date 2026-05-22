@@ -151,7 +151,7 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
         {/* APOD attribution when used as background */}
         {apod && (
           <p className="text-xs text-star-dim/40 max-w-lg mx-auto">
-            Background: NASA APOD &mdash; {apod.title}
+            背景: NASA 每日天文图 &mdash; {apod.title}
             {apod.copyright && ` (${apod.copyright})`}
           </p>
         )}
@@ -164,6 +164,9 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
           <div className="scroll-indicator-dot" />
         </div>
       </div>
+
+      {/* Bottom gradient fade to content */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-b from-transparent to-space-900 pointer-events-none z-20" />
     </section>
   );
 }

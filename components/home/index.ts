@@ -6,3 +6,4 @@ export { QuickNav } from './quick-nav';
 export { ApodSection, type ApodData } from './apod-section';
 export { getApodData } from './apod-section';
 export { SpaceTimeline } from './space-timeline';
+export { TimelineCompareBanner } from './timeline-compare-banner';

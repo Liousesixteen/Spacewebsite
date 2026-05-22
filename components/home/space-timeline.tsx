@@ -944,7 +944,7 @@ function TimelineLine({ index }: { index: number }) {
 
 export function SpaceTimeline() {
   const zh = useTranslations('common')('back') !== 'Back'; // crude locale detect
-  const [locale, setLocale] = useState<'en' | 'zh'>('en');
+  const [locale, setLocale] = useState<'en' | 'zh-CN'>('en');
   const [filter, setFilter] = useState<Category | 'all'>('all');
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -952,7 +952,7 @@ export function SpaceTimeline() {
   // Detect locale via a simple check on mount
   useEffect(() => {
     const isZh = typeof document !== 'undefined' && document.documentElement.lang === 'zh-CN';
-    setLocale(isZh ? 'zh' : 'en');
+    setLocale(isZh ? 'zh-CN' : 'en');
   }, []);
 
   const filtered = useMemo(
@@ -1025,11 +1025,11 @@ export function SpaceTimeline() {
         <div className="inline-flex items-center gap-2 text-cosmic-blue mb-2">
           <Clock className="w-6 h-6" />
           <h2 className="text-3xl md:text-4xl font-bold text-star-white">
-            {locale === 'zh' ? '航天史时间线' : 'Space History Timeline'}
+            {locale === 'zh-CN' ? '航天史时间线' : 'Space History Timeline'}
           </h2>
         </div>
         <p className="text-star-dim max-w-xl mx-auto">
-          {locale === 'zh'
+          {locale === 'zh-CN'
             ? '从1957年斯普特尼克一号至今，人类航天史上的关键里程碑'
             : 'Key milestones in space exploration from Sputnik 1 to today'}
         </p>
@@ -1055,7 +1055,7 @@ export function SpaceTimeline() {
             {cat.key !== 'all' && (
               <span className={cn('w-2 h-2 rounded-full', cat.color)} />
             )}
-            {locale === 'zh' ? cat.labelZh : cat.label}
+            {locale === 'zh-CN' ? cat.labelZh : cat.label}
           </button>
         ))}
       </div>
@@ -1067,7 +1067,7 @@ export function SpaceTimeline() {
 
         {Array.from(decades.entries()).map(([decade, decadeEvents], dIdx) => (
           <div key={decade}>
-            <DecadeMarker label={locale === 'zh' && decade === 'Future' ? '计划中' : decade} />
+            <DecadeMarker label={locale === 'zh-CN' && decade === 'Future' ? '计划中' : decade} />
 
             {decadeEvents.map((event, eIdx) => {
               const globalIndex = dIdx * 1000 + eIdx;
@@ -1106,7 +1106,7 @@ export function SpaceTimeline() {
                       onToggle={() =>
                         setExpandedId(isExpanded ? null : globalIndex)
                       }
-                      zh={locale === 'zh'}
+                      zh={locale === 'zh-CN'}
                     />
                   </div>
                 </div>
@@ -1120,7 +1120,7 @@ export function SpaceTimeline() {
       <div className="text-center py-12">
         <div className="inline-flex items-center gap-2 text-star-dim text-sm">
           <Clock className="w-4 h-4" />
-          {locale === 'zh'
+          {locale === 'zh-CN'
             ? `${filtered.length} 个里程碑事件`
             : `${filtered.length} milestone events`}
         </div>
