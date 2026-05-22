@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { Rocket, Factory } from 'lucide-react';
+import { Rocket, Factory, Play } from 'lucide-react';
 import { Button } from '@/components/ui';
 import type { ApodData } from './apod-section';
 
@@ -17,7 +17,7 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
 
   return (
     <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden">
-      {/* APOD background image with subtle overlay */}
+      {/* APOD background image */}
       {apod && (
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -30,7 +30,6 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        {/* Title */}
         <div className="mb-8">
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight tracking-tight uppercase">
             <span className="text-gradient text-glow">
@@ -43,7 +42,7 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
           </p>
         </div>
 
-        {/* CTA buttons — 2 buttons only */}
+        {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
           <Link href={`/${locale}/launches`}>
             <Button variant="primary" size="lg" className="gap-2.5 min-w-[200px] shadow-glow-blue hover:shadow-glow-purple">
@@ -57,6 +56,14 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
               {t('ctaIndustry')}
             </Button>
           </Link>
+          {liveLaunchUrl && (
+            <a href={liveLaunchUrl} target="_blank" rel="noopener noreferrer">
+              <Button variant="primary" size="lg" className="gap-2.5 min-w-[200px] bg-red-600 hover:bg-red-700 shadow-[0_0_30px_rgba(239,68,68,0.3)] animate-pulse-glow">
+                <Play className="w-5 h-5" />
+                观看发射直播
+              </Button>
+            </a>
+          )}
         </div>
 
         {/* APOD attribution */}
