@@ -87,17 +87,14 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-16">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-3 font-display uppercase tracking-wider">
+    <div>
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-star-white mb-2 font-display uppercase tracking-wider">
           {t('title')}
         </h2>
-        <p className="text-star-dim text-lg max-w-xl mx-auto">
-          {t('subtitle')}
-        </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {items.map((item) => {
           const Icon = item.icon;
           return (
@@ -110,39 +107,24 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
               } as React.CSSProperties}
             >
               <CardContent className="p-6 md:p-8 text-center">
-                {/* Frosted glass icon circle with hover pulse */}
-                <div
-                  className={`inline-flex p-4 rounded-2xl frosted-icon ${item.color} mb-5 transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-blue`}
-                >
-                  <Icon className="w-7 h-7" />
+                {/* Icon */}
+                <div className={`inline-flex p-3 rounded-xl bg-space-800 border border-space-600/20 ${item.color} mb-4 transition-all duration-300 group-hover:scale-110`}>
+                  <Icon className="w-6 h-6" />
                 </div>
 
-                {/* HUD value number — Orbitron */}
-                <div
-                  className="font-display text-4xl md:text-5xl font-bold mb-2 tabular-nums bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: `linear-gradient(135deg, rgb(var(--cosmic-blue)), rgb(var(--cosmic-purple)))`,
-                  }}
-                >
+                {/* Value */}
+                <div className="font-display text-3xl md:text-4xl font-bold mb-1 tabular-nums text-star-white">
                   <CountUp end={item.value} />
                 </div>
 
-                <div className="text-sm text-star-dim font-medium uppercase tracking-wider">
+                <div className="text-xs text-star-dim font-medium uppercase tracking-wider">
                   {t(item.key)}
                 </div>
-
-                {/* Subtle hover background pulse */}
-                <div
-                  className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                  style={{
-                    background: `radial-gradient(circle at center, ${item.glowColor} 0%, transparent 70%)`,
-                  }}
-                />
               </CardContent>
             </Card>
           );
         })}
       </div>
-    </section>
+    </div>
   );
 }
