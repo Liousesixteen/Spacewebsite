@@ -31,11 +31,11 @@ export function Footer({ locale }: FooterProps) {
 
   return (
     <footer className="relative mt-20">
-      {/* Glass top border with gradient */}
+      {/* Clean top border */}
       <div className="h-px bg-gradient-to-r from-transparent via-cosmic-blue/30 to-transparent" />
 
-      {/* Subtle gradient background */}
-      <div className="bg-gradient-to-b from-space-900 via-space-900/95 to-space-800/50">
+      {/* Clean dark background */}
+      <div className="bg-space-800 border-t border-space-600/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           {/* Main Footer Content */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
@@ -45,7 +45,7 @@ export function Footer({ locale }: FooterProps) {
                 <div className="p-2 rounded-lg bg-cosmic-blue/10 border border-cosmic-blue/20 group-hover:bg-cosmic-blue/20 transition-colors duration-300">
                   <Rocket className="w-6 h-6 text-cosmic-blue group-hover:animate-logo-pulse" />
                 </div>
-                <span className="text-xl font-bold text-gradient">SpaceData</span>
+                <span className="text-xl font-bold text-gradient font-display uppercase tracking-wide">SpaceData</span>
               </Link>
               <p className="text-sm text-star-dim max-w-sm leading-relaxed">
                 {t('footer.tagline')}
@@ -54,7 +54,7 @@ export function Footer({ locale }: FooterProps) {
 
             {/* Product Links */}
             <div>
-              <h3 className="text-xs font-bold text-star-white mb-5 uppercase tracking-[0.2em]">
+              <h3 className="font-display uppercase tracking-wider text-xs font-bold text-star-white mb-5">
                 {t('footer.product')}
               </h3>
               <ul className="space-y-3">
@@ -62,7 +62,7 @@ export function Footer({ locale }: FooterProps) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-star-dim hover:text-cosmic-blue transition-all duration-200 hover:drop-shadow-[0_0_6px_rgba(79,143,255,0.3)]"
+                      className="text-sm text-star-dim hover:text-white transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -73,7 +73,7 @@ export function Footer({ locale }: FooterProps) {
 
             {/* Company Links */}
             <div>
-              <h3 className="text-xs font-bold text-star-white mb-5 uppercase tracking-[0.2em]">
+              <h3 className="font-display uppercase tracking-wider text-xs font-bold text-star-white mb-5">
                 {t('footer.company')}
               </h3>
               <ul className="space-y-3">
@@ -81,7 +81,7 @@ export function Footer({ locale }: FooterProps) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-star-dim hover:text-cosmic-blue transition-all duration-200 hover:drop-shadow-[0_0_6px_rgba(79,143,255,0.3)]"
+                      className="text-sm text-star-dim hover:text-white transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -92,7 +92,7 @@ export function Footer({ locale }: FooterProps) {
 
             {/* Legal + Social */}
             <div>
-              <h3 className="text-xs font-bold text-star-white mb-5 uppercase tracking-[0.2em]">
+              <h3 className="font-display uppercase tracking-wider text-xs font-bold text-star-white mb-5">
                 {t('footer.legal')}
               </h3>
               <ul className="space-y-3 mb-6">
@@ -100,7 +100,7 @@ export function Footer({ locale }: FooterProps) {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className="text-sm text-star-dim hover:text-cosmic-blue transition-all duration-200 hover:drop-shadow-[0_0_6px_rgba(79,143,255,0.3)]"
+                      className="text-sm text-star-dim hover:text-white transition-colors duration-200"
                     >
                       {link.label}
                     </Link>
@@ -116,7 +116,7 @@ export function Footer({ locale }: FooterProps) {
                   href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-lg bg-space-800/60 border border-space-600/40 text-star-dim hover:text-cosmic-blue hover:border-cosmic-blue/40 hover:shadow-glow-blue transition-all duration-300"
+                  className="p-2 rounded-lg bg-space-800/60 border border-space-600/30 text-star-dim hover:text-white hover:border-space-500 transition-colors duration-200"
                   aria-label="GitHub"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -125,7 +125,7 @@ export function Footer({ locale }: FooterProps) {
                 </a>
                 <a
                   href="mailto:contact@spacedata.example"
-                  className="p-2 rounded-lg bg-space-800/60 border border-space-600/40 text-star-dim hover:text-cosmic-blue hover:border-cosmic-blue/40 hover:shadow-glow-blue transition-all duration-300"
+                  className="p-2 rounded-lg bg-space-800/60 border border-space-600/30 text-star-dim hover:text-white hover:border-space-500 transition-colors duration-200"
                   aria-label="Email"
                 >
                   <Mail className="w-5 h-5" />

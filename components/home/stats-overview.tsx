@@ -89,7 +89,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
   return (
     <section className="container mx-auto px-4 py-16">
       <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-3">
+        <h2 className="text-3xl md:text-4xl font-bold text-star-white mb-3 font-display uppercase tracking-wider">
           {t('title')}
         </h2>
         <p className="text-star-dim text-lg max-w-xl mx-auto">
@@ -117,9 +117,9 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
                   <Icon className="w-7 h-7" />
                 </div>
 
-                {/* Gradient number */}
+                {/* HUD value number — Orbitron */}
                 <div
-                  className="text-4xl md:text-5xl font-extrabold mb-2 tabular-nums bg-clip-text text-transparent"
+                  className="font-display text-4xl md:text-5xl font-bold mb-2 tabular-nums bg-clip-text text-transparent"
                   style={{
                     backgroundImage: `linear-gradient(135deg, rgb(var(--cosmic-blue)), rgb(var(--cosmic-purple)))`,
                   }}
@@ -127,7 +127,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
                   <CountUp end={item.value} />
                 </div>
 
-                <div className="text-sm text-star-dim font-medium">
+                <div className="text-sm text-star-dim font-medium uppercase tracking-wider">
                   {t(item.key)}
                 </div>
 

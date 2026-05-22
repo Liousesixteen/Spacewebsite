@@ -12,7 +12,6 @@ import {
   TimelineCompareBanner,
   getApodData,
 } from '@/components/home';
-import { SectionDivider } from '@/components/ui';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -121,27 +120,40 @@ export default async function HomePage({ params }: PageProps) {
         apod={apod}
         liveLaunchUrl={homeData.liveLaunchUrl}
       />
-      <LaunchCountdown nextLaunch={homeData.nextLaunch} locale={locale} />
 
-      <SectionDivider spacing="sm" />
-
+      {/* Stats KPI dashboard row */}
       <StatsOverview stats={homeData.stats} />
 
-      <SectionDivider spacing="sm" />
+      <section className="container mx-auto px-4">
+        <div className="hud-divider" />
+      </section>
+
+      <LaunchCountdown nextLaunch={homeData.nextLaunch} locale={locale} />
+
+      <section className="container mx-auto px-4">
+        <div className="hud-divider" />
+      </section>
 
       <QuickNav locale={locale} />
 
-      <SectionDivider spacing="sm" />
-
-      {/* Timeline & Compare CTA banner */}
       <section className="container mx-auto px-4">
-        <TimelineCompareBanner locale={locale} />
+        <div className="hud-divider" />
       </section>
-      <SectionDivider spacing="sm" />
 
       <ApodSection apod={apod} />
 
-      <SectionDivider spacing="sm" />
+      <section className="container mx-auto px-4">
+        <div className="hud-divider" />
+      </section>
+
+      {/* Timeline & Compare CTA */}
+      <section className="container mx-auto px-4 py-8">
+        <TimelineCompareBanner locale={locale} />
+      </section>
+
+      <section className="container mx-auto px-4">
+        <div className="hud-divider" />
+      </section>
 
       <Suspense fallback={null}>
         <RecentLaunches locale={locale} />

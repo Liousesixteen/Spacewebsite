@@ -11,14 +11,11 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-2xl bg-space-800 border border-space-600/30 transition-all duration-300',
+          'hud-card',
           {
-            'hover:border-space-500/60':
-              variant === 'default',
-            'hover:border-cosmic-blue/40 hover:shadow-[0_0_30px_rgba(79,143,255,0.08)]':
-              variant === 'glow',
-            'border-cosmic-blue/30 shadow-[0_0_30px_rgba(79,143,255,0.06)] hover:shadow-[0_0_50px_rgba(79,143,255,0.12)]':
-              variant === 'elevated',
+            'hud-card': variant === 'default',
+            'hud-card hover:border-cosmic-blue/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.08)]': variant === 'glow',
+            'hud-card border-cosmic-blue/30 shadow-[0_0_30px_rgba(59,130,246,0.06)]': variant === 'elevated',
           },
           className
         )}

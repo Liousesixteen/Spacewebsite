@@ -8,6 +8,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        display: ['var(--font-orbitron)', 'sans-serif'],
+        sans: ['var(--font-exo2)', 'sans-serif'],
+        mono: ['Fira Code', 'monospace'],
+      },
       colors: {
         space: {
           900: 'rgb(var(--space-900) / <alpha-value>)',

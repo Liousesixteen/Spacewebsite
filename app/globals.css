@@ -8,17 +8,17 @@
   --background: #0a0a0f;
   --foreground: #ffffff;
 
-  /* space palette - dark */
-  --space-900: 10 10 15;
-  --space-800: 18 18 26;
-  --space-700: 26 26 37;
-  --space-600: 37 37 53;
-  --space-500: 53 53 80;
+  /* space palette - dark — Space Tech/Aerospace HUD */
+  --space-900: 11 11 16;      /* #0B0B10 Deep space black */
+  --space-800: 30 30 35;      /* #1E1E23 Card surface */
+  --space-700: 35 35 42;      /* Elevated surface */
+  --space-600: 45 45 53;      /* Border default */
+  --space-500: 60 60 70;      /* Border hover */
 
   /* cosmic accents - same across themes */
-  --cosmic-blue: 79 143 255;
+  --cosmic-blue: 59 130 246;  /* #3B82F6 Launch blue */
   --cosmic-purple: 139 92 246;
-  --cosmic-cyan: 34 211 238;
+  --cosmic-cyan: 0 255 255;   /* #00FFFF HUD neon */
   --cosmic-pink: 236 72 153;
 
   /* star palette - dark */
@@ -66,7 +66,7 @@ body {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-exo2), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
 }
 
@@ -96,18 +96,34 @@ body {
 
 /* ---- Premium utility classes ---- */
 @layer utilities {
-  /* Glass morphism — kept minimal, used sparingly */
-  .glass {
-    @apply bg-space-900/90 border border-space-600/40;
-  }
-
-  /* Clean void card — no blur, sharp edges, subtle border */
-  .void-card {
+  /* HUD fine-line card */
+  .hud-card {
     @apply bg-space-800 border border-space-600/30 rounded-2xl transition-all duration-300;
   }
-  .void-card:hover {
-    @apply border-space-500/60;
-    box-shadow: 0 0 30px rgba(79, 143, 255, 0.08);
+  .hud-card:hover {
+    border-color: rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.06);
+  }
+
+  /* HUD panel — slightly transparent, fine border */
+  .hud-panel {
+    @apply bg-space-800/60 border border-space-600/20 backdrop-blur-sm rounded-xl;
+  }
+
+  /* Heading style — Orbitron, uppercase tracking */
+  .hud-heading {
+    @apply font-display uppercase tracking-wider;
+  }
+
+  /* Data value — large, bold, monospace feel */
+  .hud-value {
+    @apply font-display text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  /* Fine divider — 1px gradient line */
+  .hud-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--cosmic-blue), 0.3), transparent);
   }
 
   /* Gradient text */

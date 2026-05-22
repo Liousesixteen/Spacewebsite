@@ -69,8 +69,8 @@ export function Navbar({ locale }: NavbarProps) {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* True glass morphism navbar */}
-      <div className="bg-space-900/90 backdrop-blur-sm border-b border-space-700/50">
+      {/* Near-opaque HUD navbar */}
+      <div className="bg-space-900/95 backdrop-blur-sm border-b border-space-600/20">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -79,7 +79,7 @@ export function Navbar({ locale }: NavbarProps) {
               className="flex items-center gap-2.5 group"
             >
               <Rocket className="w-8 h-8 text-cosmic-blue transition-all duration-500 group-hover:animate-logo-pulse group-hover:drop-shadow-[0_0_8px_rgba(79,143,255,0.6)]" />
-              <span className="text-xl font-bold text-gradient">SpaceData</span>
+              <span className="text-xl font-bold text-gradient font-display uppercase tracking-wide">SpaceData</span>
             </Link>
 
             {/* Desktop nav items */}
@@ -110,7 +110,7 @@ export function Navbar({ locale }: NavbarProps) {
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800/60 backdrop-blur-md border border-space-600/50 text-star-dim hover:text-star-white hover:border-cosmic-blue/50 hover:shadow-glow-blue transition-all duration-300 text-sm"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800/80 border border-space-600/30 text-star-dim hover:text-star-white hover:border-cosmic-blue/50 transition-all duration-300 text-sm"
                 aria-label="Open search"
               >
                 <Search className="w-4 h-4" />
@@ -143,7 +143,7 @@ export function Navbar({ locale }: NavbarProps) {
                   const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
                   window.location.href = newPath;
                 }}
-                className="bg-space-800/60 backdrop-blur-md border border-space-600/50 rounded-lg px-3 py-1.5 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/60 transition-colors"
+                className="bg-space-800/80 border border-space-600/30 rounded-lg px-3 py-1.5 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/60 transition-colors"
               >
                 <option value="zh-CN">CN</option>
                 <option value="en">EN</option>

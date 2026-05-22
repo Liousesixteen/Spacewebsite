@@ -136,7 +136,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
                 {/* Hover glow */}
                 <div className="absolute inset-0 bg-cosmic-blue/5 opacity-0 group-hover/count:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <div className="relative z-10">
-                  <div className="text-3xl md:text-5xl font-extrabold text-gradient-blue tabular-nums">
+                  <div className="text-3xl md:text-5xl font-extrabold text-gradient-blue tabular-nums font-display">
                     {String(u.value).padStart(2, '0')}
                   </div>
                   <div className="mt-1.5 md:mt-2.5 text-xs md:text-sm uppercase tracking-[0.2em] text-star-dim font-medium">

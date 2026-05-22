@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { Orbitron, Exo_2 } from 'next/font/google';
 import { locales } from '@/lib/i18n/config';
 import { Navbar, Starfield, Footer } from '@/components/layout';
 import { QueryProvider } from '@/components/providers/query-provider';
@@ -9,6 +10,9 @@ import { AuthProvider } from '@/components/providers/auth-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { BackToTop } from '@/components/ui';
 import '../globals.css';
+
+const orbitron = Orbitron({ subsets: ['latin'], variable: '--font-orbitron', display: 'swap' });
+const exo2 = Exo_2({ subsets: ['latin'], variable: '--font-exo2', display: 'swap' });
 
 export async function generateMetadata({
   params,
@@ -56,7 +60,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${orbitron.variable} ${exo2.variable}`}>
       <body className="min-h-screen bg-space-900">
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>

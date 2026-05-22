@@ -25,10 +25,10 @@ export function MobileNav({ isOpen, onClose, navItems, locale, pathname }: Mobil
   return (
     <div className="md:hidden">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/70 z-40" onClick={onClose} />
 
       {/* Panel */}
-      <div className="relative z-50 bg-space-900/95 backdrop-blur-2xl border-b border-space-700/50">
+      <div className="relative z-50 bg-space-900/95 border-b border-space-600/20">
         <div className="px-4 py-4 space-y-1">
           {navItems.map((item) => (
             <Link
@@ -53,7 +53,7 @@ export function MobileNav({ isOpen, onClose, navItems, locale, pathname }: Mobil
                 const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
                 window.location.href = newPath;
               }}
-              className="bg-space-800/60 backdrop-blur-md border border-space-600/50 rounded-lg px-3 py-2 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/50"
+              className="bg-space-800/80 border border-space-600/30 rounded-lg px-3 py-2 text-sm text-star-white focus:outline-none focus:border-cosmic-blue/50"
             >
               <option value="zh-CN">CN</option>
               <option value="en">EN</option>
