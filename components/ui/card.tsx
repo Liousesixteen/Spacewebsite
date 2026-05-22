@@ -11,17 +11,13 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-2xl bg-space-800/80 backdrop-blur-xl border border-space-600/50',
-          'transition-all duration-500',
+          'rounded-2xl bg-space-800 border border-space-600/30 transition-all duration-300',
           {
-            // Default: subtle glass + hover lift
-            'shadow-card hover:shadow-card-hover hover:-translate-y-0.5 hover:border-cosmic-blue/20':
+            'hover:border-space-500/60':
               variant === 'default',
-            // Glow: blue glow on hover
-            'shadow-card hover:shadow-glow-blue hover:border-cosmic-blue/40':
+            'hover:border-cosmic-blue/40 hover:shadow-[0_0_30px_rgba(79,143,255,0.08)]':
               variant === 'glow',
-            // Elevated: larger shadow, more lift
-            'shadow-card-elevated hover:shadow-glow-blue hover:-translate-y-1 hover:border-cosmic-blue/30':
+            'border-cosmic-blue/30 shadow-[0_0_30px_rgba(79,143,255,0.06)] hover:shadow-[0_0_50px_rgba(79,143,255,0.12)]':
               variant === 'elevated',
           },
           className

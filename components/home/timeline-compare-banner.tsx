@@ -10,9 +10,9 @@ export function TimelineCompareBanner({ locale }: { locale: string }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       <Link
         href={`/${locale}/timeline`}
-        className="group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br from-cosmic-purple/10 to-cosmic-blue/5 bg-space-800/60 backdrop-blur-xl p-8 transition-all duration-500 hover:border-cosmic-blue/30 hover:-translate-y-1 hover:shadow-card-hover"
+        className="group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br from-cosmic-purple/10 to-cosmic-blue/5 bg-space-800  p-8 transition-all duration-300 hover:border-cosmic-blue/30 hover:-translate-y-1 hover:shadow-card-hover"
       >
-        <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         <div className="relative z-10">
           <div className="inline-flex p-3 rounded-xl bg-cosmic-purple/10 text-cosmic-purple mb-4">
             <Clock className="w-6 h-6" />
@@ -34,9 +34,9 @@ export function TimelineCompareBanner({ locale }: { locale: string }) {
 
       <Link
         href={`/${locale}/compare`}
-        className="group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br from-cosmic-cyan/10 to-cosmic-purple/5 bg-space-800/60 backdrop-blur-xl p-8 transition-all duration-500 hover:border-cosmic-blue/30 hover:-translate-y-1 hover:shadow-card-hover"
+        className="group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br from-cosmic-cyan/10 to-cosmic-purple/5 bg-space-800  p-8 transition-all duration-300 hover:border-cosmic-blue/30 hover:-translate-y-1 hover:shadow-card-hover"
       >
-        <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
         <div className="relative z-10">
           <div className="inline-flex p-3 rounded-xl bg-cosmic-cyan/10 text-cosmic-cyan mb-4">
             <ArrowLeftRight className="w-6 h-6" />

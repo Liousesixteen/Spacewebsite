@@ -55,7 +55,7 @@ export async function RecentLaunches({ locale }: RecentLaunchesProps) {
       </div>
 
       {launches.length === 0 ? (
-        <div className="text-center py-16 rounded-2xl bg-space-800/60 backdrop-blur-xl border border-space-600/40">
+        <div className="text-center py-16 rounded-2xl bg-space-800  border border-space-600/40">
           <p className="text-star-dim">{t('empty')}</p>
         </div>
       ) : (

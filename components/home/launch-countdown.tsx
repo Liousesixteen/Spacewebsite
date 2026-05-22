@@ -131,7 +131,7 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
             {units.map((u) => (
               <div
                 key={u.label}
-                className="relative rounded-xl bg-space-800/60 backdrop-blur-md border border-space-500/40 p-4 md:p-7 text-center overflow-hidden group/count"
+                className="relative rounded-xl bg-space-800  border border-space-500/40 p-4 md:p-7 text-center overflow-hidden group/count"
               >
                 {/* Hover glow */}
                 <div className="absolute inset-0 bg-cosmic-blue/5 opacity-0 group-hover/count:opacity-100 transition-opacity duration-300 pointer-events-none" />

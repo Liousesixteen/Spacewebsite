@@ -106,10 +106,10 @@ export function QuickNav({ locale }: QuickNavProps) {
             <AnimateIn key={item.key} delay={index * 75}>
               <Link
                 href={item.href}
-                className={`group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br ${item.gradient} bg-space-800/60 backdrop-blur-xl p-6 transition-all duration-500 hover:border-cosmic-blue/30 hover:-translate-y-1 hover:shadow-card-hover`}
+                className={`group relative overflow-hidden rounded-2xl border border-space-600/40 bg-gradient-to-br ${item.gradient} bg-space-800  p-6 transition-all duration-300 hover:border-cosmic-blue/30  hover:[0_0_30px_rgba(79,143,255,0.06)]`}
               >
                 {/* Background glow on hover */}
-                <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
                 <div className="relative z-10">
                   {/* Frosted glass icon circle */}

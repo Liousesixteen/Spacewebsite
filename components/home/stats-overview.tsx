@@ -112,7 +112,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
               <CardContent className="p-6 md:p-8 text-center">
                 {/* Frosted glass icon circle with hover pulse */}
                 <div
-                  className={`inline-flex p-4 rounded-2xl frosted-icon ${item.color} mb-5 transition-all duration-500 group-hover:scale-110 group-hover:shadow-glow-blue`}
+                  className={`inline-flex p-4 rounded-2xl frosted-icon ${item.color} mb-5 transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-blue`}
                 >
                   <Icon className="w-7 h-7" />
                 </div>
@@ -133,7 +133,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
 
                 {/* Subtle hover background pulse */}
                 <div
-                  className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+                  className="absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100"
                   style={{
                     background: `radial-gradient(circle at center, ${item.glowColor} 0%, transparent 70%)`,
                   }}

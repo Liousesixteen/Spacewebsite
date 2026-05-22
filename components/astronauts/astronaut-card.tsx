@@ -23,7 +23,7 @@ export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
                 fallback="astronaut"
                 fill
                 sizes="64px"
-                className="rounded-full transition-transform duration-500 group-hover:scale-110"
+                className="rounded-full transition-transform duration-300 group-hover:scale-110"
               />
             </div>
             <div className="flex-1 min-w-0">
