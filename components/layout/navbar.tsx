@@ -61,6 +61,7 @@ export function Navbar({ locale }: NavbarProps) {
     { href: `/${locale}/rockets`, label: t('rockets') },
     { href: `/${locale}/spacecraft`, label: t('spacecraft') },
     { href: `/${locale}/astronauts`, label: t('astronauts') },
+    { href: `/${locale}/notifications`, label: t('notifications') },
     { href: `/${locale}/timeline`, label: t('timeline') },
     { href: `/${locale}/compare`, label: t('compare') },
     { href: `/${locale}/explore`, label: t('explore') },

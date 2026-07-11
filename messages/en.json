@@ -15,6 +15,7 @@
     "compare": "Compare",
     "explore": "Explore",
     "industry": "Industry",
+    "notifications": "Alerts",
     "more": "More"
   },
   "home": {
@@ -494,5 +495,18 @@
     "syncFrequency": "Sync Frequency",
     "accuracyNotice": "Data Accuracy Notice",
     "accuracyNoticeText": "Launch schedules may change at any time due to weather, technical issues, or other factors. SpaceData strives to keep data current but cannot guarantee absolute accuracy. For mission-critical decisions, please consult official launch provider sources directly. If you find any data errors, please report them through our support channels."
+  },
+  "notifications": {
+    "breadcrumb": "Notifications",
+    "title": "Notification Center",
+    "description": "Manage launch alerts, watchlist, and notification preferences.",
+    "alertRules": "Alert Rules",
+    "noAlertRules": "No alert rules",
+    "alertRulesHint": "Click the Follow button on any launch page to create alert rules.",
+    "notificationHistory": "Notification History",
+    "notificationHint": "Notification records are kept for the last 30 days.",
+    "watchlist": "My Watchlist",
+    "noWatchlist": "No items in watchlist",
+    "watchlistHint": "Follow launches, agencies, or companies to see them here."
   }
 }

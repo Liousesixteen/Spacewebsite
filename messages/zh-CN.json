@@ -15,6 +15,7 @@
     "compare": "对比",
     "explore": "深空探索",
     "industry": "产业链",
+    "notifications": "通知",
     "more": "更多"
   },
   "home": {
@@ -494,5 +495,18 @@
     "syncFrequency": "刷新频率",
     "accuracyNotice": "数据准确性声明",
     "accuracyNoticeText": "发射计划可能因天气、技术问题等原因随时变更。SpaceData 努力保持数据及时更新，但不保证绝对准确。对于关键任务决策，请直接查阅发射机构官方信息。如果您发现任何数据错误，欢迎通过客服渠道报告。"
+  },
+  "notifications": {
+    "breadcrumb": "通知中心",
+    "title": "通知中心",
+    "description": "管理发射提醒、关注列表和通知偏好设置。",
+    "alertRules": "提醒规则",
+    "noAlertRules": "暂无提醒规则",
+    "alertRulesHint": "在任何发射任务页面点击「关注」按钮，即可创建提醒规则。",
+    "notificationHistory": "通知历史",
+    "notificationHint": "通知记录保留最近 30 天。",
+    "watchlist": "我的关注",
+    "noWatchlist": "暂无关注",
+    "watchlistHint": "关注发射任务、机构或企业后，它们将出现在这里。"
   }
 }

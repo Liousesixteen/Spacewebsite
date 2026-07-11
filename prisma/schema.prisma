@@ -520,6 +520,7 @@ model User {
   comments   Comment[]
   watchlists Watchlist[]
   alertRules AlertRule[]
+  apiKeys    ApiKey[]
 
   @@index([email])
 }
@@ -740,4 +741,34 @@ model MarketMetric {
 
   @@index([entityType, entityId])
   @@index([metricName])
+}
+
+model ApiKey {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  keyHash       String   @unique
+  keyPrefix     String
+  permissions   String[]
+  rateLimitRpm  Int      @default(60)
+  monthlyQuota  Int      @default(10000)
+  lastUsedAt    DateTime?
+  expiresAt     DateTime?
+  revokedAt     DateTime?
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([keyHash])
+}
+
+model UsageRecord {
+  id          String   @id @default(cuid())
+  apiKeyId    String
+  endpoint    String
+  statusCode  Int
+  timestamp   DateTime @default(now())
+
+  @@index([apiKeyId])
+  @@index([timestamp])
 }
