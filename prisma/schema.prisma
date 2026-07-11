@@ -367,7 +367,10 @@ model Company {
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
 
-  segments     CompanySegment[]
+  segments          CompanySegment[]
+  capabilities      ProductCapability[]
+  relationshipsFrom OrganizationRelationship[] @relation("FromCompany")
+  relationshipsTo   OrganizationRelationship[] @relation("ToCompany")
 
   @@index([country])
   @@index([type])
@@ -511,10 +514,12 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts  Account[]
-  sessions  Session[]
-  favorites Favorite[]
-  comments  Comment[]
+  accounts   Account[]
+  sessions   Session[]
+  favorites  Favorite[]
+  comments   Comment[]
+  watchlists Watchlist[]
+  alertRules AlertRule[]
 
   @@index([email])
 }
@@ -674,4 +679,65 @@ model FieldEvidence {
   @@index([entityType, entityId])
   @@index([source])
   @@index([reviewStatus])
+}
+
+model ProductCapability {
+  id           String   @id @default(cuid())
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name         String
+  description  String?  @db.Text
+  category     String?
+  maturityLevel String?
+  source       String?
+  sourceUrl    String?
+  verified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([companyId])
+  @@index([category])
+}
+
+model OrganizationRelationship {
+  id            String   @id @default(cuid())
+  fromCompanyId String
+  fromCompany   Company  @relation("FromCompany", fields: [fromCompanyId], references: [id], onDelete: Cascade)
+  toCompanyId   String
+  toCompany     Company  @relation("ToCompany", fields: [toCompanyId], references: [id], onDelete: Cascade)
+  relationType  String
+  description   String?  @db.Text
+  source        String?
+  sourceUrl     String?
+  startDate     DateTime?
+  endDate       DateTime?
+  verified      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([fromCompanyId])
+  @@index([toCompanyId])
+  @@index([relationType])
+}
+
+model MarketMetric {
+  id            String   @id @default(cuid())
+  entityType    String
+  entityId      String
+  metricName    String
+  metricValue   Float
+  unit          String?
+  currency      String?
+  baseYear      Int?
+  region        String?
+  source        String?
+  sourceUrl     String?
+  methodology   String?  @db.Text
+  factType      String   @default("ESTIMATED")
+  verified      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([metricName])
 }
