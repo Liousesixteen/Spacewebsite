@@ -27,6 +27,9 @@ import {
 } from '@/components/ui';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import { JsonLd, buildOrganizationSchema } from '@/components/seo/json-ld';
+import { SourceBadge } from '@/components/ui/source-badge';
+import { computeQualityScore, inferSourceTier } from '@/lib/api/data-quality';
 import { getRocketImage } from '@/lib/image-fallbacks';
 
 export async function generateMetadata({
@@ -189,13 +192,39 @@ export default async function RocketDetailPage({
     },
   ];
 
+  const rocketUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${locale}/rockets/${rocket.id}`;
+  const sourceTier = inferSourceTier('Launch Library 2');
+  const quality = computeQualityScore({
+    sourceTier,
+    lastSyncedAt: rocket.updatedAt,
+    coreFieldsTotal: 7,
+    coreFieldsPopulated: [
+      rocket.name, rocket.manufacturer, rocket.country,
+      rocket.description, String(rocket.height), String(rocket.diameter),
+      String(rocket.mass),
+    ].filter(Boolean).length,
+    distinctSources: 1,
+    maxSources: 3,
+    hasEditorialReview: false,
+    hasVerifiedRelationships: (rocket as any).launches?.length > 0,
+  });
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      <JsonLd
+        data={buildOrganizationSchema({
+          name: rocket.name,
+          description: rocket.description,
+          url: rocketUrl,
+          country: rocket.country,
+        })}
+      />
+
       <Breadcrumbs
         className="mb-6"
         items={[
           { label: 'SpaceData', href: `/${locale}` },
-          { label: 'Launches', href: `/${locale}/launches` },
+          { label: 'Rockets', href: `/${locale}/rockets` },
           { label: rocket.name },
         ]}
       />
@@ -367,6 +396,45 @@ export default async function RocketDetailPage({
             </CardContent>
           </Card>
         )}
+      </div>
+
+      {/* Data Quality Score */}
+      <div className="mt-8">
+        <Card variant="elevated">
+          <CardHeader>
+            <CardTitle className="text-lg text-star-white">数据质量</CardTitle>
+          </CardHeader>
+          <CardContent className="p-5">
+            <div className="mb-4 flex items-center gap-4">
+              <div className="flex-1">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm text-star-dim">综合评分</span>
+                  <span className="text-2xl font-bold text-cosmic-blue">{quality.total}/{quality.maxTotal}</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-space-700/50">
+                  <div className="h-2 rounded-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple transition-all"
+                    style={{ width: `${(quality.total / quality.maxTotal) * 100}%` }} />
+                </div>
+              </div>
+              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={rocket.updatedAt} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {quality.dimensions.map((dim: any) => (
+                <div key={dim.label} className="rounded-lg border border-space-600/30 bg-space-700/30 p-3">
+                  <div className="mb-1 flex items-center justify-between">
+                    <span className="text-xs text-star-dim">{dim.label}</span>
+                    <span className="text-xs font-mono font-semibold text-star-white">{dim.score}/{dim.maxScore}</span>
+                  </div>
+                  <div className="mb-2 h-1.5 w-full rounded-full bg-space-600/30">
+                    <div className="h-1.5 rounded-full bg-cosmic-blue/60"
+                      style={{ width: `${(dim.score / dim.maxScore) * 100}%` }} />
+                  </div>
+                  <div className="text-xs text-star-dim/70">{dim.detail}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="mt-8">
