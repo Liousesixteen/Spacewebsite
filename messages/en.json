@@ -508,5 +508,18 @@
     "watchlist": "My Watchlist",
     "noWatchlist": "No items in watchlist",
     "watchlistHint": "Follow launches, agencies, or companies to see them here."
+  },
+  "status": {
+    "breadcrumb": "Service Status",
+    "title": "Service Status",
+    "description": "Real-time view of SpaceData service health and performance.",
+    "currentStatus": "Current Status",
+    "component": "Component",
+    "status": "Status",
+    "latency": "Latency",
+    "sloTitle": "Service Level Objectives",
+    "incidentHistory": "Incident History",
+    "noIncidents": "No incidents reported",
+    "incidentsHint": "Service incidents will appear here when they occur."
   }
 }

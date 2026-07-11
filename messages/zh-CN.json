@@ -508,5 +508,18 @@
     "watchlist": "我的关注",
     "noWatchlist": "暂无关注",
     "watchlistHint": "关注发射任务、机构或企业后，它们将出现在这里。"
+  },
+  "status": {
+    "breadcrumb": "服务状态",
+    "title": "服务状态",
+    "description": "实时查看 SpaceData 各服务的运行状态和性能指标。",
+    "currentStatus": "当前状态",
+    "component": "组件",
+    "status": "状态",
+    "latency": "延迟",
+    "sloTitle": "服务等级目标 (SLO)",
+    "incidentHistory": "事件历史",
+    "noIncidents": "暂无服务事件",
+    "incidentsHint": "服务事件记录将在此处显示。"
   }
 }
