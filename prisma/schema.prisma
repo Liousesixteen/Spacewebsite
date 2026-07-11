@@ -76,6 +76,30 @@ model Rocket {
   @@index([status])
 }
 
+model Agency {
+  id            String    @id @default(cuid())
+  name          String
+  abbrev        String?
+  type          String?
+  country       String
+  description   String?   @db.Text
+  administrator String?
+  foundingYear  Int?
+  logo          String?
+  website       String?
+  externalId    String?   @unique
+  source        String?
+  lastSyncedAt  DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  launches      Launch[]
+
+  @@index([country])
+  @@index([name])
+  @@index([source])
+}
+
 model LaunchSite {
   id          String           @id @default(cuid())
   name        String
@@ -91,9 +115,35 @@ model LaunchSite {
   updatedAt   DateTime         @updatedAt
 
   launches    Launch[]
+  padsDetailed LaunchPad[]
 
   @@index([country])
   @@index([status])
+}
+
+model LaunchPad {
+  id            String           @id @default(cuid())
+  name          String
+  country       String
+  region        String?
+  latitude      Float?
+  longitude     Float?
+  status        LaunchSiteStatus @default(ACTIVE)
+  mapUrl        String?
+  externalId    String?          @unique
+  source        String?
+  lastSyncedAt  DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  launchSiteId  String
+  launchSite    LaunchSite       @relation(fields: [launchSiteId], references: [id], onDelete: Cascade)
+  launches      Launch[]
+
+  @@index([country])
+  @@index([status])
+  @@index([launchSiteId])
+  @@index([name])
 }
 
 model Astronaut {
@@ -138,6 +188,8 @@ model Spacecraft {
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
 
+  payloads         Payload[]
+
   @@index([type])
   @@index([status])
   @@index([operator])
@@ -150,10 +202,24 @@ model Launch {
   date               DateTime
   status             LaunchStatus
   missionDescription String       @db.Text
+  missionName        String?
+  missionType        String?
+  orbitName          String?
+  orbitAbbrev        String?
+  windowStart        DateTime?
+  windowEnd          DateTime?
+  slug               String?
   payloads           Json
   videoUrl           String?
+  webcastUrl         String?
+  articleUrl         String?
+  wikiUrl            String?
   images             String[]
   externalId         String?      @unique
+  source             String?
+  sourceUrl          String?
+  lastSyncedAt       DateTime?
+  rawStatus          String?
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
@@ -163,13 +229,54 @@ model Launch {
   launchSiteId       String
   launchSite         LaunchSite   @relation(fields: [launchSiteId], references: [id])
 
+  agencyId           String?
+  agency             Agency?      @relation(fields: [agencyId], references: [id])
+
+  launchPadId        String?
+  launchPad          LaunchPad?   @relation(fields: [launchPadId], references: [id])
+
   crews              LaunchCrew[]
+  payloadRecords     Payload[]
 
   @@index([date])
   @@index([status])
   @@index([rocketId])
   @@index([launchSiteId])
+  @@index([agencyId])
+  @@index([launchPadId])
+  @@index([missionType])
+  @@index([orbitName])
+  @@index([lastSyncedAt])
   @@index([date(sort: Desc)], map: "Launch_date_desc_idx")
+}
+
+model Payload {
+  id                      String      @id @default(cuid())
+  name                    String
+  type                    String?
+  orbit                   String?
+  owner                   String?
+  operator                String?
+  noradId                 Int?
+  internationalDesignator String?
+  massKg                  Float?
+  externalId              String?     @unique
+  source                  String?
+  lastSyncedAt            DateTime?
+  createdAt               DateTime    @default(now())
+  updatedAt               DateTime    @updatedAt
+
+  launchId                String
+  launch                  Launch      @relation(fields: [launchId], references: [id], onDelete: Cascade)
+
+  spacecraftId            String?
+  spacecraft              Spacecraft? @relation(fields: [spacecraftId], references: [id])
+
+  @@index([launchId])
+  @@index([spacecraftId])
+  @@index([owner])
+  @@index([operator])
+  @@index([noradId])
 }
 
 model LaunchCrew {
@@ -181,6 +288,24 @@ model LaunchCrew {
   role        String
 
   @@unique([launchId, astronautId])
+}
+
+model DataSourceRecord {
+  id           String   @id @default(cuid())
+  source       String
+  entityType   String
+  externalId   String
+  internalId   String?
+  lastSyncedAt DateTime @default(now())
+  status       String
+  message      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([source, entityType, externalId])
+  @@index([source])
+  @@index([entityType])
+  @@index([status])
 }
 
 // 产业链相关枚举
@@ -424,4 +549,93 @@ model Comment {
   @@index([userId])
   @@index([targetType, targetId])
   @@index([parentId])
+}
+
+model SyncRun {
+  id             String   @id @default(cuid())
+  source         String
+  status         String   @default("PENDING")
+  startedAt      DateTime @default(now())
+  completedAt    DateTime?
+  recordsAdded   Int      @default(0)
+  recordsUpdated Int      @default(0)
+  recordsSkipped Int      @default(0)
+  cursor         String?
+  error          String?  @db.Text
+  version        String?
+  createdAt      DateTime @default(now())
+
+  @@index([source])
+  @@index([status])
+  @@index([startedAt])
+}
+
+model ChangeEvent {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  field      String
+  oldValue   String?  @db.Text
+  newValue   String?  @db.Text
+  source     String
+  detectedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([detectedAt])
+}
+
+model Watchlist {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetType String
+  targetId   String
+  label      String?
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, targetType, targetId])
+  @@index([userId])
+  @@index([targetType, targetId])
+}
+
+model AlertRule {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetType      String
+  targetId        String?
+  eventType       String
+  minutesBefore   Int?
+  enabled         Boolean  @default(true)
+  quietStart      String?
+  quietEnd        String?
+  lastTriggeredAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([enabled])
+  @@index([eventType])
+}
+
+model NotificationDelivery {
+  id           String   @id @default(cuid())
+  userId       String
+  alertRuleId  String?
+  channel      String
+  targetType   String
+  targetId     String?
+  subject      String
+  body         String   @db.Text
+  status       String   @default("PENDING")
+  idempotencyKey String @unique
+  deliveredAt  DateTime?
+  error        String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([idempotencyKey])
+  @@index([status])
+  @@index([createdAt])
 }
