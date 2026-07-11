@@ -14,14 +14,18 @@ export function Footer({ locale }: FooterProps) {
   const footerLinks = {
     product: [
       { label: t('nav.launches'), href: `/${locale}/launches` },
+      { label: t('nav.countries'), href: `/${locale}/countries` },
+      { label: t('nav.agencies'), href: `/${locale}/agencies` },
+      { label: t('nav.rockets'), href: `/${locale}/rockets` },
+      { label: t('nav.industry'), href: `/${locale}/industry` },
       { label: t('nav.spacecraft'), href: `/${locale}/spacecraft` },
       { label: t('nav.astronauts'), href: `/${locale}/astronauts` },
-      { label: t('nav.explore'), href: `/${locale}/explore` },
     ],
     company: [
       { label: t('legal.about'), href: `/${locale}/about` },
-      { label: t('legal.contact'), href: `/${locale}/contact` },
       { label: t('legal.dataSources'), href: `/${locale}/data-sources` },
+      { label: t('status.breadcrumb'), href: `/${locale}/status` },
+      { label: t('legal.contact'), href: `/${locale}/contact` },
     ],
     legal: [
       { label: t('legal.privacy'), href: `/${locale}/privacy` },

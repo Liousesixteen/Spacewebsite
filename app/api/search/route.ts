@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   }
 
   const limit = 5;
-  const [launches, spacecraft, astronauts, rockets, companies, technologies] =
+  const [launches, spacecraft, astronauts, rockets, agencies, companies, technologies] =
     await Promise.all([
       prisma.launch.findMany({
         where: {
@@ -51,6 +51,17 @@ export async function GET(request: NextRequest) {
         },
         take: limit,
         select: { id: true, name: true, manufacturer: true, country: true },
+      }),
+      prisma.agency.findMany({
+        where: {
+          OR: [
+            { name: { contains: q, mode: 'insensitive' } },
+            { description: { contains: q, mode: 'insensitive' } },
+            { abbrev: { contains: q, mode: 'insensitive' } },
+          ],
+        },
+        take: limit,
+        select: { id: true, name: true, country: true, type: true },
       }),
       prisma.company.findMany({
         where: {
@@ -95,7 +106,12 @@ export async function GET(request: NextRequest) {
         rockets: rockets.map((r) => ({
           ...r,
           type: 'rocket' as const,
-          url: `/launches?rocketId=${r.id}`,
+          url: `/rockets/${r.id}`,
+        })),
+        agencies: agencies.map((a) => ({
+          ...a,
+          type: 'agency' as const,
+          url: `/agencies/${a.id}`,
         })),
         companies: companies.map((c) => ({
           ...c,
@@ -113,6 +129,7 @@ export async function GET(request: NextRequest) {
         spacecraft.length +
         astronauts.length +
         rockets.length +
+        agencies.length +
         companies.length +
         technologies.length,
     },

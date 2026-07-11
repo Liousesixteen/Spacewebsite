@@ -50,6 +50,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/terms',
     '/data-sources',
     '/contact',
+    '/rockets',
+    '/notifications',
+    '/status',
+    '/timeline',
+    '/compare',
   ];
 
   const staticEntries = LOCALES.flatMap((locale) =>

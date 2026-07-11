@@ -16,6 +16,8 @@
     "explore": "Explore",
     "industry": "Industry",
     "notifications": "Alerts",
+    "dataSources": "Data Sources",
+    "status": "Status",
     "more": "More"
   },
   "home": {
@@ -59,6 +61,18 @@
       "astronauts": {
         "title": "Astronauts",
         "description": "Meet astronauts from every nation and their space missions"
+      },
+      "countries": {
+        "title": "Countries",
+        "description": "Browse space launch capabilities, agency ecosystems, and industry profiles by country"
+      },
+      "agencies": {
+        "title": "Agencies",
+        "description": "Explore global space agencies, rocket families, and launch site distributions"
+      },
+      "dataSources": {
+        "title": "Data Health",
+        "description": "Check data domain status, record counts, and last sync times"
       },
       "industry": {
         "title": "Industry",
@@ -398,6 +412,19 @@
     "unknown": "Unknown",
     "dbUnavailable": "Database temporarily unavailable",
     "dbUnavailableHint": "Agency data is recovering. Page structure and navigation remain available."
+  },
+  "rockets": {
+    "breadcrumb": "Rockets",
+    "title": "Rocket Models",
+    "description": "Browse global launch vehicle families, compare technical specs, launch records, and success rates.",
+    "dbUnavailable": "Database temporarily unavailable",
+    "dbUnavailableHint": "Rocket data is recovering. Page structure and navigation remain available.",
+    "empty": "No rocket data available.",
+    "height": "Height",
+    "stages": "Stages",
+    "payloadToLEO": "LEO Payload",
+    "active": "Active",
+    "successRate": "Success Rate"
   },
   "spacecraft": {
     "title": "Spacecraft",

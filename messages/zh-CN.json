@@ -16,6 +16,8 @@
     "explore": "深空探索",
     "industry": "产业链",
     "notifications": "通知",
+    "dataSources": "数据来源",
+    "status": "服务状态",
     "more": "更多"
   },
   "home": {
@@ -59,6 +61,18 @@
       "astronauts": {
         "title": "宇航员",
         "description": "认识各国宇航员及其太空任务履历"
+      },
+      "countries": {
+        "title": "国家能力",
+        "description": "按国家查看航天发射能力、机构生态与产业画像"
+      },
+      "agencies": {
+        "title": "航天机构",
+        "description": "浏览全球航天机构、火箭谱系与发射场分布"
+      },
+      "dataSources": {
+        "title": "数据健康",
+        "description": "查看各数据域的状态、记录数与最后同步时间"
       },
       "industry": {
         "title": "产业链",
@@ -398,6 +412,19 @@
     "unknown": "未知",
     "dbUnavailable": "数据库暂时不可用",
     "dbUnavailableHint": "航天机构数据正在恢复中，页面框架和导航仍可使用。"
+  },
+  "rockets": {
+    "breadcrumb": "火箭",
+    "title": "火箭型号",
+    "description": "浏览全球运载火箭谱系，比较技术参数、发射记录与成功率。",
+    "dbUnavailable": "数据库暂时不可用",
+    "dbUnavailableHint": "火箭数据服务正在恢复中，页面框架和导航仍可使用。",
+    "empty": "暂无火箭数据。",
+    "height": "高度",
+    "stages": "级数",
+    "payloadToLEO": "LEO 载荷",
+    "active": "现役",
+    "successRate": "成功率"
   },
   "spacecraft": {
     "title": "航天器",

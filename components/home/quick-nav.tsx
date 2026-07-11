@@ -8,6 +8,9 @@ import {
   Clock,
   ArrowLeftRight,
   ArrowRight,
+  Globe,
+  Building2,
+  Database,
   type LucideIcon,
 } from 'lucide-react';
 import { AnimateIn } from '@/components/ui';
@@ -50,11 +53,32 @@ export function QuickNav({ locale }: QuickNavProps) {
       iconColor: 'text-cosmic-purple',
     },
     {
+      key: 'countries',
+      href: `/${locale}/countries`,
+      icon: Globe,
+      gradient: 'from-emerald-400/10 to-cosmic-blue/5',
+      iconColor: 'text-emerald-400',
+    },
+    {
+      key: 'agencies',
+      href: `/${locale}/agencies`,
+      icon: Building2,
+      gradient: 'from-amber-400/10 to-cosmic-purple/5',
+      iconColor: 'text-amber-400',
+    },
+    {
       key: 'industry',
       href: `/${locale}/industry`,
       icon: Factory,
       gradient: 'from-cosmic-pink/10 to-cosmic-blue/5',
       iconColor: 'text-cosmic-pink',
+    },
+    {
+      key: 'dataSources',
+      href: `/${locale}/data-sources`,
+      icon: Database,
+      gradient: 'from-cosmic-blue/10 to-cosmic-cyan/5',
+      iconColor: 'text-cosmic-blue',
     },
     {
       key: 'timeline',

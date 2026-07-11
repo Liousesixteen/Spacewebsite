@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Rocket, Satellite, Users, Building2, type LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui';
@@ -55,6 +56,13 @@ function CountUp({ end, duration = 1500 }: { end: number; duration?: number }) {
 export function StatsOverview({ stats }: StatsOverviewProps) {
   const t = useTranslations('home.stats');
 
+  const itemLinks: Record<string, string> = {
+    launches: '/launches',
+    spacecraft: '/spacecraft',
+    astronauts: '/astronauts',
+    companies: '/industry/companies',
+  };
+
   const items: StatItem[] = [
     {
       key: 'launches',
@@ -97,11 +105,12 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         {items.map((item) => {
           const Icon = item.icon;
+          const href = itemLinks[item.key];
           return (
-            <Card
-              key={item.key}
-              variant="elevated"
-              className="group cursor-default"
+            <Link key={item.key} href={href}>
+              <Card
+                variant="elevated"
+                className="group cursor-pointer hover:border-cosmic-blue/30 transition-colors"
               style={{
                 '--stat-glow': item.glowColor,
               } as React.CSSProperties}
@@ -122,6 +131,7 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
                 </div>
               </CardContent>
             </Card>
+            </Link>
           );
         })}
       </div>
