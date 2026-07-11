@@ -12,6 +12,7 @@ import {
   type LaunchFilterValues,
 } from '@/components/launches/launch-filters';
 import { LaunchCalendar } from '@/components/launches/launch-calendar';
+import { Download } from 'lucide-react';
 import { LaunchMissionControl } from '@/components/launches/launch-mission-control';
 import { ViewToggle, Pagination, AnimateIn, Breadcrumbs, PageHeader } from '@/components/ui';
 import type { ViewMode } from '@/components/ui/view-toggle';
@@ -81,6 +82,14 @@ export default function LaunchesPage({
                 labels={{ grid: t('grid'), table: t('table') }}
               />
             )}
+            <a
+              href="/api/launches/export?limit=500"
+              className="flex items-center gap-1.5 rounded-lg border border-space-600/40 bg-space-800/60 px-3 py-1.5 text-xs font-medium text-star-dim hover:text-star-white hover:border-cosmic-blue/50 transition-colors"
+              download
+            >
+              <Download className="h-3.5 w-3.5" />
+              CSV
+            </a>
           </div>
         }
       />
