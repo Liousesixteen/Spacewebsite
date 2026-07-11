@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { useState, useRef, useEffect } from 'react';
 import { User, LogOut, Heart, MessageSquare, Settings, Shield } from 'lucide-react';
 import { Button } from '@/components/ui';
@@ -11,6 +12,8 @@ interface UserNavProps {
 }
 
 export function UserNav({ locale }: UserNavProps) {
+  const authT = useTranslations('auth');
+  const profileT = useTranslations('profile.tabs');
   const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -32,12 +35,12 @@ export function UserNav({ locale }: UserNavProps) {
   if (!session?.user) {
     return (
       <Link href={`/${locale}/login`}>
-        <Button size="sm">登录</Button>
+        <Button size="sm">{authT('login')}</Button>
       </Link>
     );
   }
 
-  const displayName = session.user.name || session.user.email || '用户';
+  const displayName = session.user.name || session.user.email || authT('user');
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
@@ -75,7 +78,7 @@ export function UserNav({ locale }: UserNavProps) {
             onClick={() => setOpen(false)}
           >
             <User className="w-4 h-4" />
-            个人主页
+            {profileT('info')}
           </Link>
           <Link
             href={`/${locale}/profile/favorites`}
@@ -83,7 +86,7 @@ export function UserNav({ locale }: UserNavProps) {
             onClick={() => setOpen(false)}
           >
             <Heart className="w-4 h-4" />
-            我的收藏
+            {profileT('favorites')}
           </Link>
           <Link
             href={`/${locale}/profile/comments`}
@@ -91,7 +94,7 @@ export function UserNav({ locale }: UserNavProps) {
             onClick={() => setOpen(false)}
           >
             <MessageSquare className="w-4 h-4" />
-            我的评论
+            {profileT('comments')}
           </Link>
           <Link
             href={`/${locale}/profile/settings`}
@@ -99,7 +102,7 @@ export function UserNav({ locale }: UserNavProps) {
             onClick={() => setOpen(false)}
           >
             <Settings className="w-4 h-4" />
-            设置
+            {profileT('settings')}
           </Link>
           {session.user.role === 'ADMIN' && (
             <Link
@@ -108,7 +111,7 @@ export function UserNav({ locale }: UserNavProps) {
               onClick={() => setOpen(false)}
             >
               <Shield className="w-4 h-4" />
-              管理后台
+              {authT('admin')}
             </Link>
           )}
           <div className="border-t border-space-700 mt-2 pt-2">
@@ -121,7 +124,7 @@ export function UserNav({ locale }: UserNavProps) {
               className="w-full flex items-center gap-2 px-4 py-2 text-sm text-star-dim hover:text-star-white hover:bg-space-700"
             >
               <LogOut className="w-4 h-4" />
-              退出登录
+              {authT('logout')}
             </button>
           </div>
         </div>

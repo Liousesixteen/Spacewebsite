@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui';
 
@@ -10,6 +11,12 @@ export interface LaunchFilterValues {
   year?: string;
   rocketName?: string;
   launchSite?: string;
+  provider?: string;
+  missionType?: string;
+  orbit?: string;
+  launchPad?: string;
+  from?: string;
+  to?: string;
 }
 
 interface LaunchFiltersProps {
@@ -18,12 +25,14 @@ interface LaunchFiltersProps {
 }
 
 export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
+  const t = useTranslations('launches.filters');
+  const statusT = useTranslations('launches.status');
   const [expanded, setExpanded] = useState(false);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 20 }, (_, i) => currentYear - i);
 
   const launchSites = [
-    { value: '', label: '全部发射场' },
+    { value: '', label: t('allLaunchSites') },
     { value: 'Kennedy', label: '肯尼迪航天中心' },
     { value: 'Cape Canaveral', label: '卡纳维拉尔角' },
     { value: 'Vandenberg', label: '范登堡空军基地' },
@@ -48,11 +57,11 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
           onChange={(e) => update({ status: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部状态</option>
-          <option value="SUCCESS">成功</option>
-          <option value="FAILURE">失败</option>
-          <option value="PLANNED">计划中</option>
-          <option value="POSTPONED">推迟</option>
+          <option value="">{t('allStatus')}</option>
+          <option value="SUCCESS">{statusT('SUCCESS')}</option>
+          <option value="FAILURE">{statusT('FAILURE')}</option>
+          <option value="PLANNED">{statusT('PLANNED')}</option>
+          <option value="POSTPONED">{statusT('POSTPONED')}</option>
         </select>
 
         <select
@@ -60,13 +69,13 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
           onChange={(e) => update({ country: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部国家</option>
-          <option value="USA">美国</option>
-          <option value="China">中国</option>
-          <option value="Russia">俄罗斯</option>
-          <option value="Europe">欧洲</option>
-          <option value="Japan">日本</option>
-          <option value="India">印度</option>
+          <option value="">{t('allCountries')}</option>
+          <option value="USA">{t('countries.USA')}</option>
+          <option value="China">{t('countries.China')}</option>
+          <option value="Russia">{t('countries.Russia')}</option>
+          <option value="Europe">{t('countries.Europe')}</option>
+          <option value="Japan">{t('countries.Japan')}</option>
+          <option value="India">{t('countries.India')}</option>
         </select>
 
         <select
@@ -74,7 +83,7 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
           onChange={(e) => update({ year: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部年份</option>
+          <option value="">{t('allYears')}</option>
           {years.map((year) => (
             <option key={year} value={year}>
               {year}
@@ -83,7 +92,7 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
         </select>
 
         <Button variant="ghost" onClick={() => onFilterChange({})}>
-          重置
+          {t('reset')}
         </Button>
 
         <Button variant="ghost" onClick={() => setExpanded(!expanded)}>
@@ -92,7 +101,7 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
           ) : (
             <ChevronDown className="w-4 h-4 mr-1" />
           )}
-          更多筛选
+          {expanded ? t('less') : t('more')}
         </Button>
       </div>
 
@@ -103,8 +112,32 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
             type="text"
             value={filters.rocketName || ''}
             onChange={(e) => update({ rocketName: e.target.value || undefined })}
-            placeholder="搜索火箭名称..."
+            placeholder={t('rocketPlaceholder')}
             className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
+          />
+
+          <input
+            type="text"
+            value={filters.provider || ''}
+            onChange={(e) => update({ provider: e.target.value || undefined })}
+            placeholder={t('providerPlaceholder')}
+            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
+          />
+
+          <input
+            type="text"
+            value={filters.missionType || ''}
+            onChange={(e) => update({ missionType: e.target.value || undefined })}
+            placeholder={t('allMissionTypes')}
+            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[190px]"
+          />
+
+          <input
+            type="text"
+            value={filters.orbit || ''}
+            onChange={(e) => update({ orbit: e.target.value || undefined })}
+            placeholder={t('allOrbits')}
+            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[160px]"
           />
 
           <select
@@ -118,6 +151,34 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
               </option>
             ))}
           </select>
+
+          <input
+            type="text"
+            value={filters.launchPad || ''}
+            onChange={(e) => update({ launchPad: e.target.value || undefined })}
+            placeholder={t('launchPadPlaceholder')}
+            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[180px]"
+          />
+
+          <label className="flex items-center gap-2 text-sm text-star-dim">
+            <span>{t('fromDate')}</span>
+            <input
+              type="date"
+              value={filters.from || ''}
+              onChange={(e) => update({ from: e.target.value || undefined })}
+              className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white focus:outline-none focus:border-cosmic-blue"
+            />
+          </label>
+
+          <label className="flex items-center gap-2 text-sm text-star-dim">
+            <span>{t('toDate')}</span>
+            <input
+              type="date"
+              value={filters.to || ''}
+              onChange={(e) => update({ to: e.target.value || undefined })}
+              className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white focus:outline-none focus:border-cosmic-blue"
+            />
+          </label>
         </div>
       )}
     </div>

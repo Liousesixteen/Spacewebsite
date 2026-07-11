@@ -5,8 +5,6 @@ import {
   Satellite,
   Users,
   Factory,
-  Compass,
-  User,
   Clock,
   ArrowLeftRight,
   ArrowRight,
@@ -59,20 +57,6 @@ export function QuickNav({ locale }: QuickNavProps) {
       iconColor: 'text-cosmic-pink',
     },
     {
-      key: 'explore',
-      href: `/${locale}/explore`,
-      icon: Compass,
-      gradient: 'from-cosmic-cyan/10 to-cosmic-purple/5',
-      iconColor: 'text-cosmic-cyan',
-    },
-    {
-      key: 'profile',
-      href: `/${locale}/profile`,
-      icon: User,
-      gradient: 'from-cosmic-blue/10 to-cosmic-cyan/5',
-      iconColor: 'text-cosmic-blue',
-    },
-    {
       key: 'timeline',
       href: `/${locale}/timeline`,
       icon: Clock,
@@ -99,21 +83,21 @@ export function QuickNav({ locale }: QuickNavProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5">
         {items.map((item, index) => {
           const Icon = item.icon;
           return (
-            <AnimateIn key={item.key} delay={index * 75}>
+            <AnimateIn key={item.key} delay={index * 75} className="h-full">
               <Link
                 href={item.href}
-                className={`group relative overflow-hidden rounded-2xl border border-space-600/30 bg-space-800 p-6 transition-all duration-300 hover:border-cosmic-blue/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.06)]`}
+                className="group relative flex h-full min-h-[180px] flex-col overflow-hidden rounded-2xl border border-space-600/30 bg-space-800 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-cosmic-blue/40 hover:shadow-[0_0_30px_rgba(59,130,246,0.06)]"
               >
                 {/* Background glow on hover */}
-                <div className="absolute inset-0 bg-cosmic-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`} />
 
-                <div className="relative z-10">
+                <div className="relative z-10 flex h-full flex-col">
                   {/* Frosted glass icon circle */}
-                  <div className={`inline-flex p-3.5 rounded-xl frosted-icon mb-5 ${item.iconColor} transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-blue`}>
+                  <div className={`mb-5 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-space-600/40 bg-space-700/60 ${item.iconColor} transition-all duration-300 group-hover:scale-105 group-hover:border-cosmic-blue/40`}>
                     <Icon className="w-6 h-6" />
                   </div>
 
@@ -126,9 +110,9 @@ export function QuickNav({ locale }: QuickNavProps) {
                   </p>
 
                   {/* Slide-in arrow on hover */}
-                  <div className="flex items-center gap-1.5 text-sm text-cosmic-blue font-medium">
+                  <div className="mt-auto flex items-center gap-1.5 text-sm text-cosmic-blue font-medium">
                     <span className="transform transition-all duration-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0">
-                      {t('explore')}
+                      {t('cta')}
                     </span>
                     <ArrowRight className="w-4 h-4 transform transition-all duration-300 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0" />
                   </div>

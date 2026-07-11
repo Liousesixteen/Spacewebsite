@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
+import { buildSpacecraftWhere, parsePositiveInt } from '@/lib/api/filter-params';
 
 export const revalidate = 60;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const type = searchParams.get('type');
-  const status = searchParams.get('status');
-  const operator = searchParams.get('operator');
-
-  const where: Prisma.SpacecraftWhereInput = {};
-  if (type) where.type = type as Prisma.SpacecraftWhereInput['type'];
-  if (status) where.status = status as Prisma.SpacecraftWhereInput['status'];
-  if (operator) where.operator = operator;
+  const page = parsePositiveInt(searchParams.get('page'), 1);
+  const limit = parsePositiveInt(searchParams.get('limit'), 20);
+  const where = buildSpacecraftWhere(searchParams);
 
   const [spacecraft, total] = await Promise.all([
     prisma.spacecraft.findMany({

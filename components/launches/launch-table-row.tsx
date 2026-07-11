@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Rocket, MapPin, Calendar } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Building2, Rocket, MapPin, Calendar } from 'lucide-react';
 import { Badge } from '@/components/ui';
 import type { Launch } from '@/lib/api/launches';
 
@@ -12,20 +13,14 @@ const statusColors = {
   IN_FLIGHT: 'info',
 } as const;
 
-const statusLabels: Record<string, string> = {
-  SUCCESS: '成功',
-  FAILURE: '失败',
-  PLANNED: '计划中',
-  POSTPONED: '推迟',
-  IN_FLIGHT: '飞行中',
-};
-
 interface LaunchTableRowProps {
   launch: Launch;
   locale: string;
 }
 
 export function LaunchTableRow({ launch, locale }: LaunchTableRowProps) {
+  const statusT = useTranslations('launches.status');
+
   return (
     <Link href={`/${locale}/launches/${launch.id}`}>
       <div className="flex items-center gap-4 px-6 py-4 bg-space-800 border border-space-600 rounded-lg hover:border-cosmic-blue/60 transition-colors">
@@ -40,7 +35,7 @@ export function LaunchTableRow({ launch, locale }: LaunchTableRowProps) {
                 'default'
               }
             >
-              {statusLabels[launch.status] || launch.status}
+              {statusT(launch.status)}
             </Badge>
           </div>
         </div>
@@ -57,9 +52,14 @@ export function LaunchTableRow({ launch, locale }: LaunchTableRowProps) {
           <span className="truncate">{launch.rocket.name}</span>
         </div>
 
+        <div className="hidden xl:flex items-center gap-2 text-sm text-star-dim min-w-[150px]">
+          <Building2 className="w-4 h-4 shrink-0" />
+          <span className="truncate">{launch.agency?.name || launch.missionType || '-'}</span>
+        </div>
+
         <div className="hidden lg:flex items-center gap-2 text-sm text-star-dim min-w-[120px]">
           <MapPin className="w-4 h-4 shrink-0" />
-          <span className="truncate">{launch.launchSite.name}</span>
+          <span className="truncate">{launch.launchPad?.name || launch.launchSite.name}</span>
         </div>
 
         <ChevronRightIcon />

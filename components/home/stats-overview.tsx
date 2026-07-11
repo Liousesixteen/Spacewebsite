@@ -88,8 +88,8 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-star-white mb-2 font-display uppercase tracking-wider">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-star-white mb-2 font-display tracking-wide">
           {t('title')}
         </h2>
       </div>
@@ -106,14 +106,14 @@ export function StatsOverview({ stats }: StatsOverviewProps) {
                 '--stat-glow': item.glowColor,
               } as React.CSSProperties}
             >
-              <CardContent className="p-6 md:p-8 text-center">
+              <CardContent className="p-5 text-center lg:p-6">
                 {/* Icon */}
-                <div className={`inline-flex p-3 rounded-xl bg-space-800 border border-space-600/20 ${item.color} mb-4 transition-all duration-300 group-hover:scale-110`}>
+                <div className={`inline-flex p-3 rounded-xl bg-space-700/60 border border-space-600/30 ${item.color} mb-4 transition-all duration-300 group-hover:scale-105`}>
                   <Icon className="w-6 h-6" />
                 </div>
 
                 {/* Value */}
-                <div className="font-display text-3xl md:text-4xl font-bold mb-1 tabular-nums text-star-white">
+                <div className="font-display text-3xl font-bold mb-1 tabular-nums text-star-white lg:text-4xl">
                   <CountUp end={item.value} />
                 </div>
 

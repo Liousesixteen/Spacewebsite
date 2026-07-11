@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { Network, Building2, Cpu, Beaker, Wrench } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
 import { Card, CardContent, Breadcrumbs, PageHeader } from '@/components/ui';
-import { IndustryChainDiagram } from '@/components/industry/industry-chain-diagram';
+import { IndustryChainBrowser } from '@/components/industry/industry-chain-browser';
 import { MarketStats } from '@/components/industry/market-stats';
-import type { IndustrySegment } from '@/lib/api/industry';
+import { buildIndustryCoverage } from '@/lib/api/industry-coverage';
 
 export default async function IndustryOverviewPage({
   params,
@@ -12,57 +13,33 @@ export default async function IndustryOverviewPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'industry' });
 
-  const [
-    segmentsRaw,
-    totalCompanies,
-    totalTechnologies,
-    totalMaterials,
-    totalEquipment,
-    aggregations,
-  ] = await Promise.all([
-    prisma.industrySegment.findMany({
-      include: { _count: { select: { companies: true } } },
-      orderBy: [{ level: 'asc' }, { category: 'asc' }],
-    }),
-    prisma.company.count(),
-    prisma.technology.count(),
-    prisma.material.count(),
-    prisma.equipment.count(),
-    prisma.industrySegment.aggregate({
-      _sum: { marketSize: true },
-      _avg: { growthRate: true },
-    }),
-  ]);
-
-  const segments = segmentsRaw as unknown as IndustrySegment[];
-  const totalSegments = segments.length;
-  const marketSize = aggregations._sum.marketSize ?? 0;
-  const averageGrowthRate = aggregations._avg.growthRate ?? 0;
+  const industryData = await loadIndustryData();
 
   const quickLinks = [
     {
       href: `/${locale}/industry/companies`,
-      label: 'Companies',
-      description: 'Upstream and downstream companies across the space industry supply chain',
+      label: t('companies'),
+      description: t('companyDescription'),
       icon: Building2,
     },
     {
       href: `/${locale}/industry/technologies`,
-      label: 'Technologies',
-      description: 'Key technologies and current development status',
+      label: t('technologies'),
+      description: t('technologyDescription'),
       icon: Cpu,
     },
     {
       href: `/${locale}/industry/materials`,
-      label: 'Materials',
-      description: 'Aerospace materials and performance parameters',
+      label: t('materials'),
+      description: t('materialDescription'),
       icon: Beaker,
     },
     {
       href: `/${locale}/industry/equipment`,
-      label: 'Equipment',
-      description: 'Space equipment and critical hardware',
+      label: t('equipment'),
+      description: t('equipmentDescription'),
       icon: Wrench,
     },
   ];
@@ -73,35 +50,57 @@ export default async function IndustryOverviewPage({
         className="mb-4"
         items={[
           { label: 'SpaceData', href: `/${locale}` },
-          { label: 'Industry' },
+          { label: t('breadcrumb') },
         ]}
       />
 
       <PageHeader
         icon={Network}
-        title="Space Industry Chain"
-        description="A complete overview of the space industry ecosystem -- from raw materials to space applications."
+        title={t('overviewTitle')}
+        description={t('overviewDescription')}
       />
 
       <section className="mb-10">
         <MarketStats
-          totalSegments={totalSegments}
-          totalCompanies={totalCompanies}
-          totalTechnologies={totalTechnologies}
-          totalMaterials={totalMaterials}
-          totalEquipment={totalEquipment}
-          marketSize={marketSize}
-          averageGrowthRate={averageGrowthRate}
+          totalSegments={industryData.coverage.summary.totalSegments}
+          totalCompanies={industryData.coverage.summary.totalCompanies}
+          totalTechnologies={industryData.totalTechnologies}
+          totalMaterials={industryData.totalMaterials}
+          totalEquipment={industryData.totalEquipment}
+          marketSize={industryData.marketSize}
+          averageGrowthRate={industryData.averageGrowthRate}
+          labels={{
+            segments: t('segments'),
+            companies: t('totalCompanies'),
+            technologies: t('totalTechnologies'),
+            materials: t('totalMaterials'),
+            equipment: t('totalEquipment'),
+            items: t('items'),
+            companiesUnit: t('companiesUnit'),
+            technologiesUnit: t('technologiesUnit'),
+            materialsUnit: t('materialsUnit'),
+            equipmentUnit: t('equipmentUnit'),
+            marketSize: t('marketSize'),
+            marketUnit: t('marketUnit'),
+            averageGrowthRate: t('averageGrowthRate'),
+          }}
         />
       </section>
 
       <section className="mb-10">
-        <h2 className="text-2xl font-semibold text-star-white mb-6">Industry Chain Overview</h2>
-        <IndustryChainDiagram segments={segments} locale={locale} />
+        <h2 className="text-2xl font-semibold text-star-white mb-6">{t('chainOverview')}</h2>
+        <IndustryChainBrowser
+          locale={locale}
+          initialData={{
+            generatedAt: industryData.generatedAt,
+            sourceStatus: industryData.sourceStatus,
+            ...industryData.coverage,
+          }}
+        />
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold text-star-white mb-6">Quick Navigation</h2>
+        <h2 className="text-2xl font-semibold text-star-white mb-6">{t('quickNavigation')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {quickLinks.map((link) => {
             const Icon = link.icon;
@@ -127,4 +126,61 @@ export default async function IndustryOverviewPage({
       </section>
     </div>
   );
+}
+
+async function loadIndustryData() {
+  const generatedAt = new Date().toISOString();
+
+  try {
+    const [segments, totalTechnologies, totalMaterials, totalEquipment, aggregations] =
+      await Promise.all([
+        prisma.industrySegment.findMany({
+          include: {
+            companies: {
+              include: {
+                company: {
+                  select: {
+                    id: true,
+                    name: true,
+                    country: true,
+                    type: true,
+                  },
+                },
+              },
+            },
+          },
+          orderBy: [{ level: 'asc' }, { category: 'asc' }],
+        }),
+        prisma.technology.count(),
+        prisma.material.count(),
+        prisma.equipment.count(),
+        prisma.industrySegment.aggregate({
+          _sum: { marketSize: true },
+          _avg: { growthRate: true },
+        }),
+      ]);
+
+    return {
+      generatedAt,
+      sourceStatus: 'ok' as const,
+      coverage: buildIndustryCoverage(segments),
+      totalTechnologies,
+      totalMaterials,
+      totalEquipment,
+      marketSize: aggregations._sum.marketSize ?? 0,
+      averageGrowthRate: aggregations._avg.growthRate ?? 0,
+    };
+  } catch (error) {
+    console.error('[industry] failed to load overview:', error);
+    return {
+      generatedAt,
+      sourceStatus: 'unavailable' as const,
+      coverage: buildIndustryCoverage([]),
+      totalTechnologies: 0,
+      totalMaterials: 0,
+      totalEquipment: 0,
+      marketSize: 0,
+      averageGrowthRate: 0,
+    };
+  }
 }

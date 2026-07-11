@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Rocket, Menu, X, Search, Sun, Moon } from 'lucide-react';
+import { ChevronDown, Rocket, Menu, X, Search, Sun, Moon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { MobileNav } from './mobile-nav';
@@ -52,12 +52,18 @@ export function Navbar({ locale }: NavbarProps) {
   const navItems = [
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/launches`, label: t('launches') },
+    { href: `/${locale}/countries`, label: t('countries') },
+    { href: `/${locale}/agencies`, label: t('agencies') },
+    { href: `/${locale}/industry`, label: t('industry') },
+  ];
+
+  const secondaryNavItems = [
+    { href: `/${locale}/rockets`, label: t('rockets') },
     { href: `/${locale}/spacecraft`, label: t('spacecraft') },
     { href: `/${locale}/astronauts`, label: t('astronauts') },
     { href: `/${locale}/timeline`, label: t('timeline') },
     { href: `/${locale}/compare`, label: t('compare') },
     { href: `/${locale}/explore`, label: t('explore') },
-    { href: `/${locale}/industry`, label: t('industry') },
   ];
 
   const isActive = (href: string) => {
@@ -66,6 +72,8 @@ export function Navbar({ locale }: NavbarProps) {
     }
     return pathname.startsWith(href);
   };
+
+  const moreActive = secondaryNavItems.some((item) => isActive(item.href));
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -83,7 +91,7 @@ export function Navbar({ locale }: NavbarProps) {
             </Link>
 
             {/* Desktop nav items */}
-            <div className="hidden md:flex items-center gap-0.5">
+            <div className="hidden lg:flex items-center gap-0.5">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -102,10 +110,45 @@ export function Navbar({ locale }: NavbarProps) {
                   )}
                 </Link>
               ))}
+
+              <div className="group relative">
+                <button
+                  type="button"
+                  className={cn(
+                    'relative flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    moreActive
+                      ? 'text-star-white'
+                      : 'text-star-dim hover:text-star-white hover:bg-space-800/60'
+                  )}
+                  aria-haspopup="menu"
+                >
+                  {t('more')}
+                  <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                  {moreActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 rounded-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple animate-gradient-underline origin-center" />
+                  )}
+                </button>
+                <div className="invisible absolute left-1/2 top-full z-50 mt-2 w-44 -translate-x-1/2 rounded-xl border border-space-600/30 bg-space-900/95 p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  {secondaryNavItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'block rounded-lg px-3 py-2 text-sm transition-colors',
+                        isActive(item.href)
+                          ? 'bg-cosmic-blue/10 text-star-white'
+                          : 'text-star-dim hover:bg-space-800/70 hover:text-star-white'
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Right actions */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-3">
               {/* Search button - glass style */}
               <button
                 type="button"
@@ -155,7 +198,7 @@ export function Navbar({ locale }: NavbarProps) {
             </div>
 
             {/* Mobile controls */}
-            <div className="flex items-center gap-2 md:hidden">
+            <div className="flex items-center gap-2 lg:hidden">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
@@ -178,6 +221,8 @@ export function Navbar({ locale }: NavbarProps) {
           isOpen={mobileMenuOpen}
           onClose={() => setMobileMenuOpen(false)}
           navItems={navItems}
+          secondaryNavItems={secondaryNavItems}
+          secondaryLabel={t('more')}
           locale={locale}
           pathname={pathname}
         />

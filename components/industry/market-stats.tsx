@@ -9,6 +9,21 @@ interface MarketStatsProps {
   totalEquipment: number;
   marketSize: number;
   averageGrowthRate: number;
+  labels: {
+    segments: string;
+    companies: string;
+    technologies: string;
+    materials: string;
+    equipment: string;
+    items: string;
+    companiesUnit: string;
+    technologiesUnit: string;
+    materialsUnit: string;
+    equipmentUnit: string;
+    marketSize: string;
+    marketUnit: string;
+    averageGrowthRate: string;
+  };
 }
 
 export function MarketStats({
@@ -19,40 +34,41 @@ export function MarketStats({
   totalEquipment,
   marketSize,
   averageGrowthRate,
+  labels,
 }: MarketStatsProps) {
   const stats = [
     {
-      label: '产业环节',
+      label: labels.segments,
       value: totalSegments,
-      suffix: '个',
+      suffix: labels.items,
       icon: TrendingUp,
       variant: 'cosmic-blue',
     },
     {
-      label: '企业总数',
+      label: labels.companies,
       value: totalCompanies,
-      suffix: '家',
+      suffix: labels.companiesUnit,
       icon: Building2,
       variant: 'cosmic-blue',
     },
     {
-      label: '关键技术',
+      label: labels.technologies,
       value: totalTechnologies,
-      suffix: '项',
+      suffix: labels.technologiesUnit,
       icon: Cpu,
       variant: 'cosmic-blue',
     },
     {
-      label: '材料种类',
+      label: labels.materials,
       value: totalMaterials,
-      suffix: '种',
+      suffix: labels.materialsUnit,
       icon: Beaker,
       variant: 'cosmic-blue',
     },
     {
-      label: '设备种类',
+      label: labels.equipment,
       value: totalEquipment,
-      suffix: '种',
+      suffix: labels.equipmentUnit,
       icon: Wrench,
       variant: 'cosmic-blue',
     },
@@ -87,10 +103,10 @@ export function MarketStats({
           {marketSize > 0 && (
             <Card variant="glow">
               <CardContent className="p-6">
-                <div className="text-sm text-star-dim mb-2">全球市场规模</div>
+                <div className="text-sm text-star-dim mb-2">{labels.marketSize}</div>
                 <div className="text-3xl font-bold text-star-white">
                   ${marketSize.toLocaleString(undefined, { maximumFractionDigits: 1 })}
-                  <span className="text-base text-star-dim ml-2">亿美元</span>
+                  <span className="text-base text-star-dim ml-2">{labels.marketUnit}</span>
                 </div>
               </CardContent>
             </Card>
@@ -98,7 +114,7 @@ export function MarketStats({
           {averageGrowthRate > 0 && (
             <Card variant="glow">
               <CardContent className="p-6">
-                <div className="text-sm text-star-dim mb-2">平均年增长率</div>
+                <div className="text-sm text-star-dim mb-2">{labels.averageGrowthRate}</div>
                 <div className="text-3xl font-bold text-green-400">
                   {averageGrowthRate.toFixed(1)}%
                 </div>

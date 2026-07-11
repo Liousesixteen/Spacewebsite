@@ -12,6 +12,9 @@ export async function GET(
     include: {
       rocket: true,
       launchSite: true,
+      agency: true,
+      launchPad: true,
+      payloadRecords: true,
       crews: {
         include: { astronaut: true },
       },

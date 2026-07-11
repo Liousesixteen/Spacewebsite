@@ -3,6 +3,18 @@ import { prisma } from '@/lib/db';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 const LOCALES = ['zh-CN', 'en', 'ru', 'ja'] as const;
+const COUNTRY_SLUGS = [
+  'usa',
+  'china',
+  'russia',
+  'india',
+  'japan',
+  'france',
+  'new-zealand',
+  'south-korea',
+  'iran',
+  'israel',
+] as const;
 
 type EntityRow = { id: string; updatedAt: Date };
 
@@ -21,6 +33,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     '',
     '/launches',
+    '/agencies',
+    '/countries',
     '/spacecraft',
     '/astronauts',
     '/explore',
@@ -48,10 +62,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   );
 
   // Dynamic entries from DB - graceful fallback if database is unavailable
-  const [launches, spacecraft, astronauts, companies, technologies] =
+  const [
+    launches,
+    agencies,
+    rockets,
+    spacecraft,
+    astronauts,
+    companies,
+    technologies,
+  ] =
     await Promise.all([
       safeFindMany(() =>
         prisma.launch.findMany({
+          select: { id: true, updatedAt: true },
+          take: 500,
+        })
+      ),
+      safeFindMany(() =>
+        prisma.agency.findMany({
+          where: { launches: { some: {} } },
+          select: { id: true, updatedAt: true },
+          take: 500,
+        })
+      ),
+      safeFindMany(() =>
+        prisma.rocket.findMany({
           select: { id: true, updatedAt: true },
           take: 500,
         })
@@ -88,6 +123,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: l.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.7,
+    })),
+    ...agencies.map((a) => ({
+      url: `${SITE_URL}/${locale}/agencies/${a.id}`,
+      lastModified: a.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+    ...COUNTRY_SLUGS.map((slug) => ({
+      url: `${SITE_URL}/${locale}/countries/${slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+    ...rockets.map((r) => ({
+      url: `${SITE_URL}/${locale}/rockets/${r.id}`,
+      lastModified: r.updatedAt,
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
     })),
     ...spacecraft.map((s) => ({
       url: `${SITE_URL}/${locale}/spacecraft/${s.id}`,

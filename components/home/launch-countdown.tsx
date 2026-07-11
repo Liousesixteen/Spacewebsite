@@ -61,17 +61,15 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
 
   if (!nextLaunch || !targetDate) {
     return (
-      <section className="container mx-auto px-4 py-12">
-        <Card variant="elevated">
-          <CardContent className="p-10 text-center">
-            <Rocket className="w-12 h-12 mx-auto mb-4 text-star-dim/40" />
-            <h2 className="text-2xl font-semibold text-star-white mb-2">
-              {t('title')}
-            </h2>
-            <p className="text-star-dim">{t('empty')}</p>
-          </CardContent>
-        </Card>
-      </section>
+      <Card variant="elevated" className="h-full">
+        <CardContent className="flex min-h-[260px] flex-col items-center justify-center p-8 text-center">
+          <Rocket className="w-10 h-10 mb-4 text-star-dim/40" />
+          <h2 className="text-xl font-semibold text-star-white mb-2">
+            {t('title')}
+          </h2>
+          <p className="text-sm text-star-dim">{t('empty')}</p>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -83,15 +81,14 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-12">
-      <Card variant="elevated" className="animate-border-glow">
-        <CardContent className="p-8 md:p-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+    <Card variant="elevated" className="h-full animate-border-glow">
+      <CardContent className="p-6 lg:p-7">
+          <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
             <div>
               <Badge variant="info" className="mb-3">
                 {t('badge')}
               </Badge>
-              <h2 className="text-2xl md:text-3xl font-bold text-star-white">
+              <h2 className="text-xl font-bold leading-tight text-star-white lg:text-2xl">
                 {t('title')}
               </h2>
             </div>
@@ -107,11 +104,11 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
             href={`/${locale}/launches/${nextLaunch.id}`}
             className="block group"
           >
-            <div className="mb-8">
-              <h3 className="text-xl md:text-2xl font-semibold text-star-white group-hover:text-cosmic-blue transition-colors duration-300 mb-3">
+            <div className="mb-5">
+              <h3 className="text-lg font-semibold leading-snug text-star-white group-hover:text-cosmic-blue transition-colors duration-300 lg:text-xl">
                 {nextLaunch.name}
               </h3>
-              <div className="flex flex-wrap gap-4 text-sm text-star-dim">
+              <div className="mt-3 flex flex-col gap-2 text-sm text-star-dim">
                 {nextLaunch.rocket?.name && (
                   <span className="flex items-center gap-1.5">
                     <Rocket className="w-4 h-4 text-cosmic-blue/70" />
@@ -127,19 +124,19 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
           </Link>
 
           {/* Countdown digits */}
-          <div className="grid grid-cols-4 gap-3 md:gap-5">
+          <div className="grid grid-cols-4 gap-2">
             {units.map((u) => (
               <div
                 key={u.label}
-                className="relative rounded-xl bg-space-800  border border-space-500/40 p-4 md:p-7 text-center overflow-hidden group/count"
+                className="relative overflow-hidden rounded-xl border border-space-500/40 bg-space-800 p-3 text-center group/count"
               >
                 {/* Hover glow */}
                 <div className="absolute inset-0 bg-cosmic-blue/5 opacity-0 group-hover/count:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 <div className="relative z-10">
-                  <div className="text-3xl md:text-5xl font-extrabold text-gradient-blue tabular-nums font-display">
+                  <div className="font-mono text-2xl font-extrabold tabular-nums text-cosmic-blue lg:text-3xl">
                     {String(u.value).padStart(2, '0')}
                   </div>
-                  <div className="mt-1.5 md:mt-2.5 text-xs md:text-sm uppercase tracking-[0.2em] text-star-dim font-medium">
+                  <div className="mt-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-star-dim">
                     {u.label}
                   </div>
                 </div>
@@ -148,6 +145,5 @@ export function LaunchCountdown({ nextLaunch, locale }: LaunchCountdownProps) {
           </div>
         </CardContent>
       </Card>
-    </section>
   );
 }

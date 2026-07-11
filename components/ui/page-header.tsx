@@ -18,14 +18,14 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <div className={cn('mb-8', className)}>
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-4 sm:items-center">
           {/* Frosted glass icon */}
-          <div className="p-3 rounded-xl frosted-icon text-cosmic-blue shadow-glow-blue">
+          <div className="shrink-0 p-3 rounded-xl frosted-icon text-cosmic-blue shadow-glow-blue">
             <Icon className="w-7 h-7" />
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-star-white page-header-underline pb-2">
+          <div className="min-w-0">
+            <h1 className="break-words text-3xl font-bold text-star-white page-header-underline pb-2">
               {title}
             </h1>
             {description && (
@@ -36,7 +36,7 @@ export function PageHeader({
           </div>
         </div>
         {actions && (
-          <div className="shrink-0">{actions}</div>
+          <div className="w-full sm:w-auto sm:shrink-0">{actions}</div>
         )}
       </div>
     </div>

@@ -8,9 +8,17 @@ export type ViewMode = 'grid' | 'table';
 interface ViewToggleProps {
   mode: ViewMode;
   onChange: (mode: ViewMode) => void;
+  labels?: {
+    grid: string;
+    table: string;
+  };
 }
 
-export function ViewToggle({ mode, onChange }: ViewToggleProps) {
+export function ViewToggle({
+  mode,
+  onChange,
+  labels = { grid: '网格', table: '列表' },
+}: ViewToggleProps) {
   return (
     <div className="flex items-center gap-1 bg-space-800 rounded-lg border border-space-600 p-1">
       <button
@@ -21,10 +29,10 @@ export function ViewToggle({ mode, onChange }: ViewToggleProps) {
             ? 'bg-cosmic-blue/20 text-cosmic-blue'
             : 'text-star-dim hover:text-star-white'
         )}
-        title="网格视图"
+        title={labels.grid}
       >
         <LayoutGrid className="w-4 h-4" />
-        网格
+        {labels.grid}
       </button>
       <button
         onClick={() => onChange('table')}
@@ -34,10 +42,10 @@ export function ViewToggle({ mode, onChange }: ViewToggleProps) {
             ? 'bg-cosmic-blue/20 text-cosmic-blue'
             : 'text-star-dim hover:text-star-white'
         )}
-        title="列表视图"
+        title={labels.table}
       >
         <List className="w-4 h-4" />
-        列表
+        {labels.table}
       </button>
     </div>
   );

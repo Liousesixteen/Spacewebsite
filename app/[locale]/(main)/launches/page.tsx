@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { Rocket } from 'lucide-react';
 import { getLaunches } from '@/lib/api/launches';
 import { LaunchCard } from '@/components/launches/launch-card';
@@ -11,6 +12,7 @@ import {
   type LaunchFilterValues,
 } from '@/components/launches/launch-filters';
 import { LaunchCalendar } from '@/components/launches/launch-calendar';
+import { LaunchMissionControl } from '@/components/launches/launch-mission-control';
 import { ViewToggle, Pagination, AnimateIn, Breadcrumbs, PageHeader } from '@/components/ui';
 import type { ViewMode } from '@/components/ui/view-toggle';
 
@@ -21,6 +23,7 @@ export default function LaunchesPage({
 }: {
   params: { locale: string };
 }) {
+  const t = useTranslations('launches.page');
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<LaunchFilterValues>({});
   const [pageMode, setPageMode] = useState<PageViewMode>('list');
@@ -37,16 +40,16 @@ export default function LaunchesPage({
         className="mb-4"
         items={[
           { label: 'SpaceData', href: `/${locale}` },
-          { label: 'Launches' },
+          { label: t('breadcrumb') },
         ]}
       />
 
       <PageHeader
         icon={Rocket}
-        title="Launch Data"
-        description="Track every space launch from around the world — past, present, and planned."
+        title={t('title')}
+        description={t('description')}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             {/* View mode toggle */}
             <div className="flex items-center gap-1 bg-space-800/60 backdrop-blur-md rounded-lg border border-space-600/50 p-1">
               <button
@@ -57,7 +60,7 @@ export default function LaunchesPage({
                     : 'text-star-dim hover:text-star-white'
                 }`}
               >
-                List
+                {t('list')}
               </button>
               <button
                 onClick={() => setPageMode('calendar')}
@@ -67,35 +70,45 @@ export default function LaunchesPage({
                     : 'text-star-dim hover:text-star-white'
                 }`}
               >
-                Calendar
+                {t('calendar')}
               </button>
             </div>
 
             {pageMode === 'list' && (
-              <ViewToggle mode={viewMode} onChange={setViewMode} />
+              <ViewToggle
+                mode={viewMode}
+                onChange={setViewMode}
+                labels={{ grid: t('grid'), table: t('table') }}
+              />
             )}
           </div>
         }
       />
 
+      <LaunchMissionControl locale={locale} />
+
       {pageMode === 'calendar' ? (
-        <LaunchCalendar locale={locale} />
+        <div className="mt-8">
+          <LaunchCalendar locale={locale} />
+        </div>
       ) : (
         <>
-          <LaunchFilters
-            filters={filters}
-            onFilterChange={(next) => {
-              setFilters(next);
-              setPage(1);
-            }}
-          />
+          <div className="mt-8">
+            <LaunchFilters
+              filters={filters}
+              onFilterChange={(next) => {
+                setFilters(next);
+                setPage(1);
+              }}
+            />
+          </div>
 
           {isLoading && (
-            <div className="text-center py-12 text-star-dim">Loading...</div>
+            <div className="text-center py-12 text-star-dim">{t('loading')}</div>
           )}
 
           {error && (
-            <div className="text-center py-12 text-red-400">Failed to load</div>
+            <div className="text-center py-12 text-red-400">{t('failed')}</div>
           )}
 
           {data && (
@@ -119,7 +132,7 @@ export default function LaunchesPage({
               )}
 
               {data.data.length === 0 && (
-                <div className="text-center py-12 text-star-dim">No data</div>
+                <div className="text-center py-12 text-star-dim">{t('empty')}</div>
               )}
 
               <Pagination

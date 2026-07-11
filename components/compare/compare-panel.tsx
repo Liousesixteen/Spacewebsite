@@ -178,12 +178,17 @@ export function ComparePanel({ locale }: ComparePanelProps) {
   const [left, setLeft] = useState<Rocket | Spacecraft | null>(null);
   const [right, setRight] = useState<Rocket | Spacecraft | null>(null);
   const [shared, setShared] = useState(false);
+  const [origin, setOrigin] = useState('');
 
   // Fetch data
   const { data: rocketData, isLoading: rocketsLoading } = useQuery({
     queryKey: ['rockets', { limit: 500 }],
     queryFn: () => getRocketList({ limit: 500 }),
   });
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const { data: spacecraftData, isLoading: spacecraftLoading } = useQuery({
     queryKey: ['spacecraft', { limit: 500 }],
@@ -241,10 +246,11 @@ export function ComparePanel({ locale }: ComparePanelProps) {
   const shareLink = useMemo(() => {
     const params = new URLSearchParams();
     params.set('type', compareType);
-    if (left) params.set('left', encodeURIComponent((left as Rocket | Spacecraft).name));
-    if (right) params.set('right', encodeURIComponent((right as Rocket | Spacecraft).name));
-    return `${window.location.origin}/${locale}/compare?${params.toString()}`;
-  }, [left, right, compareType, locale]);
+    if (left) params.set('left', left.id || (left as Rocket | Spacecraft).name);
+    if (right) params.set('right', right.id || (right as Rocket | Spacecraft).name);
+    const path = `/${locale}/compare?${params.toString()}`;
+    return origin ? `${origin}${path}` : path;
+  }, [left, right, compareType, locale, origin]);
 
   const handleShare = async () => {
     try {

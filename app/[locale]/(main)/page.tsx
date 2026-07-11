@@ -80,8 +80,8 @@ export default async function HomePage({ params }: PageProps) {
       <HeroSection locale={locale} apod={apod} liveLaunchUrl={homeData.liveLaunchUrl} />
 
       {/* 2. Dashboard strip: Stats + Countdown side by side */}
-      <section className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
+      <section className="container mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
           <StatsOverview stats={homeData.stats} />
           <LaunchCountdown nextLaunch={homeData.nextLaunch} locale={locale} />
         </div>

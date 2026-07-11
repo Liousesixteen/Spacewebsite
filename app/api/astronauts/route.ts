@@ -1,21 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
+import { buildAstronautWhere, parsePositiveInt } from '@/lib/api/filter-params';
 
 export const revalidate = 60;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const nationality = searchParams.get('nationality');
-  const agency = searchParams.get('agency');
-  const status = searchParams.get('status');
-
-  const where: Prisma.AstronautWhereInput = {};
-  if (nationality) where.nationality = nationality;
-  if (agency) where.agency = agency;
-  if (status) where.status = status as Prisma.AstronautWhereInput['status'];
+  const page = parsePositiveInt(searchParams.get('page'), 1);
+  const limit = parsePositiveInt(searchParams.get('limit'), 20);
+  const where = buildAstronautWhere(searchParams);
 
   const [astronauts, total] = await Promise.all([
     prisma.astronaut.findMany({

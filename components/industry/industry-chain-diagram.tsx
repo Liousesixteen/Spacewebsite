@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { ChevronDown, Building2, ArrowDown } from 'lucide-react';
 import { Card, CardContent, Badge } from '@/components/ui';
 import type { IndustrySegment, IndustryLevel } from '@/lib/api/industry';
@@ -13,21 +14,15 @@ interface IndustryChainDiagramProps {
 
 const levelMeta: Record<
   IndustryLevel,
-  { label: string; description: string; variant: 'info' | 'warning' | 'success' }
+  { variant: 'info' | 'warning' | 'success' }
 > = {
   UPSTREAM: {
-    label: '上游',
-    description: '材料 / 电子元器件 / 机械部件 / 软件系统',
     variant: 'info',
   },
   MIDSTREAM: {
-    label: '中游',
-    description: '运载火箭 / 航天器制造 / 地面设备 / 发射服务',
     variant: 'warning',
   },
   DOWNSTREAM: {
-    label: '下游',
-    description: '卫星通信 / 导航定位 / 遥感观测 / 科学探索',
     variant: 'success',
   },
 };
@@ -38,6 +33,7 @@ export function IndustryChainDiagram({
   segments,
   locale,
 }: IndustryChainDiagramProps) {
+  const t = useTranslations('industry');
   const [expanded, setExpanded] = useState<IndustryLevel | null>('UPSTREAM');
 
   const grouped = levelOrder.map((level) => ({
@@ -50,6 +46,7 @@ export function IndustryChainDiagram({
       {grouped.map(({ level, items }, idx) => {
         const meta = levelMeta[level];
         const isOpen = expanded === level;
+        const levelLabel = t(`levels.${level}`);
         return (
           <div key={level}>
             <Card
@@ -64,14 +61,14 @@ export function IndustryChainDiagram({
                       variant={meta.variant}
                       className="text-base px-3 py-1"
                     >
-                      {meta.label}
+                      {levelLabel}
                     </Badge>
                     <div>
                       <h3 className="text-xl font-semibold text-star-white">
-                        {meta.label}产业 ({items.length})
+                        {t('levelTitle', { level: levelLabel })} ({items.length})
                       </h3>
                       <p className="text-sm text-star-dim mt-1">
-                        {meta.description}
+                        {t(`levelDescriptions.${level}`)}
                       </p>
                     </div>
                   </div>
@@ -86,7 +83,7 @@ export function IndustryChainDiagram({
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
                     {items.length === 0 ? (
                       <div className="col-span-full text-center text-star-dim py-4">
-                        暂无产业环节数据
+                        {t('emptySegments')}
                       </div>
                     ) : (
                       items.map((segment) => (
@@ -103,7 +100,7 @@ export function IndustryChainDiagram({
                             {segment._count && (
                               <Badge variant="default">
                                 <Building2 className="w-3 h-3 mr-1" />
-                                {segment._count.companies}
+                                {t('companyCount', { count: segment._count.companies })}
                               </Badge>
                             )}
                           </div>

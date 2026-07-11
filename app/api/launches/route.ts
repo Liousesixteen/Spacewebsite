@@ -1,25 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
+import { buildLaunchWhere, parsePositiveInt } from '@/lib/api/filter-params';
 
 export const revalidate = 60;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const page = parseInt(searchParams.get('page') || '1');
-  const limit = parseInt(searchParams.get('limit') || '20');
-  const status = searchParams.get('status');
-  const country = searchParams.get('country');
-  const year = searchParams.get('year');
-
-  const where: Prisma.LaunchWhereInput = {};
-  if (status) where.status = status as Prisma.LaunchWhereInput['status'];
-  if (country) where.rocket = { country };
-  if (year) {
-    const startDate = new Date(`${year}-01-01`);
-    const endDate = new Date(`${parseInt(year) + 1}-01-01`);
-    where.date = { gte: startDate, lt: endDate };
-  }
+  const page = parsePositiveInt(searchParams.get('page'), 1);
+  const limit = parsePositiveInt(searchParams.get('limit'), 20);
+  const where = buildLaunchWhere(searchParams);
 
   const [launches, total] = await Promise.all([
     prisma.launch.findMany({
@@ -27,6 +16,21 @@ export async function GET(request: NextRequest) {
       include: {
         rocket: { select: { id: true, name: true, country: true } },
         launchSite: { select: { id: true, name: true } },
+        agency: { select: { id: true, name: true, country: true } },
+        launchPad: { select: { id: true, name: true } },
+        payloadRecords: {
+          select: {
+            id: true,
+            name: true,
+            type: true,
+            orbit: true,
+            owner: true,
+            operator: true,
+            noradId: true,
+            internationalDesignator: true,
+          },
+          take: 6,
+        },
       },
       orderBy: { date: 'desc' },
       skip: (page - 1) * limit,

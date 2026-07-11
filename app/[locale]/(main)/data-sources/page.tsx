@@ -1,148 +1,371 @@
 import { getTranslations } from 'next-intl/server';
+import { prisma } from '@/lib/db';
+import {
+  buildHealthSnapshot,
+  type HealthDomainKey,
+  type HealthDomainSample,
+  type HealthSnapshot,
+} from '@/lib/api/data-health';
+import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent } from '@/components/ui/card';
-import Link from 'next/link';
-import { ExternalLink } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Breadcrumbs } from '@/components/ui/breadcrumbs';
+import { Database, CheckCircle2, AlertTriangle, XCircle, Circle } from 'lucide-react';
 
-interface PageProps {
-  params: Promise<{ locale: string }>;
+const DOMAINS: Array<{
+  key: HealthDomainKey;
+  source: string;
+  expectedRefreshHours: number;
+}> = [
+  { key: 'launches', source: 'Launch Library 2', expectedRefreshHours: 6 },
+  { key: 'agencies', source: 'Launch Library 2', expectedRefreshHours: 24 },
+  { key: 'rockets', source: 'Launch Library 2', expectedRefreshHours: 24 },
+  { key: 'launchSites', source: 'Launch Library 2', expectedRefreshHours: 168 },
+  { key: 'astronauts', source: 'Launch Library 2', expectedRefreshHours: 168 },
+  { key: 'spacecraft', source: 'Launch Library 2', expectedRefreshHours: 168 },
+];
+
+async function queryDomain(key: HealthDomainKey): Promise<{
+  count: number;
+  latestUpdatedAt: Date | null;
+  latestSyncedAt: Date | null;
+}> {
+  switch (key) {
+    case 'launches': {
+      const [count, latest] = await Promise.all([
+        prisma.launch.count(),
+        prisma.launch.findFirst({
+          select: { updatedAt: true, lastSyncedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: latest?.lastSyncedAt ?? null,
+      };
+    }
+    case 'agencies': {
+      const [count, latest] = await Promise.all([
+        prisma.agency.count(),
+        prisma.agency.findFirst({
+          select: { updatedAt: true, lastSyncedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: latest?.lastSyncedAt ?? null,
+      };
+    }
+    case 'rockets': {
+      const [count, latest] = await Promise.all([
+        prisma.rocket.count(),
+        prisma.rocket.findFirst({
+          select: { updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: null,
+      };
+    }
+    case 'launchSites': {
+      const [count, latest] = await Promise.all([
+        prisma.launchSite.count(),
+        prisma.launchSite.findFirst({
+          select: { updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: null,
+      };
+    }
+    case 'astronauts': {
+      const [count, latest] = await Promise.all([
+        prisma.astronaut.count(),
+        prisma.astronaut.findFirst({
+          select: { updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: null,
+      };
+    }
+    case 'spacecraft': {
+      const [count, latest] = await Promise.all([
+        prisma.spacecraft.count(),
+        prisma.spacecraft.findFirst({
+          select: { updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+        }),
+      ]);
+      return {
+        count,
+        latestUpdatedAt: latest?.updatedAt ?? null,
+        latestSyncedAt: null,
+      };
+    }
+    default:
+      return { count: 0, latestUpdatedAt: null, latestSyncedAt: null };
+  }
 }
 
-export default async function DataSourcesPage({ params }: PageProps) {
+async function loadHealthSnapshot(): Promise<HealthSnapshot | null> {
+  try {
+    const samples: HealthDomainSample[] = await Promise.all(
+      DOMAINS.map(async ({ key, source, expectedRefreshHours }) => {
+        try {
+          const { count, latestUpdatedAt, latestSyncedAt } = await queryDomain(key);
+          return { key, count, latestUpdatedAt, latestSyncedAt, source, expectedRefreshHours };
+        } catch (error) {
+          console.error(`[data-health] Failed to query ${key}:`, error);
+          return {
+            key,
+            count: 0,
+            latestUpdatedAt: null,
+            latestSyncedAt: null,
+            source,
+            expectedRefreshHours,
+            error: error instanceof Error ? error.message : String(error),
+          };
+        }
+      })
+    );
+
+    return buildHealthSnapshot(samples);
+  } catch (error) {
+    console.error('[data-health] Complete failure:', error);
+    return null;
+  }
+}
+
+const STATUS_CONFIG = {
+  healthy: { icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20', label: '正常' },
+  stale: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20', label: '延迟' },
+  empty: { icon: Circle, color: 'text-star-dim/50', bg: 'bg-star-dim/5', border: 'border-space-600/30', label: '空' },
+  unavailable: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-400/10', border: 'border-red-400/20', label: '不可用' },
+} as const;
+
+const OVERALL_CONFIG = {
+  healthy: { icon: CheckCircle2, color: 'text-emerald-400', label: '正常' },
+  degraded: { icon: AlertTriangle, color: 'text-amber-400', label: '部分降级' },
+  unavailable: { icon: XCircle, color: 'text-red-400', label: '不可用' },
+} as const;
+
+const DOMAIN_LABELS: Record<HealthDomainKey, string> = {
+  launches: '发射数据',
+  agencies: '航天机构',
+  rockets: '火箭',
+  launchSites: '发射场',
+  astronauts: '宇航员',
+  spacecraft: '航天器',
+};
+
+export default async function DataSourcesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'legal' });
+  const t = await getTranslations({ locale, namespace: 'dataHealth' });
+
+  const snapshot = await loadHealthSnapshot();
+  const OverallIcon = snapshot
+    ? OVERALL_CONFIG[snapshot.status].icon
+    : XCircle;
+  const overallColor = snapshot
+    ? OVERALL_CONFIG[snapshot.status].color
+    : 'text-red-400';
+  const overallLabel = snapshot
+    ? OVERALL_CONFIG[snapshot.status].label
+    : '不可用';
 
   return (
-    <div className="min-h-screen bg-space-900 pt-20 pb-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-star-white mb-4">数据来源</h1>
-          <p className="text-star-dim">
-            SpaceData 整合来自全球领先航天机构和数据提供商的数据
-          </p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <Breadcrumbs
+        className="mb-4"
+        items={[
+          { label: 'SpaceData', href: `/${locale}` },
+          { label: t('breadcrumb') },
+        ]}
+      />
 
-        {/* Introduction */}
-        <Card className="mb-12">
-          <CardContent className="pt-8">
-            <p className="text-star-dim leading-relaxed">
-              我们的平台汇集来自多个可靠来源的航天数据，确保用户获得最准确、最全面的信息。以下是我们主要的数据来源及其说明。
-            </p>
+      <PageHeader
+        icon={Database}
+        title={t('title')}
+        description={t('description')}
+      />
+
+      {/* Overall status strip */}
+      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card variant="elevated">
+          <CardContent className="flex items-center gap-4 p-5">
+            <OverallIcon className={`h-8 w-8 ${overallColor}`} />
+            <div>
+              <div className="text-xs text-star-dim">{t('overallStatus')}</div>
+              <div className={`text-lg font-semibold ${overallColor}`}>{overallLabel}</div>
+            </div>
           </CardContent>
         </Card>
-
-        {/* Data Sources */}
-        <div className="space-y-8">
-          {/* Launch Library 2 */}
-          <Card>
-            <CardContent className="pt-8">
-              <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-star-white">Launch Library 2</h2>
-                <Link
-                  href="https://ll.thespacedevs.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cosmic-blue hover:text-cosmic-blue/80 transition-colors"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                </Link>
-              </div>
-              <p className="text-star-dim mb-3">
-                <strong>提供者：</strong> TheSpaceDevs
-              </p>
-              <p className="text-star-dim leading-relaxed mb-4">
-                Launch Library 2 是全球最全面的火箭发射数据库，包含历史发射记录、即将进行的发射任务、火箭信息和发射场地详情。
-              </p>
-              <p className="text-star-dim">
-                <strong>同步频率：</strong> 每小时更新一次
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* SpaceX API */}
-          <Card>
-            <CardContent className="pt-8">
-              <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-star-white">SpaceX API</h2>
-                <Link
-                  href="https://docs.spacexdata.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cosmic-blue hover:text-cosmic-blue/80 transition-colors"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                </Link>
-              </div>
-              <p className="text-star-dim mb-3">
-                <strong>提供者：</strong> SpaceX
-              </p>
-              <p className="text-star-dim leading-relaxed mb-4">
-                SpaceX 官方 API 提供了关于 SpaceX 火箭、发射任务、龙飞船和星舰的详细信息。这是了解 SpaceX 最新动态的权威来源。
-              </p>
-              <p className="text-star-dim">
-                <strong>同步频率：</strong> 每 6 小时更新一次
-              </p>
-            </CardContent>
-          </Card>
-
-          {/* NASA APIs */}
-          <Card>
-            <CardContent className="pt-8">
-              <div className="flex items-start justify-between mb-4">
-                <h2 className="text-2xl font-bold text-star-white">NASA APIs</h2>
-                <Link
-                  href="https://api.nasa.gov"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-cosmic-blue hover:text-cosmic-blue/80 transition-colors"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                </Link>
-              </div>
-              <p className="text-star-dim mb-3">
-                <strong>提供者：</strong> 美国国家航空航天局 (NASA)
-              </p>
-              <p className="text-star-dim leading-relaxed mb-4">
-                NASA 提供的多个 API 包含关于航天器、宇航员、太空任务和航天探索的官方数据。
-              </p>
-              <p className="text-star-dim">
-                <strong>同步频率：</strong> 每天更新一次
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Data Accuracy Notice */}
-        <Card className="mt-12">
-          <CardContent className="pt-8">
-            <h2 className="text-2xl font-bold text-star-white mb-4">数据准确性声明</h2>
-            <p className="text-star-dim leading-relaxed mb-4">
-              虽然我们从可靠的来源获取数据，但我们不能保证所有信息的完全准确性。航天数据可能会因以下原因而变化：
-            </p>
-            <ul className="space-y-3 text-star-dim mb-4">
-              <li className="flex items-start gap-3">
-                <span className="text-cosmic-blue mt-1">•</span>
-                <span>发射日期的变更或推迟</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-cosmic-blue mt-1">•</span>
-                <span>任务状态的实时更新</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-cosmic-blue mt-1">•</span>
-                <span>数据源之间的信息差异</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-cosmic-blue mt-1">•</span>
-                <span>数据同步延迟</span>
-              </li>
-            </ul>
-            <p className="text-star-dim leading-relaxed">
-              对于关键决策，我们建议您直接查阅官方来源。如果您发现任何数据错误，请通过联系我们报告。
-            </p>
+        <Card variant="elevated">
+          <CardContent className="p-5">
+            <div className="text-xs text-star-dim">{t('totalRecords')}</div>
+            <div className="mt-1 text-3xl font-bold text-star-white">
+              {(snapshot?.summary.totalRecords ?? 0).toLocaleString()}
+            </div>
+          </CardContent>
+        </Card>
+        <Card variant="elevated">
+          <CardContent className="p-5">
+            <div className="text-xs text-star-dim">{t('healthyDomains')}</div>
+            <div className="mt-1 text-3xl font-bold text-star-white">
+              {snapshot?.summary.healthyDomains ?? 0}
+              <span className="text-lg text-star-dim"> / {snapshot?.summary.totalDomains ?? 6}</span>
+            </div>
+          </CardContent>
+        </Card>
+        <Card variant="elevated">
+          <CardContent className="p-5">
+            <div className="text-xs text-star-dim">{t('snapshotTime')}</div>
+            <div className="mt-1 text-lg font-semibold text-star-white">
+              {snapshot?.generatedAt
+                ? new Intl.DateTimeFormat(locale, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  }).format(new Date(snapshot.generatedAt))
+                : '--:--:--'}
+            </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Domain status table */}
+      <Card variant="glow" className="mb-8 overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-space-600/30 bg-space-800/50">
+                  <th className="px-5 py-3 text-left text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('domain')}
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('status')}
+                  </th>
+                  <th className="px-5 py-3 text-right text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('records')}
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('latestUpdate')}
+                  </th>
+                  <th className="px-5 py-3 text-left text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('source')}
+                  </th>
+                  <th className="px-5 py-3 text-right text-xs font-medium text-star-dim uppercase tracking-wider">
+                    {t('refreshInterval')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-space-600/20">
+                {(snapshot?.domains ?? DOMAINS.map((d) => ({
+                  key: d.key,
+                  status: 'unavailable' as const,
+                  count: 0,
+                  latestUpdate: null,
+                  latestSync: null,
+                  source: d.source,
+                  expectedRefreshHours: d.expectedRefreshHours,
+                  message: t('domainUnavailable'),
+                }))).map((domain) => {
+                  const cfg = STATUS_CONFIG[domain.status];
+                  const Icon = cfg.icon;
+                  const label = DOMAIN_LABELS[domain.key] ?? domain.key;
+                  const latestTime = domain.latestSync ?? domain.latestUpdate;
+
+                  return (
+                    <tr
+                      key={domain.key}
+                      className="hover:bg-space-700/30 transition-colors"
+                    >
+                      <td className="px-5 py-3.5">
+                        <span className="font-medium text-star-white">{label}</span>
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <span
+                          className={`inline-flex items-center gap-1.5 rounded-full border ${cfg.border} ${cfg.bg} px-2.5 py-0.5 text-xs font-medium ${cfg.color}`}
+                        >
+                          <Icon className="h-3 w-3" />
+                          {cfg.label}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3.5 text-right tabular-nums text-star-white">
+                        {domain.count.toLocaleString()}
+                      </td>
+                      <td className="px-5 py-3.5 text-star-dim">
+                        {latestTime
+                          ? new Intl.DateTimeFormat(locale, {
+                              month: '2-digit',
+                              day: '2-digit',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            }).format(new Date(latestTime))
+                          : '—'}
+                      </td>
+                      <td className="px-5 py-3.5 text-star-dim">
+                        {domain.source}
+                      </td>
+                      <td className="px-5 py-3.5 text-right text-star-dim">
+                        {domain.expectedRefreshHours <= 24
+                          ? `${domain.expectedRefreshHours}h`
+                          : `${Math.round(domain.expectedRefreshHours / 24)}d`}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Source registry */}
+      <Card className="mb-8">
+        <CardContent className="pt-6">
+          <h2 className="text-lg font-semibold text-star-white mb-4">{t('sourceRegistry')}</h2>
+          <div className="space-y-4">
+            <div className="rounded-xl border border-space-600/30 bg-space-700/30 p-4">
+              <h3 className="font-medium text-star-white">Launch Library 2</h3>
+              <p className="mt-1 text-sm text-star-dim">
+                {t('ll2Description')}
+              </p>
+              <p className="mt-2 text-xs text-star-dim/70">
+                {t('syncFrequency')}: 发射 6h / 机构 24h / 火箭 24h / 发射场 7d / 宇航员 7d / 航天器 7d
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Accuracy notice */}
+      <Card>
+        <CardContent className="pt-6">
+          <h2 className="text-lg font-semibold text-star-white mb-3">{t('accuracyNotice')}</h2>
+          <p className="text-sm text-star-dim leading-relaxed">
+            {t('accuracyNoticeText')}
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

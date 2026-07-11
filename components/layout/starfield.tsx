@@ -10,6 +10,12 @@ interface Star {
   speed: number;
 }
 
+interface StarfieldColors {
+  background: string;
+  starRgb: string;
+  opacityScale: number;
+}
+
 export function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -20,6 +26,20 @@ export function Starfield() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const readThemeColors = (): StarfieldColors => {
+      const styles = getComputedStyle(document.documentElement);
+      const background = styles.getPropertyValue('--background').trim() || '#0a0a0f';
+      const starRgb = styles.getPropertyValue('--star-white').trim().replace(/\s+/g, ', ') || '255, 255, 255';
+      const isLight = document.documentElement.classList.contains('light');
+      return {
+        background,
+        starRgb,
+        opacityScale: isLight ? 0.22 : 1,
+      };
+    };
+
+    let colors = readThemeColors();
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -27,6 +47,13 @@ export function Starfield() {
 
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    const observer = new MutationObserver(() => {
+      colors = readThemeColors();
+    });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
 
     const stars: Star[] = [];
     const starCount = 200;
@@ -44,13 +71,13 @@ export function Starfield() {
     let animationId: number;
 
     const animate = () => {
-      ctx.fillStyle = '#0a0a0f';
+      ctx.fillStyle = colors.background;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       stars.forEach((star) => {
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+        ctx.fillStyle = `rgba(${colors.starRgb}, ${star.opacity * colors.opacityScale})`;
         ctx.fill();
 
         star.y += star.speed;
@@ -70,6 +97,7 @@ export function Starfield() {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      observer.disconnect();
       cancelAnimationFrame(animationId);
     };
   }, []);

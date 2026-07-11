@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
-import { Rocket, MapPin, Calendar } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Building2, CircleDot, Rocket, MapPin, Calendar } from 'lucide-react';
 import { Card, CardContent, Badge, SmartImage, StatusBadge } from '@/components/ui';
 import type { Launch } from '@/lib/api/launches';
 import { getLaunchImage } from '@/lib/image-fallbacks';
@@ -11,6 +12,7 @@ interface LaunchCardProps {
 }
 
 export function LaunchCard({ launch, locale }: LaunchCardProps) {
+  const statusT = useTranslations('launches.status');
   const image = getLaunchImage(launch.id, launch.images, launch.rocket.name);
 
   return (
@@ -35,7 +37,7 @@ export function LaunchCard({ launch, locale }: LaunchCardProps) {
               {launch.name}
             </h3>
             <div className="shrink-0">
-              <StatusBadge status={launch.status} />
+              <StatusBadge status={launch.status} label={statusT(launch.status)} />
             </div>
           </div>
 
@@ -49,11 +51,33 @@ export function LaunchCard({ launch, locale }: LaunchCardProps) {
               <Rocket className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
               <span className="truncate">{launch.rocket.name}</span>
             </div>
+            {launch.agency?.name && (
+              <div className="flex items-center gap-2.5">
+                <Building2 className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
+                <span className="truncate">{launch.agency.name}</span>
+              </div>
+            )}
             <div className="flex items-center gap-2.5">
               <MapPin className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
               <span className="truncate">{launch.launchSite.name}</span>
             </div>
           </div>
+
+          {(launch.missionType || launch.orbitName || launch.orbitAbbrev) && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {launch.missionType && (
+                <Badge variant="info" className="normal-case tracking-normal">
+                  {launch.missionType}
+                </Badge>
+              )}
+              {(launch.orbitName || launch.orbitAbbrev) && (
+                <Badge variant="hud" className="normal-case tracking-normal">
+                  <CircleDot className="mr-1 h-3 w-3" />
+                  {launch.orbitName || launch.orbitAbbrev}
+                </Badge>
+              )}
+            </div>
+          )}
 
           {/* Description */}
           <p className="mt-4 text-sm text-star-dim/70 line-clamp-2 leading-relaxed">
