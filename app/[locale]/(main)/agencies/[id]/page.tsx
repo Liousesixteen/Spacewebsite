@@ -26,6 +26,9 @@ import {
 } from '@/components/ui';
 import { buildAgencyStats } from '@/lib/api/agency-stats';
 import { normalizeCountryName } from '@/lib/api/country-stats';
+import { computeQualityScore, inferSourceTier } from '@/lib/api/data-quality';
+import { JsonLd, buildOrganizationSchema } from '@/components/seo/json-ld';
+import { SourceBadge } from '@/components/ui/source-badge';
 
 export async function generateMetadata({
   params,
@@ -85,8 +88,39 @@ export default async function AgencyDetailPage({
     t('unknown');
   const displayCountrySlug = normalizeCountryName(displayCountry)?.slug;
 
+  const sourceTier = inferSourceTier(agency.source);
+  const quality = computeQualityScore({
+    sourceTier,
+    lastSyncedAt: agency.lastSyncedAt,
+    coreFieldsTotal: 6,
+    coreFieldsPopulated: [
+      agency.name,
+      agency.country,
+      agency.type,
+      agency.description,
+      agency.website,
+      agency.logo,
+    ].filter(Boolean).length,
+    distinctSources: agency.source ? 1 : 0,
+    maxSources: 3,
+    hasEditorialReview: false,
+    hasVerifiedRelationships: agency.launches?.length > 0,
+  });
+
+  const agencyUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${locale}/agencies/${agency.id}`;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <JsonLd
+        data={buildOrganizationSchema({
+          name: agency.name,
+          description: agency.description,
+          url: agencyUrl,
+          logo: agency.logo ?? null,
+          country: agency.country,
+        })}
+      />
+
       <Breadcrumbs
         className="mb-4"
         items={[
@@ -180,6 +214,54 @@ export default async function AgencyDetailPage({
         <CountPanel title={t('rocketUsage')} items={stats.rocketCounts.slice(0, 8)} />
         <CountPanel title={t('missionTypes')} items={stats.missionTypeCounts.slice(0, 8)} />
         <CountPanel title={t('launchSiteUsage')} items={stats.siteCounts.slice(0, 8)} />
+      </div>
+
+      {/* Data Quality Score */}
+      <div className="mt-8">
+        <Card variant="elevated">
+          <CardHeader>
+            <CardTitle className="text-lg text-star-white">数据质量评分</CardTitle>
+          </CardHeader>
+          <CardContent className="p-5">
+            <div className="mb-4 flex items-center gap-4">
+              <div className="flex-1">
+                <div className="mb-2 flex items-center justify-between">
+                  <span className="text-sm text-star-dim">综合评分</span>
+                  <span className="text-2xl font-bold text-cosmic-blue">{quality.total}/{quality.maxTotal}</span>
+                </div>
+                <div className="h-2 w-full rounded-full bg-space-700/50">
+                  <div
+                    className="h-2 rounded-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple transition-all"
+                    style={{ width: `${(quality.total / quality.maxTotal) * 100}%` }}
+                  />
+                </div>
+              </div>
+              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={agency.lastSyncedAt} />
+            </div>
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {quality.dimensions.map((dim) => (
+                <div
+                  key={dim.label}
+                  className="rounded-lg border border-space-600/30 bg-space-700/30 p-3"
+                >
+                  <div className="mb-1 flex items-center justify-between">
+                    <span className="text-xs text-star-dim">{dim.label}</span>
+                    <span className="text-xs font-mono font-semibold text-star-white">
+                      {dim.score}/{dim.maxScore}
+                    </span>
+                  </div>
+                  <div className="mb-2 h-1.5 w-full rounded-full bg-space-600/30">
+                    <div
+                      className="h-1.5 rounded-full bg-cosmic-blue/60"
+                      style={{ width: `${(dim.score / dim.maxScore) * 100}%` }}
+                    />
+                  </div>
+                  <div className="text-xs text-star-dim/70">{dim.detail}</div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
