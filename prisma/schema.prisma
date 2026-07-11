@@ -639,3 +639,39 @@ model NotificationDelivery {
   @@index([status])
   @@index([createdAt])
 }
+
+model EntityAlias {
+  id         String   @id @default(cuid())
+  entityType String
+  entityId   String
+  alias      String
+  language   String?
+  aliasType  String   @default("ALTERNATIVE")
+  source     String?
+  verified   Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@unique([entityType, entityId, alias])
+  @@index([entityType, entityId])
+  @@index([alias])
+}
+
+model FieldEvidence {
+  id              String   @id @default(cuid())
+  entityType      String
+  entityId        String
+  field           String
+  value           String?  @db.Text
+  source          String
+  sourceUrl       String?
+  observedAt      DateTime?
+  confidence      Float?
+  factType        String   @default("OBSERVED")
+  reviewerId      String?
+  reviewStatus    String   @default("UNREVIEWED")
+  createdAt       DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([source])
+  @@index([reviewStatus])
+}
