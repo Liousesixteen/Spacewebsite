@@ -1,4 +1,4 @@
-export type RocketStatus = 'ACTIVE' | 'RETIRED' | 'DEVELOPMENT';
+export type RocketStatus = 'ACTIVE' | 'RETIRED' | 'IN_DEVELOPMENT';
 
 export interface Rocket {
   id: string;
