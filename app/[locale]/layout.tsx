@@ -38,6 +38,12 @@ export async function generateMetadata({
     },
     alternates: {
       languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+      types: {
+        'application/rss+xml': '/api/launches/rss',
+      },
+    },
+    other: {
+      'application/rss+xml': '/api/launches/rss',
     },
   };
 }

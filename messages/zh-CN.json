@@ -91,6 +91,9 @@
   "common": {
     "loading": "加载中...",
     "error": "加载失败",
+    "notFound": "页面未找到",
+    "notFoundHint": "您访问的页面不在我们的轨道上。",
+    "backHome": "返回首页",
     "viewMore": "查看更多",
     "viewAll": "查看全部",
     "viewDetails": "查看详情",

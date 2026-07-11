@@ -91,6 +91,9 @@
   "common": {
     "loading": "Loading...",
     "error": "Failed to load",
+    "notFound": "Page not found",
+    "notFoundHint": "The page you're looking for is not in our orbit.",
+    "backHome": "Back to Home",
     "viewMore": "View more",
     "viewAll": "View all",
     "viewDetails": "View details",
