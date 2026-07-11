@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
-import { Building2, CircleDot, Database, ExternalLink, Factory, Rocket, MapPin, Calendar, Users, Video, type LucideIcon } from 'lucide-react';
+import { Building2, CalendarDays, CircleDot, Database, ExternalLink, Factory, Rocket, MapPin, Calendar, Users, Video, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
@@ -17,8 +17,10 @@ import {
   ImageLightbox,
   Breadcrumbs,
 } from '@/components/ui';
+import { SourceBadge } from '@/components/ui/source-badge';
 import { FavoriteButton } from '@/components/common/favorite-button';
 import { CommentSection } from '@/components/common/comment-section';
+import { JsonLd, buildLaunchSchema } from '@/components/seo/json-ld';
 import {
   getAstronautImage,
   getLaunchImage,
@@ -201,8 +203,25 @@ export default async function LaunchDetailPage({
     industryCompanies
   );
 
+  const launchUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${locale}/launches/${launch.id}`;
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* JSON-LD structured data */}
+      <JsonLd
+        data={buildLaunchSchema({
+          name: launch.name,
+          description: launch.missionDescription,
+          startDate: (launch.windowStart ?? launch.date).toISOString(),
+          endDate: launch.windowEnd?.toISOString(),
+          location: launch.launchSite?.name,
+          status: launch.status,
+          url: launchUrl,
+          image: launch.images?.[0] ?? null,
+          organizer: launch.agency ? { name: launch.agency.name } : null,
+        })}
+      />
+
       {/* Breadcrumbs */}
       <Breadcrumbs
         className="mb-6"
@@ -344,8 +363,24 @@ export default async function LaunchDetailPage({
               <ExternalButton href={launch.articleUrl} label={t('article')} />
               <ExternalButton href={launch.wikiUrl} label={t('wiki')} />
               <ExternalButton href={launch.sourceUrl} label={t('source')} />
+              <a
+                href={`/api/launches/${launch.id}/ics`}
+                className="inline-flex items-center gap-2 rounded-lg border border-space-600/40 bg-space-800/60 px-3 py-2 text-xs font-medium text-star-dim hover:text-star-white hover:border-cosmic-blue/50 transition-colors"
+                download
+              >
+                <CalendarDays className="h-3.5 w-3.5" />
+                {t('addToCalendar')}
+              </a>
             </div>
           )}
+          {/* Source credibility */}
+          <div className="mt-4">
+            <SourceBadge
+              tier={launch.source === 'Launch Library 2' ? 'B' : 'C'}
+              factType="OBSERVED"
+              lastSyncedAt={launch.lastSyncedAt}
+            />
+          </div>
         </CardContent>
       </Card>
 
