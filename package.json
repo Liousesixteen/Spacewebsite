@@ -13,6 +13,10 @@
     "sync:astronauts": "tsx scripts/sync/sync-astronauts.ts",
     "sync:spacecraft": "tsx scripts/sync/sync-spacecraft.ts",
     "sync:launches": "tsx scripts/sync/sync-launches.ts",
+    "sync:agencies": "tsx scripts/sync/sync-agencies.ts",
+    "sync:historical": "tsx scripts/sync/sync-historical.ts",
+    "sync:satcat": "tsx scripts/sync/sync-satcat.ts",
+    "sync:spacex-full": "tsx scripts/sync/sync-spacex-full.ts",
     "make-admin": "tsx scripts/make-admin.ts"
   },
   "dependencies": {
