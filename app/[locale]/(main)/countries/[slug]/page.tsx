@@ -23,6 +23,7 @@ import {
   StatusBadge,
 } from '@/components/ui';
 import { ValueChainMap } from '@/components/countries/value-chain-map';
+import { JsonLd } from '@/components/seo/json-ld';
 import { getCountryProfile } from '@/lib/api/country-profile';
 
 export async function generateMetadata({
@@ -54,8 +55,20 @@ export default async function CountryDetailPage({
   const upcomingLaunches = country.upcomingLaunches.slice(0, 10);
   const recentLaunches = country.recentLaunches.slice(0, 10);
 
+  const countryUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ''}/${locale}/countries/${country.slug}`;
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Country',
+          name: displayLabel,
+          url: countryUrl,
+          description: `${displayLabel} 航天能力画像: ${country.totalLaunches} 次发射, ${country.successRate}% 成功率`,
+        }}
+      />
+
       <Breadcrumbs
         className="mb-4"
         items={[
