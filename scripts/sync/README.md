@@ -19,6 +19,10 @@ upserts, so re-running the sync is safe.
 | `pnpm sync:astronauts` | Refresh astronauts from LL2 `/astronaut`                                  |
 | `pnpm sync:spacecraft` | Refresh spacecraft configs from LL2 `/spacecraft`                         |
 | `pnpm sync:launches`   | Refresh upcoming + previous launches from LL2, enrich SpaceX with YouTube |
+| `pnpm sync:agencies`   | Refresh global agencies and launch providers from LL2 `/agencies`         |
+| `pnpm sync:historical` | Import curated major historical launches across countries                 |
+| `pnpm sync:satcat`     | Import satellite/payload catalog records from CelesTrak SATCAT            |
+| `pnpm sync:spacex-full` | Import full SpaceX rockets, pads, and launch history from SpaceX API v4   |
 
 If `pnpm` is unavailable in your environment, you can call the scripts
 directly: `node node_modules/tsx/dist/cli.mjs scripts/sync/index.ts`.

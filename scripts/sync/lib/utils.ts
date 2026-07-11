@@ -4,6 +4,67 @@
 
 import { LaunchStatus, RocketStatus, AstronautStatus, LaunchSiteStatus, SpacecraftStatus } from '@prisma/client';
 
+export function mapCountryCode(code: string | null | undefined): string {
+  const map: Record<string, string> = {
+    USA: 'USA',
+    CHN: 'China',
+    RUS: 'Russia',
+    JPN: 'Japan',
+    IND: 'India',
+    FRA: 'France',
+    GBR: 'United Kingdom',
+    DEU: 'Germany',
+    ITA: 'Italy',
+    ESP: 'Spain',
+    KOR: 'South Korea',
+    PRK: 'North Korea',
+    IRN: 'Iran',
+    ISR: 'Israel',
+    BRA: 'Brazil',
+    CAN: 'Canada',
+    AUS: 'Australia',
+    NZL: 'New Zealand',
+    UKR: 'Ukraine',
+    KAZ: 'Kazakhstan',
+    EU: 'Europe',
+    INT: 'International',
+    UAE: 'UAE',
+    SAU: 'Saudi Arabia',
+    LUX: 'Luxembourg',
+    NLD: 'Netherlands',
+    BEL: 'Belgium',
+    CHE: 'Switzerland',
+    SWE: 'Sweden',
+    NOR: 'Norway',
+    FIN: 'Finland',
+    DNK: 'Denmark',
+    POL: 'Poland',
+    TUR: 'Turkey',
+    SGP: 'Singapore',
+    MYS: 'Malaysia',
+    THA: 'Thailand',
+    VNM: 'Vietnam',
+    IDN: 'Indonesia',
+    PHL: 'Philippines',
+    EGY: 'Egypt',
+    ZAF: 'South Africa',
+    NGA: 'Nigeria',
+    MEX: 'Mexico',
+    ARG: 'Argentina',
+    CHL: 'Chile',
+    COL: 'Colombia',
+    PER: 'Peru',
+    VEN: 'Venezuela',
+    PAK: 'Pakistan',
+    BGD: 'Bangladesh',
+    LKA: 'Sri Lanka',
+    NPL: 'Nepal',
+    MMR: 'Myanmar',
+    BTN: 'Bhutan',
+  };
+  return map[code || ''] || code || 'Unknown';
+}
+
 /** Slugify an arbitrary string into a stable id-safe slug. */
 export function slugify(text: string | null | undefined): string {
   if (!text) return '';
