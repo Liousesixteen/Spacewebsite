@@ -100,30 +100,34 @@ function checkApiRateLimit(req: NextRequest): NextResponse | null {
 }
 
 export default function middleware(req: NextRequest) {
-  // Rate limit check for API routes
+  const isApi = req.nextUrl.pathname.startsWith('/api/');
+
+  // API routes: only security + rate limiting, no i18n redirect
+  if (isApi) {
+    const rateLimitResponse = checkApiRateLimit(req);
+    if (rateLimitResponse) {
+      return applySecurityHeaders(rateLimitResponse);
+    }
+
+    const response = NextResponse.next();
+    response.headers.set('Access-Control-Allow-Origin', '*');
+    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+      return new NextResponse(null, { status: 204, headers: response.headers });
+    }
+
+    return applySecurityHeaders(response);
+  }
+
+  // Page routes: rate limit + i18n
   const rateLimitResponse = checkApiRateLimit(req);
   if (rateLimitResponse) {
     return applySecurityHeaders(rateLimitResponse);
   }
 
-  // i18n routing
   const response = intlMiddleware(req);
-
-  // CORS headers for API routes
-  if (req.nextUrl.pathname.startsWith('/api/')) {
-    response.headers.set('Access-Control-Allow-Origin', '*');
-    response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-
-    // Handle preflight
-    if (req.method === 'OPTIONS') {
-      return new NextResponse(null, {
-        status: 204,
-        headers: response.headers,
-      });
-    }
-  }
-
   return applySecurityHeaders(response);
 }
 
