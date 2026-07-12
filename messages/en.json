@@ -15,8 +15,9 @@
     "compare": "Compare",
     "explore": "Explore",
     "industry": "Industry",
-    "notifications": "Alerts",
+    "data": "Data",
     "dataSources": "Data Sources",
+    "notifications": "Alerts",
     "status": "Status",
     "more": "More"
   },
@@ -52,7 +53,11 @@
       "cta": "Explore now",
       "launches": {
         "title": "Launches",
-        "description": "Real-time global rocket launch records, statuses, and details"
+        "description": "Real-time global rocket launch schedule, status, and mission details"
+      },
+      "rockets": {
+        "title": "Rockets",
+        "description": "Browse global launch vehicle families, compare specs and success rates"
       },
       "spacecraft": {
         "title": "Spacecraft",
@@ -70,9 +75,9 @@
         "title": "Agencies",
         "description": "Explore global space agencies, rocket families, and launch site distributions"
       },
-      "dataSources": {
-        "title": "Data Health",
-        "description": "Check data domain status, record counts, and last sync times"
+      "data": {
+        "title": "Data Center",
+        "description": "Data health, API status, and domain sync overview"
       },
       "industry": {
         "title": "Industry",
@@ -499,6 +504,7 @@
   "footer": {
     "tagline": "Comprehensive aerospace data platform",
     "product": "Product",
+    "explore": "Explore",
     "company": "Company",
     "legal": "Legal",
     "follow": "Follow Us",

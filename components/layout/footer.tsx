@@ -14,17 +14,22 @@ export function Footer({ locale }: FooterProps) {
   const footerLinks = {
     product: [
       { label: t('nav.launches'), href: `/${locale}/launches` },
+      { label: t('nav.rockets'), href: `/${locale}/rockets` },
+      { label: t('nav.spacecraft'), href: `/${locale}/spacecraft` },
+      { label: t('nav.industry'), href: `/${locale}/industry` },
+      { label: t('nav.astronauts'), href: `/${locale}/astronauts` },
+    ],
+    explore: [
       { label: t('nav.countries'), href: `/${locale}/countries` },
       { label: t('nav.agencies'), href: `/${locale}/agencies` },
-      { label: t('nav.rockets'), href: `/${locale}/rockets` },
-      { label: t('nav.industry'), href: `/${locale}/industry` },
-      { label: t('nav.spacecraft'), href: `/${locale}/spacecraft` },
-      { label: t('nav.astronauts'), href: `/${locale}/astronauts` },
+      { label: t('nav.timeline'), href: `/${locale}/timeline` },
+      { label: t('nav.compare'), href: `/${locale}/compare` },
+      { label: t('nav.explore'), href: `/${locale}/explore` },
     ],
     company: [
       { label: t('legal.about'), href: `/${locale}/about` },
-      { label: t('legal.dataSources'), href: `/${locale}/data-sources` },
-      { label: t('status.breadcrumb'), href: `/${locale}/status` },
+      { label: t('nav.data'), href: `/${locale}/data-sources` },
+      { label: t('nav.status'), href: `/${locale}/status` },
       { label: t('legal.contact'), href: `/${locale}/contact` },
     ],
     legal: [
@@ -63,6 +68,25 @@ export function Footer({ locale }: FooterProps) {
               </h3>
               <ul className="space-y-3">
                 {footerLinks.product.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-star-dim hover:text-white transition-colors duration-200"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Explore Links */}
+            <div>
+              <h3 className="font-display uppercase tracking-wider text-xs font-bold text-star-white mb-5">
+                {t('footer.explore')}
+              </h3>
+              <ul className="space-y-3">
+                {footerLinks.explore.map((link) => (
                   <li key={link.href}>
                     <Link
                       href={link.href}

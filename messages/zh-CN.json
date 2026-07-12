@@ -5,9 +5,9 @@
   },
   "nav": {
     "home": "首页",
-    "launches": "发射数据",
+    "launches": "发射",
     "countries": "国家",
-    "agencies": "航天机构",
+    "agencies": "机构",
     "rockets": "火箭",
     "spacecraft": "航天器",
     "astronauts": "宇航员",
@@ -15,9 +15,10 @@
     "compare": "对比",
     "explore": "深空探索",
     "industry": "产业链",
-    "notifications": "通知",
+    "data": "数据",
     "dataSources": "数据来源",
-    "status": "服务状态",
+    "notifications": "通知",
+    "status": "状态",
     "more": "更多"
   },
   "home": {
@@ -51,8 +52,12 @@
       "subtitle": "前往各个核心模块",
       "cta": "立即探索",
       "launches": {
-        "title": "发射数据",
-        "description": "实时查看全球火箭发射记录、状态与详情"
+        "title": "发射任务",
+        "description": "实时查看全球火箭发射计划、状态与任务详情"
+      },
+      "rockets": {
+        "title": "火箭型号",
+        "description": "浏览全球运载火箭谱系，对比参数与成功率"
       },
       "spacecraft": {
         "title": "航天器",
@@ -70,9 +75,9 @@
         "title": "航天机构",
         "description": "浏览全球航天机构、火箭谱系与发射场分布"
       },
-      "dataSources": {
-        "title": "数据健康",
-        "description": "查看各数据域的状态、记录数与最后同步时间"
+      "data": {
+        "title": "数据中心",
+        "description": "查看数据健康、API 状态与各数据域同步情况"
       },
       "industry": {
         "title": "产业链",
@@ -499,6 +504,7 @@
   "footer": {
     "tagline": "全面的航天数据平台",
     "product": "产品",
+    "explore": "探索",
     "company": "公司",
     "legal": "法律",
     "follow": "关注我们",

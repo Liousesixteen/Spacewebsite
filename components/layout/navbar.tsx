@@ -52,21 +52,21 @@ export function Navbar({ locale }: NavbarProps) {
   const navItems = [
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/launches`, label: t('launches') },
-    { href: `/${locale}/countries`, label: t('countries') },
-    { href: `/${locale}/agencies`, label: t('agencies') },
+    { href: `/${locale}/rockets`, label: t('rockets') },
+    { href: `/${locale}/spacecraft`, label: t('spacecraft') },
     { href: `/${locale}/industry`, label: t('industry') },
+    { href: `/${locale}/data-sources`, label: t('data') },
   ];
 
   const secondaryNavItems = [
-    { href: `/${locale}/rockets`, label: t('rockets') },
-    { href: `/${locale}/spacecraft`, label: t('spacecraft') },
+    { href: `/${locale}/countries`, label: t('countries') },
+    { href: `/${locale}/agencies`, label: t('agencies') },
     { href: `/${locale}/astronauts`, label: t('astronauts') },
-    { href: `/${locale}/data-sources`, label: t('dataSources') },
-    { href: `/${locale}/status`, label: t('status') },
     { href: `/${locale}/notifications`, label: t('notifications') },
     { href: `/${locale}/timeline`, label: t('timeline') },
     { href: `/${locale}/compare`, label: t('compare') },
     { href: `/${locale}/explore`, label: t('explore') },
+    { href: `/${locale}/status`, label: t('status') },
   ];
 
   const isActive = (href: string) => {

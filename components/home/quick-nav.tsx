@@ -39,32 +39,18 @@ export function QuickNav({ locale }: QuickNavProps) {
       iconColor: 'text-cosmic-blue',
     },
     {
+      key: 'rockets',
+      href: `/${locale}/rockets`,
+      icon: Rocket,
+      gradient: 'from-cosmic-purple/10 to-blue-400/5',
+      iconColor: 'text-cosmic-purple',
+    },
+    {
       key: 'spacecraft',
       href: `/${locale}/spacecraft`,
       icon: Satellite,
       gradient: 'from-cosmic-cyan/10 to-cosmic-blue/5',
       iconColor: 'text-cosmic-cyan',
-    },
-    {
-      key: 'astronauts',
-      href: `/${locale}/astronauts`,
-      icon: Users,
-      gradient: 'from-cosmic-purple/10 to-cosmic-pink/5',
-      iconColor: 'text-cosmic-purple',
-    },
-    {
-      key: 'countries',
-      href: `/${locale}/countries`,
-      icon: Globe,
-      gradient: 'from-emerald-400/10 to-cosmic-blue/5',
-      iconColor: 'text-emerald-400',
-    },
-    {
-      key: 'agencies',
-      href: `/${locale}/agencies`,
-      icon: Building2,
-      gradient: 'from-amber-400/10 to-cosmic-purple/5',
-      iconColor: 'text-amber-400',
     },
     {
       key: 'industry',
@@ -74,7 +60,7 @@ export function QuickNav({ locale }: QuickNavProps) {
       iconColor: 'text-cosmic-pink',
     },
     {
-      key: 'dataSources',
+      key: 'data',
       href: `/${locale}/data-sources`,
       icon: Database,
       gradient: 'from-cosmic-blue/10 to-cosmic-cyan/5',
