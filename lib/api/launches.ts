@@ -64,6 +64,7 @@ export interface LaunchOverview {
   sourceStatus: 'ok' | 'unavailable';
   sourceMessage?: string;
   nextLaunch: Launch | null;
+  chinaNextLaunch: Launch | null;
   inFlight: Launch[];
   next24Hours: Launch[];
   upcoming7Days: Launch[];

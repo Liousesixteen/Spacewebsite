@@ -25,6 +25,12 @@ import {
   isTentativeLaunchTime,
 } from '@/lib/launch-time';
 import { cn } from '@/lib/utils';
+import {
+  displayRocketName,
+  displayAgencyName,
+  displaySiteName,
+  displayMissionType,
+} from '@/lib/display-names';
 
 interface LaunchMissionControlProps {
   locale: string;
@@ -65,10 +71,12 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
     );
   }
 
-  const nextLaunch = data.nextLaunch;
+  // Prioritize China launches for the hero display
+  const heroLaunch = data.chinaNextLaunch ?? data.nextLaunch;
+  const isChinaHero = data.chinaNextLaunch !== null;
   const sourceUnavailable = data.sourceStatus === 'unavailable';
-  const headline = getHeadline(nextLaunch, sourceUnavailable, t);
-  const summary = getSummary(nextLaunch, sourceUnavailable, t);
+  const headline = getHeadline(heroLaunch, sourceUnavailable, t);
+  const summary = getSummary(heroLaunch, sourceUnavailable, t);
 
   return (
     <section className="mt-8 space-y-4">
@@ -80,6 +88,13 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
                 <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.15em] text-cosmic-cyan">
                   <RadioTower className="h-4 w-4" />
                   {t('control')}
+                </div>
+                <div className="mb-2 flex items-center gap-2">
+                  {isChinaHero && (
+                    <span className="inline-flex items-center gap-1 rounded-md border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-xs font-semibold text-red-400">
+                      🇨🇳 中国发射
+                    </span>
+                  )}
                 </div>
                 <h2 className="text-xl font-semibold text-star-white sm:text-2xl">
                   {headline}
@@ -111,45 +126,45 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
                         })
                       : t(`freshness.${data.freshness.status}`)}
                   </Badge>
-                  {nextLaunch && (
+                  {heroLaunch && (
                     <>
                       <StatusBadge
-                        status={nextLaunch.status}
-                        label={statusT(nextLaunch.status)}
+                        status={heroLaunch.status}
+                        label={statusT(heroLaunch.status)}
                       />
-                      <Badge variant="hud">{timeToLaunch(nextLaunch.date)}</Badge>
+                      <Badge variant="hud">{timeToLaunch(heroLaunch.date)}</Badge>
                     </>
                   )}
                 </div>
               )}
             </div>
 
-            {nextLaunch && (
+            {heroLaunch && (
               <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 <MetricLine
                   icon={CalendarClock}
                   label={t('launchTime')}
-                  value={formatLaunchDateTime(nextLaunch.date, locale, timeZone)}
+                  value={formatLaunchDateTime(heroLaunch.date, locale, timeZone)}
                 />
                 <MetricLine
                   icon={Building2}
                   label={t('provider')}
-                  value={nextLaunch.agency?.name || t('unknown')}
+                  value={heroLaunch.agency?.name ? displayAgencyName(heroLaunch.agency.name, locale) : t('unknown')}
                 />
                 <MetricLine
                   icon={Rocket}
                   label={t('rocket')}
-                  value={nextLaunch.rocket.name}
+                  value={displayRocketName(heroLaunch.rocket.name, locale)}
                 />
                 <MetricLine
                   icon={CircleDot}
                   label={t('missionType')}
-                  value={nextLaunch.missionType || t('unknown')}
+                  value={displayMissionType(heroLaunch.missionType, locale) || t('unknown')}
                 />
                 <MetricLine
                   icon={Globe2}
                   label={t('orbit')}
-                  value={nextLaunch.orbitName || nextLaunch.orbitAbbrev || t('unknown')}
+                  value={heroLaunch.orbitName || heroLaunch.orbitAbbrev || t('unknown')}
                 />
                 <MetricLine
                   icon={Database}
@@ -395,9 +410,9 @@ function ScheduleBoard({
                       {launchWindow && (
                         <span>{t('launchWindow', { window: launchWindow })}</span>
                       )}
-                      <span>{launch.agency?.name || t('unknown')}</span>
-                      <span>{launch.rocket.name}</span>
-                      <span>{launch.launchSite.name}</span>
+                      <span>{launch.agency?.name ? displayAgencyName(launch.agency.name, locale) : t('unknown')}</span>
+                      <span>{displayRocketName(launch.rocket.name, locale)}</span>
+                      <span>{displaySiteName(launch.launchSite.name, locale)}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 sm:justify-end">

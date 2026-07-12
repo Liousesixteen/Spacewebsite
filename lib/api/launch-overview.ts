@@ -37,11 +37,18 @@ export interface LaunchOverviewCount {
   count: number;
 }
 
+function isChinaLaunch(l: LaunchOverviewInput): boolean {
+  const ac = l.agency?.country ?? '';
+  const rc = l.rocket?.country ?? '';
+  return ac === 'China' || ac === 'CHN' || rc === 'China' || rc === 'CHN';
+}
+
 export interface LaunchOverview {
   generatedAt: string;
   sourceStatus: 'ok' | 'unavailable';
   sourceMessage?: string;
   nextLaunch: LaunchOverviewInput | null;
+  chinaNextLaunch: LaunchOverviewInput | null;
   inFlight: LaunchOverviewInput[];
   next24Hours: LaunchOverviewInput[];
   upcoming7Days: LaunchOverviewInput[];
@@ -97,6 +104,14 @@ export function buildLaunchOverview(
         getTime(launch) >= nowMs
     ) ?? null;
 
+  const chinaNextLaunch =
+    sortedAsc.find(
+      (launch) =>
+        launch.status === 'PLANNED' &&
+        getTime(launch) >= nowMs &&
+        isChinaLaunch(launch)
+    ) ?? null;
+
   const inFlight = sortedAsc.filter((launch) => launch.status === 'IN_FLIGHT');
 
   const recentCompleted = sortedRecent.filter((launch) => {
@@ -133,6 +148,7 @@ export function buildLaunchOverview(
     generatedAt: now.toISOString(),
     sourceStatus: 'ok',
     nextLaunch,
+    chinaNextLaunch,
     inFlight,
     next24Hours,
     upcoming7Days,
