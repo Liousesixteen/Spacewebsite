@@ -17,6 +17,7 @@ interface NavbarProps {
 
 export function Navbar({ locale }: NavbarProps) {
   const t = useTranslations('nav');
+  const commonT = useTranslations('common');
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -52,20 +53,20 @@ export function Navbar({ locale }: NavbarProps) {
   const navItems = [
     { href: `/${locale}`, label: t('home') },
     { href: `/${locale}/launches`, label: t('launches') },
+    { href: `/${locale}/industry`, label: t('industry') },
+  ];
+
+  const archiveNavItems = [
     { href: `/${locale}/rockets`, label: t('rockets') },
     { href: `/${locale}/spacecraft`, label: t('spacecraft') },
-    { href: `/${locale}/industry`, label: t('industry') },
-    { href: `/${locale}/data-sources`, label: t('data') },
+    { href: `/${locale}/astronauts`, label: t('astronauts') },
   ];
 
   const secondaryNavItems = [
     { href: `/${locale}/countries`, label: t('countries') },
     { href: `/${locale}/agencies`, label: t('agencies') },
-    { href: `/${locale}/astronauts`, label: t('astronauts') },
     { href: `/${locale}/notifications`, label: t('notifications') },
-    { href: `/${locale}/timeline`, label: t('timeline') },
-    { href: `/${locale}/compare`, label: t('compare') },
-    { href: `/${locale}/explore`, label: t('explore') },
+    { href: `/${locale}/data-sources`, label: t('data') },
     { href: `/${locale}/status`, label: t('status') },
   ];
 
@@ -77,6 +78,7 @@ export function Navbar({ locale }: NavbarProps) {
   };
 
   const moreActive = secondaryNavItems.some((item) => isActive(item.href));
+  const archiveActive = archiveNavItems.some((item) => isActive(item.href));
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -113,6 +115,41 @@ export function Navbar({ locale }: NavbarProps) {
                   )}
                 </Link>
               ))}
+
+              <div className="group relative">
+                <button
+                  type="button"
+                  className={cn(
+                    'relative flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    archiveActive
+                      ? 'text-star-white'
+                      : 'text-star-dim hover:text-star-white hover:bg-space-800/60'
+                  )}
+                  aria-haspopup="menu"
+                >
+                  {t('catalog')}
+                  <ChevronDown className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" />
+                  {archiveActive && (
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-0.5 rounded-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple animate-gradient-underline origin-center" />
+                  )}
+                </button>
+                <div className="invisible absolute left-1/2 top-full z-50 mt-2 w-44 -translate-x-1/2 rounded-xl border border-space-600/30 bg-space-900/95 p-1.5 opacity-0 shadow-xl backdrop-blur-md transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  {archiveNavItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'block rounded-lg px-3 py-2 text-sm transition-colors',
+                        isActive(item.href)
+                          ? 'bg-cosmic-blue/10 text-star-white'
+                          : 'text-star-dim hover:bg-space-800/70 hover:text-star-white'
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
               <div className="group relative">
                 <button
@@ -157,7 +194,7 @@ export function Navbar({ locale }: NavbarProps) {
                 type="button"
                 onClick={() => setSearchOpen(true)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-space-800/80 border border-space-600/30 text-star-dim hover:text-star-white hover:border-cosmic-blue/50 transition-all duration-300 text-sm"
-                aria-label="Open search"
+                aria-label={commonT('search')}
               >
                 <Search className="w-4 h-4" />
                 <span className="hidden lg:inline text-xs font-mono px-1.5 py-0.5 rounded bg-space-700/80 border border-space-600/50">
@@ -170,7 +207,7 @@ export function Navbar({ locale }: NavbarProps) {
                 type="button"
                 onClick={toggle}
                 className="p-2 rounded-lg text-star-dim hover:text-star-white hover:bg-space-800/60 transition-all duration-300"
-                aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                aria-label={t(theme === 'dark' ? 'switchToLight' : 'switchToDark')}
               >
                 <span className="block transition-transform duration-500 rotate-0 hover:rotate-180">
                   {theme === 'dark' ? (
@@ -184,6 +221,7 @@ export function Navbar({ locale }: NavbarProps) {
               {/* Language selector */}
               <select
                 value={locale}
+                aria-label={t('language')}
                 onChange={(e) => {
                   const newLocale = e.target.value;
                   const newPath = pathname.replace(`/${locale}`, `/${newLocale}`);
@@ -193,8 +231,6 @@ export function Navbar({ locale }: NavbarProps) {
               >
                 <option value="zh-CN">CN</option>
                 <option value="en">EN</option>
-                <option value="ru">RU</option>
-                <option value="ja">JA</option>
               </select>
 
               <UserNav locale={locale} />
@@ -206,13 +242,16 @@ export function Navbar({ locale }: NavbarProps) {
                 type="button"
                 onClick={() => setSearchOpen(true)}
                 className="p-2 text-star-dim hover:text-star-white transition-colors"
-                aria-label="Open search"
+                aria-label={commonT('search')}
               >
                 <Search className="w-5 h-5" />
               </button>
               <button
+                type="button"
                 className="p-2 text-star-dim hover:text-star-white transition-colors"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-expanded={mobileMenuOpen}
+                aria-label={t(mobileMenuOpen ? 'closeMenu' : 'openMenu')}
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -226,6 +265,8 @@ export function Navbar({ locale }: NavbarProps) {
           navItems={navItems}
           secondaryNavItems={secondaryNavItems}
           secondaryLabel={t('more')}
+          archiveNavItems={archiveNavItems}
+          archiveLabel={t('catalog')}
           locale={locale}
           pathname={pathname}
         />

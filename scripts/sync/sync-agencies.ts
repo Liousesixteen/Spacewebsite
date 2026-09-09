@@ -11,6 +11,7 @@
 import { CompanyType } from '@prisma/client';
 import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
+import { runTrackedSync } from './lib/sync-run';
 import { mapCountryCode, slugify } from './lib/utils';
 
 interface LL2Agency {
@@ -50,7 +51,11 @@ function parseFounded(year: string | number | null | undefined): number | null {
   return Number.isFinite(n) && n > 1900 && n < 2100 ? n : null;
 }
 
-async function main() {
+export async function syncAgencies(): Promise<{ added: number; updated: number; skipped: number }> {
+  return runTrackedSync('Launch Library 2: Agencies', syncAgenciesImpl);
+}
+
+async function syncAgenciesImpl(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[agencies] Fetching agencies from LL2...');
   const agencies = await fetchLL2List<LL2Agency>(
     '/agencies/',
@@ -189,10 +194,18 @@ async function main() {
     `\n[agencies] Done. Agency: added=${agencyAdded} updated=${agencyUpdated}. ` +
     `Company: added=${companyAdded} updated=${companyUpdated}. skipped=${skipped}`
   );
-  await prisma.$disconnect();
+  return {
+    added: agencyAdded + companyAdded,
+    updated: agencyUpdated + companyUpdated,
+    skipped,
+  };
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+if (require.main === module) {
+  syncAgencies()
+    .then(() => prisma.$disconnect())
+    .catch((e) => {
+      console.error(e);
+      return prisma.$disconnect().then(() => process.exit(1));
+    });
+}

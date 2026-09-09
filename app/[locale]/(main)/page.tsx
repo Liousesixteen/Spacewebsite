@@ -8,9 +8,6 @@ import {
   StatsOverview,
   QuickNav,
   RecentLaunches,
-  ApodSection,
-  TimelineCompareBanner,
-  getApodData,
 } from '@/components/home';
 
 interface PageProps {
@@ -72,12 +69,12 @@ async function loadHomeData(): Promise<{
 
 export default async function HomePage({ params }: PageProps) {
   const { locale } = await params;
-  const [homeData, apod] = await Promise.all([loadHomeData(), getApodData()]);
+  const homeData = await loadHomeData();
 
   return (
     <>
       {/* 1. Hero */}
-      <HeroSection locale={locale} apod={apod} liveLaunchUrl={homeData.liveLaunchUrl} />
+      <HeroSection locale={locale} liveLaunchUrl={homeData.liveLaunchUrl} />
 
       {/* 2. Dashboard strip: Stats + Countdown side by side */}
       <section className="container mx-auto px-4 py-10">
@@ -94,19 +91,7 @@ export default async function HomePage({ params }: PageProps) {
 
       <section className="container mx-auto px-4"><div className="hud-divider" /></section>
 
-      {/* 4. APOD — full clean image */}
-      <ApodSection apod={apod} />
-
-      <section className="container mx-auto px-4"><div className="hud-divider" /></section>
-
-      {/* 5. Timeline & Compare */}
-      <section className="container mx-auto px-4 py-12">
-        <TimelineCompareBanner locale={locale} />
-      </section>
-
-      <section className="container mx-auto px-4"><div className="hud-divider" /></section>
-
-      {/* 6. Recent Launches */}
+      {/* 4. Recent Launches */}
       <Suspense fallback={null}>
         <RecentLaunches locale={locale} />
       </Suspense>

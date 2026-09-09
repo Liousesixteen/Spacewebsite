@@ -17,19 +17,18 @@ export function PageHeader({
   className,
 }: PageHeaderProps) {
   return (
-    <div className={cn('mb-8', className)}>
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 items-start gap-4 sm:items-center">
-          {/* Frosted glass icon */}
-          <div className="shrink-0 p-3 rounded-xl frosted-icon text-cosmic-blue shadow-glow-blue">
-            <Icon className="w-7 h-7" />
+    <div className={cn('mb-7 border-b border-space-600/35 pb-6', className)}>
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="mt-0.5 shrink-0 rounded-md border border-cosmic-blue/25 bg-cosmic-blue/10 p-2.5 text-cosmic-blue">
+            <Icon className="h-5 w-5" />
           </div>
           <div className="min-w-0">
-            <h1 className="break-words text-3xl font-bold text-star-white page-header-underline pb-2">
+            <h1 className="break-words text-2xl font-semibold text-star-white sm:text-3xl">
               {title}
             </h1>
             {description && (
-              <p className="text-star-dim mt-2 text-sm leading-relaxed max-w-xl">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-star-dim">
                 {description}
               </p>
             )}

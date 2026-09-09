@@ -6,6 +6,7 @@ import {
   type HealthDomainSample,
   type HealthSnapshot,
 } from '@/lib/api/data-health';
+import { HEALTH_DOMAINS, loadDataHealthSnapshot } from '@/lib/api/data-health-service';
 import { PageHeader } from '@/components/ui/page-header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -122,27 +123,7 @@ async function queryDomain(key: HealthDomainKey): Promise<{
 
 async function loadHealthSnapshot(): Promise<HealthSnapshot | null> {
   try {
-    const samples: HealthDomainSample[] = await Promise.all(
-      DOMAINS.map(async ({ key, source, expectedRefreshHours }) => {
-        try {
-          const { count, latestUpdatedAt, latestSyncedAt } = await queryDomain(key);
-          return { key, count, latestUpdatedAt, latestSyncedAt, source, expectedRefreshHours };
-        } catch (error) {
-          console.error(`[data-health] Failed to query ${key}:`, error);
-          return {
-            key,
-            count: 0,
-            latestUpdatedAt: null,
-            latestSyncedAt: null,
-            source,
-            expectedRefreshHours,
-            error: error instanceof Error ? error.message : String(error),
-          };
-        }
-      })
-    );
-
-    return buildHealthSnapshot(samples);
+    return await loadDataHealthSnapshot();
   } catch (error) {
     console.error('[data-health] Complete failure:', error);
     return null;
@@ -150,26 +131,17 @@ async function loadHealthSnapshot(): Promise<HealthSnapshot | null> {
 }
 
 const STATUS_CONFIG = {
-  healthy: { icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20', label: '正常' },
-  stale: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20', label: '延迟' },
-  empty: { icon: Circle, color: 'text-star-dim/50', bg: 'bg-star-dim/5', border: 'border-space-600/30', label: '空' },
-  unavailable: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-400/10', border: 'border-red-400/20', label: '不可用' },
+  healthy: { icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-400/10', border: 'border-emerald-400/20' },
+  stale: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-400/10', border: 'border-amber-400/20' },
+  empty: { icon: Circle, color: 'text-star-dim/50', bg: 'bg-star-dim/5', border: 'border-space-600/30' },
+  unavailable: { icon: XCircle, color: 'text-red-400', bg: 'bg-red-400/10', border: 'border-red-400/20' },
 } as const;
 
 const OVERALL_CONFIG = {
-  healthy: { icon: CheckCircle2, color: 'text-emerald-400', label: '正常' },
-  degraded: { icon: AlertTriangle, color: 'text-amber-400', label: '部分降级' },
-  unavailable: { icon: XCircle, color: 'text-red-400', label: '不可用' },
+  healthy: { icon: CheckCircle2, color: 'text-emerald-400' },
+  degraded: { icon: AlertTriangle, color: 'text-amber-400' },
+  unavailable: { icon: XCircle, color: 'text-red-400' },
 } as const;
-
-const DOMAIN_LABELS: Record<HealthDomainKey, string> = {
-  launches: '发射数据',
-  agencies: '航天机构',
-  rockets: '火箭',
-  launchSites: '发射场',
-  astronauts: '宇航员',
-  spacecraft: '航天器',
-};
 
 export default async function DataSourcesPage({
   params,
@@ -178,6 +150,25 @@ export default async function DataSourcesPage({
 }) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'dataHealth' });
+  const statusLabels = {
+    healthy: t('statusHealthy'),
+    stale: t('statusStale'),
+    empty: t('statusEmpty'),
+    unavailable: t('statusUnavailable'),
+  } as const;
+  const overallLabels = {
+    healthy: t('statusHealthy'),
+    degraded: t('statusDegraded'),
+    unavailable: t('statusUnavailable'),
+  } as const;
+  const domainLabels: Record<HealthDomainKey, string> = {
+    launches: t('domainLaunches'),
+    agencies: t('domainAgencies'),
+    rockets: t('domainRockets'),
+    launchSites: t('domainLaunchSites'),
+    astronauts: t('domainAstronauts'),
+    spacecraft: t('domainSpacecraft'),
+  };
 
   const snapshot = await loadHealthSnapshot();
   const OverallIcon = snapshot
@@ -186,9 +177,7 @@ export default async function DataSourcesPage({
   const overallColor = snapshot
     ? OVERALL_CONFIG[snapshot.status].color
     : 'text-red-400';
-  const overallLabel = snapshot
-    ? OVERALL_CONFIG[snapshot.status].label
-    : '不可用';
+  const overallLabel = snapshot ? overallLabels[snapshot.status] : statusLabels.unavailable;
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
@@ -230,7 +219,7 @@ export default async function DataSourcesPage({
             <div className="text-xs text-star-dim">{t('healthyDomains')}</div>
             <div className="mt-1 text-3xl font-bold text-star-white">
               {snapshot?.summary.healthyDomains ?? 0}
-              <span className="text-lg text-star-dim"> / {snapshot?.summary.totalDomains ?? 6}</span>
+              <span className="text-lg text-star-dim"> / {snapshot?.summary.totalDomains ?? HEALTH_DOMAINS.length}</span>
             </div>
           </CardContent>
         </Card>
@@ -286,11 +275,12 @@ export default async function DataSourcesPage({
                   latestSync: null,
                   source: d.source,
                   expectedRefreshHours: d.expectedRefreshHours,
+                  lastRun: null,
                   message: t('domainUnavailable'),
                 }))).map((domain) => {
                   const cfg = STATUS_CONFIG[domain.status];
                   const Icon = cfg.icon;
-                  const label = DOMAIN_LABELS[domain.key] ?? domain.key;
+                  const label = domainLabels[domain.key] ?? domain.key;
                   const latestTime = domain.latestSync ?? domain.latestUpdate;
 
                   return (
@@ -306,7 +296,7 @@ export default async function DataSourcesPage({
                           className={`inline-flex items-center gap-1.5 rounded-full border ${cfg.border} ${cfg.bg} px-2.5 py-0.5 text-xs font-medium ${cfg.color}`}
                         >
                           <Icon className="h-3 w-3" />
-                          {cfg.label}
+                          {statusLabels[domain.status]}
                         </span>
                       </td>
                       <td className="px-5 py-3.5 text-right tabular-nums text-star-white">
@@ -321,6 +311,18 @@ export default async function DataSourcesPage({
                               minute: '2-digit',
                             }).format(new Date(latestTime))
                           : '—'}
+                        {domain.lastRun && (
+                          <div className="mt-1 text-xs text-star-dim/70">
+                            {t('lastSyncRun', {
+                              status: domain.lastRun.status === 'SUCCEEDED'
+                                ? t('syncSucceeded')
+                                : domain.lastRun.status === 'FAILED'
+                                  ? t('syncFailed')
+                                  : domain.lastRun.status,
+                              changed: domain.lastRun.recordsAdded + domain.lastRun.recordsUpdated,
+                            })}
+                          </div>
+                        )}
                       </td>
                       <td className="px-5 py-3.5 text-star-dim">
                         {domain.source}
@@ -350,7 +352,7 @@ export default async function DataSourcesPage({
                 {t('ll2Description')}
               </p>
               <p className="mt-2 text-xs text-star-dim/70">
-                {t('syncFrequency')}: 发射 6h / 机构 24h / 火箭 24h / 发射场 7d / 宇航员 7d / 航天器 7d
+                {t('syncFrequency')}: {t('syncSchedule')}
               </p>
             </div>
           </div>

@@ -29,6 +29,7 @@ export function FavoriteButton({
   size = 'md',
   variant = 'outline',
 }: FavoriteButtonProps) {
+  const isEnglish = locale === 'en';
   const { status } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -56,7 +57,7 @@ export function FavoriteButton({
     },
     onError: (err, _v, context) => {
       if (context?.prev) queryClient.setQueryData(queryKey, context.prev);
-      setErrorMessage(err instanceof Error ? err.message : '操作失败');
+      setErrorMessage(err instanceof Error ? err.message : isEnglish ? 'Action failed' : '操作失败');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -74,7 +75,7 @@ export function FavoriteButton({
     },
     onError: (err, _v, context) => {
       if (context?.prev) queryClient.setQueryData(queryKey, context.prev);
-      setErrorMessage(err instanceof Error ? err.message : '操作失败');
+      setErrorMessage(err instanceof Error ? err.message : isEnglish ? 'Action failed' : '操作失败');
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -115,7 +116,7 @@ export function FavoriteButton({
         <Heart
           className={cn('w-4 h-4 mr-2', favorited && 'fill-rose-400 text-rose-400')}
         />
-        {favorited ? '已收藏' : '收藏'}
+        {favorited ? (isEnglish ? 'Saved' : '已收藏') : (isEnglish ? 'Save' : '收藏')}
       </Button>
       {errorMessage && (
         <span className="text-xs text-red-400">{errorMessage}</span>

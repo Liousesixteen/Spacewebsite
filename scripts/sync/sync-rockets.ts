@@ -4,6 +4,7 @@
 
 import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
+import { runTrackedSync } from './lib/sync-run';
 import { mapRocketStatus, parseDate, slugify, descOrEmpty, num } from './lib/utils';
 
 interface LL2Agency {
@@ -41,6 +42,10 @@ interface LL2Launcher {
 }
 
 export async function syncRockets(): Promise<{ added: number; updated: number; skipped: number }> {
+  return runTrackedSync('Launch Library 2: Rockets', syncRocketsImpl);
+}
+
+async function syncRocketsImpl(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[rockets] Fetching launcher_config list from LL2...');
   // /config/launcher/ returns rocket configurations (e.g. Falcon 9), which is
   // what we want. /launcher/ returns individual hardware (specific boosters).

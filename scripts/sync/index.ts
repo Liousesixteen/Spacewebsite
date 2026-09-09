@@ -15,11 +15,13 @@ import { syncLaunchSites } from './sync-launch-sites';
 import { syncAstronauts } from './sync-astronauts';
 import { syncSpacecraft } from './sync-spacecraft';
 import { syncLaunches } from './sync-launches';
+import { syncAgencies } from './sync-agencies';
 
 async function main() {
   const started = Date.now();
   console.log('=== Space Website Sync ===');
 
+  const agencies = await safe('agencies', syncAgencies);
   const rockets = await safe('rockets', syncRockets);
   const sites = await safe('launch-sites', syncLaunchSites);
   const astronauts = await safe('astronauts', syncAstronauts);
@@ -28,6 +30,7 @@ async function main() {
 
   const elapsed = ((Date.now() - started) / 1000).toFixed(1);
   console.log('\n=== Summary ===');
+  console.log(`Agencies      added=${agencies.added}  updated=${agencies.updated}  skipped=${agencies.skipped}`);
   console.log(`Rockets       added=${rockets.added}  updated=${rockets.updated}  skipped=${rockets.skipped}`);
   console.log(`LaunchSites   added=${sites.added}  updated=${sites.updated}  skipped=${sites.skipped}`);
   console.log(`Astronauts    added=${astronauts.added}  updated=${astronauts.updated}  skipped=${astronauts.skipped}`);

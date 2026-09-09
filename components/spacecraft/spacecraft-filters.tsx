@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui';
 
@@ -21,13 +22,14 @@ export function SpacecraftFilters({
   filters,
   onFilterChange,
 }: SpacecraftFiltersProps) {
+  const t = useTranslations('spacecraft');
   const [expanded, setExpanded] = useState(false);
 
   const update = (patch: Partial<SpacecraftFilterValues>) =>
     onFilterChange({ ...filters, ...patch });
 
   return (
-    <div className="p-4 bg-space-800 rounded-xl border border-space-600">
+    <div className="rounded-lg border border-space-600 bg-space-800 p-4">
       {/* Always visible core filters */}
       <div className="flex flex-wrap gap-4">
         <select
@@ -35,12 +37,12 @@ export function SpacecraftFilters({
           onChange={(e) => update({ type: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部类型</option>
-          <option value="SPACE_STATION">空间站</option>
-          <option value="SATELLITE">卫星</option>
-          <option value="PROBE">探测器</option>
-          <option value="CREWED_SPACECRAFT">载人飞船</option>
-          <option value="CARGO_SPACECRAFT">货运飞船</option>
+          <option value="">{t('filters.allTypes')}</option>
+          <option value="SPACE_STATION">{t('types.SPACE_STATION')}</option>
+          <option value="SATELLITE">{t('types.SATELLITE')}</option>
+          <option value="PROBE">{t('types.PROBE')}</option>
+          <option value="CREWED_SPACECRAFT">{t('types.CREWED_SPACECRAFT')}</option>
+          <option value="CARGO_SPACECRAFT">{t('types.CARGO_SPACECRAFT')}</option>
         </select>
 
         <select
@@ -48,14 +50,14 @@ export function SpacecraftFilters({
           onChange={(e) => update({ status: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部状态</option>
-          <option value="OPERATIONAL">运行中</option>
-          <option value="RETIRED">已退役</option>
-          <option value="LOST">已失联</option>
+          <option value="">{t('filters.allStatuses')}</option>
+          <option value="OPERATIONAL">{t('statuses.OPERATIONAL')}</option>
+          <option value="RETIRED">{t('statuses.RETIRED')}</option>
+          <option value="LOST">{t('statuses.LOST')}</option>
         </select>
 
         <Button variant="ghost" onClick={() => onFilterChange({})}>
-          重置
+          {t('filters.reset')}
         </Button>
 
         <Button variant="ghost" onClick={() => setExpanded(!expanded)}>
@@ -64,7 +66,7 @@ export function SpacecraftFilters({
           ) : (
             <ChevronDown className="w-4 h-4 mr-1" />
           )}
-          更多筛选
+          {expanded ? t('filters.less') : t('filters.more')}
         </Button>
       </div>
 
@@ -75,7 +77,7 @@ export function SpacecraftFilters({
             type="text"
             value={filters.name || ''}
             onChange={(e) => update({ name: e.target.value || undefined })}
-            placeholder="搜索航天器名称..."
+            placeholder={t('filters.namePlaceholder')}
             className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
           />
 
@@ -83,7 +85,7 @@ export function SpacecraftFilters({
             type="text"
             value={filters.operator || ''}
             onChange={(e) => update({ operator: e.target.value || undefined })}
-            placeholder="搜索运营机构..."
+            placeholder={t('filters.operatorPlaceholder')}
             className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
           />
 
@@ -92,13 +94,13 @@ export function SpacecraftFilters({
             onChange={(e) => update({ orbitType: e.target.value || undefined })}
             className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
           >
-            <option value="">全部轨道</option>
-            <option value="LEO">LEO - 低地球轨道</option>
-            <option value="MEO">MEO - 中地球轨道</option>
-            <option value="GEO">GEO - 地球同步轨道</option>
-            <option value="HEO">HEO - 高椭圆轨道</option>
-            <option value="SSO">SSO - 太阳同步轨道</option>
-            <option value="Unknown">未知</option>
+            <option value="">{t('filters.allOrbits')}</option>
+            <option value="LEO">{t('orbits.LEO')}</option>
+            <option value="MEO">{t('orbits.MEO')}</option>
+            <option value="GEO">{t('orbits.GEO')}</option>
+            <option value="HEO">{t('orbits.HEO')}</option>
+            <option value="SSO">{t('orbits.SSO')}</option>
+            <option value="Unknown">{t('orbits.Unknown')}</option>
           </select>
         </div>
       )}

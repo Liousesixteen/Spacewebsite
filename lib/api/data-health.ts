@@ -24,7 +24,18 @@ export interface HealthDomainSample {
   latestSyncedAt: Date | null;
   source: string;
   expectedRefreshHours: number;
+  lastRun?: HealthSyncRun | null;
   error?: string;
+}
+
+export interface HealthSyncRun {
+  status: string;
+  startedAt: Date;
+  completedAt: Date | null;
+  recordsAdded: number;
+  recordsUpdated: number;
+  recordsSkipped: number;
+  error: string | null;
 }
 
 export interface HealthDomain {
@@ -35,6 +46,15 @@ export interface HealthDomain {
   latestSync: string | null;
   source: string;
   expectedRefreshHours: number;
+  lastRun: {
+    status: string;
+    startedAt: string;
+    completedAt: string | null;
+    recordsAdded: number;
+    recordsUpdated: number;
+    recordsSkipped: number;
+    error: string | null;
+  } | null;
   message: string | null;
 }
 
@@ -119,6 +139,17 @@ export function buildHealthSnapshot(
       latestSync: sample.latestSyncedAt?.toISOString() ?? null,
       source: sample.source,
       expectedRefreshHours: sample.expectedRefreshHours,
+      lastRun: sample.lastRun
+        ? {
+            status: sample.lastRun.status,
+            startedAt: sample.lastRun.startedAt.toISOString(),
+            completedAt: sample.lastRun.completedAt?.toISOString() ?? null,
+            recordsAdded: sample.lastRun.recordsAdded,
+            recordsUpdated: sample.lastRun.recordsUpdated,
+            recordsSkipped: sample.lastRun.recordsSkipped,
+            error: sample.lastRun.error,
+          }
+        : null,
       message,
     };
   });

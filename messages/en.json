@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "Home",
+    "catalog": "Space Catalog",
     "launches": "Launches",
     "countries": "Countries",
     "agencies": "Agencies",
@@ -19,7 +20,12 @@
     "dataSources": "Data Sources",
     "notifications": "Alerts",
     "status": "Status",
-    "more": "More"
+    "more": "More",
+    "language": "Language",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "home": {
     "hero": {
@@ -132,7 +138,9 @@
     "of": "of",
     "noData": "No data",
     "all": "All",
-    "tryAgain": "Try again"
+    "tryAgain": "Try again",
+    "unexpectedError": "The page encountered an unexpected problem. Try again or continue elsewhere.",
+    "errorReference": "Error reference"
   },
   "auth": {
     "login": "Sign in",
@@ -194,11 +202,15 @@
       "loading": "Loading...",
       "failed": "Failed to load",
       "empty": "No data",
-    "grid": "Grid",
-    "table": "Table"
+      "grid": "Cards",
+      "table": "Table",
+      "archiveTitle": "Global launch records",
+      "archiveDescription": "Search all historical and planned missions by status, country, year, and mission fields.",
+      "resultCount": "{count} missions on this page"
   },
   "filters": {
-    "allStatus": "All statuses",
+      "title": "Filter missions",
+      "allStatus": "All statuses",
     "allCountries": "All countries",
     "allYears": "All years",
     "allLaunchSites": "All launch sites",
@@ -230,6 +242,10 @@
       "noUpcoming": "No planned launches in the next 30 days",
       "noUpcomingSummary": "No planned launches were found in the current database window. Run the sync scripts to refresh Launch Library 2 and SpaceX data.",
       "waitingDetails": "Waiting for mission details to sync.",
+      "unknownPayload": "Unknown payload",
+      "countdownStarted": "Launch time reached",
+      "countdownDays": "T-{days}d {hours}h",
+      "countdownHours": "T-{hours}h",
       "dataOffline": "Data offline",
     "launchTime": "Launch time",
     "rocket": "Rocket",
@@ -271,10 +287,21 @@
     "noUpcoming7": "No planned launches in the next 7 days",
     "noAttention": "No delays or recent failures",
     "noCountryStats": "No country stats",
-    "noProviderStats": "No provider stats",
-    "noMissionTypeStats": "No mission type stats"
-  },
-  "detail": {
+      "noProviderStats": "No provider stats",
+      "noMissionTypeStats": "No mission type stats"
+    },
+    "calendar": {
+      "today": "Today",
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month",
+      "dailyList": "Daily launch list",
+      "moreCount": "+{count} missions",
+      "noLaunches": "No launches this month",
+      "dayLaunches": "Launches on {date}",
+      "close": "Close",
+      "watchVideo": "Watch launch video"
+    },
+    "detail": {
     "breadcrumb": "Launches",
     "launchInfo": "Launch info",
     "rocketInfo": "Rocket info",
@@ -433,11 +460,84 @@
   },
   "spacecraft": {
     "title": "Spacecraft",
-    "subtitle": "Satellites, space stations, probes, and crewed vessels"
+    "subtitle": "Satellites, space stations, probes, and crewed vessels",
+    "breadcrumb": "Spacecraft",
+    "description": "Browse missions and orbital data for satellites, space stations, deep-space probes, and crewed spacecraft worldwide.",
+    "loading": "Loading spacecraft data...",
+    "failed": "Failed to load spacecraft data",
+    "empty": "No spacecraft match these filters",
+    "grid": "Cards",
+    "table": "Table",
+    "noDescription": "A description for this spacecraft has not been synced yet.",
+    "filters": {
+      "allTypes": "All types",
+      "allStatuses": "All statuses",
+      "allOrbits": "All orbits",
+      "reset": "Reset",
+      "more": "More filters",
+      "less": "Hide filters",
+      "namePlaceholder": "Search spacecraft name...",
+      "operatorPlaceholder": "Search operator..."
+    },
+    "types": {
+      "SPACE_STATION": "Space station",
+      "SATELLITE": "Satellite",
+      "PROBE": "Probe",
+      "CREWED_SPACECRAFT": "Crewed spacecraft",
+      "CARGO_SPACECRAFT": "Cargo spacecraft"
+    },
+    "statuses": {
+      "OPERATIONAL": "Operational",
+      "RETIRED": "Retired",
+      "LOST": "Lost"
+    },
+    "orbits": {
+      "LEO": "LEO - Low Earth orbit",
+      "MEO": "MEO - Medium Earth orbit",
+      "GEO": "GEO - Geosynchronous orbit",
+      "HEO": "HEO - Highly elliptical orbit",
+      "SSO": "SSO - Sun-synchronous orbit",
+      "Unknown": "Unknown orbit"
+    }
   },
   "astronauts": {
     "title": "Astronauts",
-    "subtitle": "Stories of space heroes"
+    "subtitle": "Stories of space heroes",
+    "breadcrumb": "Astronauts",
+    "description": "Explore astronauts and cosmonauts worldwide by agency, flight count, and cumulative time in space.",
+    "loading": "Loading astronaut data...",
+    "failed": "Failed to load astronaut data",
+    "empty": "No astronauts match these filters",
+    "grid": "Cards",
+    "table": "Table",
+    "flightCount": "{count} flights",
+    "filters": {
+      "allCountries": "All countries",
+      "allAgencies": "All agencies",
+      "allStatuses": "All statuses",
+      "reset": "Reset",
+      "more": "More filters",
+      "less": "Hide filters",
+      "namePlaceholder": "Search astronaut name...",
+      "flightCount": "Space flights",
+      "minimum": "Min",
+      "maximum": "Max"
+    },
+    "statuses": {
+      "ACTIVE": "Active",
+      "RETIRED": "Retired",
+      "DECEASED": "Deceased"
+    },
+    "countries": {
+      "USA": "United States",
+      "China": "China",
+      "Russia": "Russia",
+      "Japan": "Japan",
+      "India": "India",
+      "Germany": "Germany",
+      "France": "France",
+      "UK": "United Kingdom"
+    }
   },
   "industry": {
     "title": "Aerospace Industry",
@@ -465,9 +565,11 @@
     "technologiesUnit": "items",
     "materialsUnit": "types",
     "equipmentUnit": "types",
-    "marketSize": "Global market size",
-    "marketUnit": "USD 100M",
-    "averageGrowthRate": "Average annual growth",
+    "marketSize": "Estimated segment total",
+    "marketUnit": "USD bn",
+    "averageGrowthRate": "Average segment growth",
+    "estimateNotice": "Market values and growth rates are internal range estimates in the current taxonomy. Segments may overlap and the total is not an audited global market valuation.",
+    "methodology": "View methodology",
     "levels": {
       "UPSTREAM": "Upstream",
       "MIDSTREAM": "Midstream",
@@ -486,7 +588,60 @@
     "allCountries": "All countries/regions",
     "updating": "Updating",
     "noCoverage": "No segments indexed in this lane",
-    "sourceUnavailable": "Industry data is temporarily unavailable. The taxonomy and navigation remain usable."
+    "sourceUnavailable": "Industry data is temporarily unavailable. The taxonomy and navigation remain usable.",
+    "companyList": {
+      "industry": "Industry",
+      "title": "Space companies",
+      "description": "Browse participants in the global space value chain by country, company type, and industry segment.",
+      "allCountries": "All countries/regions",
+      "allTypes": "All company types",
+      "segmentActive": "Industry segment filter applied",
+      "founded": "Founded {year}",
+      "noDescription": "A description for this company has not been synced yet.",
+      "types": {
+        "STATE_OWNED": "State-owned",
+        "PRIVATE": "Private",
+        "PUBLIC": "Public",
+        "STARTUP": "Startup"
+      },
+      "countries": {
+        "China": "China",
+        "USA": "United States",
+        "Russia": "Russia",
+        "Europe": "Europe",
+        "Japan": "Japan",
+        "India": "India"
+      }
+    },
+    "companyDetail": {
+      "unavailableTitle": "Company data is temporarily unavailable",
+      "unavailableDescription": "The company data service is recovering. Please try again shortly.",
+      "backToCompanies": "Back to companies",
+      "basicInfo": "Company profile",
+      "founded": "Founded {year}",
+      "employees": "Employees: {count}",
+      "revenue": "Revenue: {amount}",
+      "website": "Official website",
+      "segments": "Industry segments",
+      "overview": "Company overview",
+      "products": "Key products",
+      "capabilities": "Core capabilities",
+      "achievements": "Highlights",
+      "dataQuality": "Data quality",
+      "overallScore": "Overall score",
+      "relatedTechnologies": "Related technologies",
+      "peerCompanies": "Companies in the same country",
+      "noDescription": "A localized description is not available yet.",
+      "quality": {
+        "sourceAuthority": "Source authority",
+        "freshness": "Data freshness",
+        "completeness": "Core field completeness",
+        "consistency": "Multi-source consistency",
+        "editorialReview": "Editorial review",
+        "relationshipVerification": "Relationship verification",
+        "score": "{score}/{max} points"
+      }
+    }
   },
   "explore": {
     "title": "Deep Space Explore",
@@ -526,9 +681,24 @@
     "source": "Source",
     "refreshInterval": "Refresh Interval",
     "domainUnavailable": "Query Failed",
+    "statusHealthy": "Healthy",
+    "statusStale": "Delayed",
+    "statusEmpty": "Empty",
+    "statusUnavailable": "Unavailable",
+    "statusDegraded": "Degraded",
+    "domainLaunches": "Launches",
+    "domainAgencies": "Agencies",
+    "domainRockets": "Rockets",
+    "domainLaunchSites": "Launch Sites",
+    "domainAstronauts": "Astronauts",
+    "domainSpacecraft": "Spacecraft",
+    "lastSyncRun": "Latest sync: {status}, {changed} records changed",
+    "syncSucceeded": "Succeeded",
+    "syncFailed": "Failed",
     "sourceRegistry": "Source Registry",
     "ll2Description": "Launch Library 2 is the world's most comprehensive rocket launch database, maintained by TheSpaceDevs. It provides standardized data on launch missions, agencies, rockets, launch sites, astronauts, and spacecraft.",
     "syncFrequency": "Sync Frequency",
+    "syncSchedule": "Launches 6h / agencies 24h / rockets 24h / launch sites 7d / astronauts 7d / spacecraft 7d",
     "accuracyNotice": "Data Accuracy Notice",
     "accuracyNoticeText": "Launch schedules may change at any time due to weather, technical issues, or other factors. SpaceData strives to keep data current but cannot guarantee absolute accuracy. For mission-critical decisions, please consult official launch provider sources directly. If you find any data errors, please report them through our support channels."
   },

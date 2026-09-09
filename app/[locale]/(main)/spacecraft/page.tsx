@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { Satellite } from 'lucide-react';
 import { getSpacecraftList } from '@/lib/api/spacecraft';
 import { SpacecraftCard } from '@/components/spacecraft/spacecraft-card';
@@ -18,6 +19,7 @@ export default function SpacecraftPage({
 }: {
   params: { locale: string };
 }) {
+  const t = useTranslations('spacecraft');
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<SpacecraftFilterValues>({});
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -33,16 +35,20 @@ export default function SpacecraftPage({
         className="mb-4"
         items={[
           { label: 'SpaceData', href: `/${locale}` },
-          { label: 'Spacecraft' },
+          { label: t('breadcrumb') },
         ]}
       />
 
       <PageHeader
         icon={Satellite}
-        title="Spacecraft"
-        description="Browse satellites, space stations, probes, and crewed spacecraft from space agencies worldwide."
+        title={t('title')}
+        description={t('description')}
         actions={
-          <ViewToggle mode={viewMode} onChange={setViewMode} />
+          <ViewToggle
+            mode={viewMode}
+            onChange={setViewMode}
+            labels={{ grid: t('grid'), table: t('table') }}
+          />
         }
       />
 
@@ -55,11 +61,11 @@ export default function SpacecraftPage({
       />
 
       {isLoading && (
-        <div className="text-center py-12 text-star-dim">Loading...</div>
+        <div className="py-12 text-center text-star-dim">{t('loading')}</div>
       )}
 
       {error && (
-        <div className="text-center py-12 text-red-400">Failed to load</div>
+        <div className="py-12 text-center text-red-400">{t('failed')}</div>
       )}
 
       {data && (
@@ -83,7 +89,7 @@ export default function SpacecraftPage({
           )}
 
           {data.data.length === 0 && (
-            <div className="text-center py-12 text-star-dim">No data</div>
+            <div className="py-12 text-center text-star-dim">{t('empty')}</div>
           )}
 
           <Pagination

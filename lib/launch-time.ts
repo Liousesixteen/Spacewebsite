@@ -1,3 +1,5 @@
+import { normalizeIntlLocale } from '@/lib/i18n/locale';
+
 interface DateTimeParts {
   date: string;
   time: string;
@@ -47,7 +49,7 @@ function getDateTimeParts(
   locale: string,
   timeZone?: string
 ): DateTimeParts {
-  const formatter = new Intl.DateTimeFormat(locale, {
+  const formatter = new Intl.DateTimeFormat(normalizeIntlLocale(locale), {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { assessSchemaHealth, REQUIRED_SCHEMA_TABLES } from '@/lib/api/schema-health';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,6 +47,31 @@ export async function GET() {
     latencyMs: Date.now() - dbStart,
     error: dbError,
   });
+
+  // Verify schema objects required by the currently deployed application.
+  const schemaStart = Date.now();
+  try {
+    const rows = await prisma.$queryRaw<Array<{ table_name: string }>>`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+        AND table_name IN (${REQUIRED_SCHEMA_TABLES[0]})
+    `;
+    const schema = assessSchemaHealth(rows.map((row) => row.table_name));
+    components.push({
+      name: 'database_schema',
+      status: schema.status,
+      latencyMs: Date.now() - schemaStart,
+      error: schema.missingTables.length ? `Missing table: ${schema.missingTables.join(', ')}` : undefined,
+    });
+  } catch (error) {
+    components.push({
+      name: 'database_schema',
+      status: 'down',
+      latencyMs: Date.now() - schemaStart,
+      error: error instanceof Error ? error.message.slice(0, 100) : 'Schema check failed',
+    });
+  }
 
   // Aggregate status
   const allDown = components.every((c) => c.status === 'down');

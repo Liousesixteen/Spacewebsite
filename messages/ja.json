@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "ホーム",
+    "catalog": "宇宙アーカイブ",
     "launches": "打ち上げ",
     "countries": "国",
     "agencies": "宇宙機関",
@@ -16,7 +17,12 @@
     "explore": "宇宙探査",
     "industry": "産業",
     "notifications": "通知",
-    "more": "その他"
+    "more": "その他",
+    "language": "言語",
+    "switchToLight": "ライトモードに切り替え",
+    "switchToDark": "ダークモードに切り替え",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる"
   },
   "home": {
     "hero": {
@@ -52,6 +58,10 @@
         "title": "打ち上げ",
         "description": "世界のロケット打ち上げ記録、ステータス、詳細"
       },
+      "rockets": {
+        "title": "ロケット",
+        "description": "世界の打ち上げ機ファミリーと主要仕様"
+      },
       "spacecraft": {
         "title": "宇宙船",
         "description": "衛星・宇宙ステーション・探査機の軌道とミッション"
@@ -59,6 +69,14 @@
       "astronauts": {
         "title": "宇宙飛行士",
         "description": "各国の宇宙飛行士とミッション履歴"
+      },
+      "countries": {
+        "title": "国・地域",
+        "description": "国別の打ち上げ能力、機関、産業を確認"
+      },
+      "agencies": {
+        "title": "宇宙機関",
+        "description": "世界の宇宙機関、打ち上げ機、発射場を確認"
       },
       "industry": {
         "title": "産業",
@@ -110,7 +128,9 @@
     "of": "/",
     "noData": "データなし",
     "all": "すべて",
-    "tryAgain": "再試行"
+    "tryAgain": "再試行",
+    "unexpectedError": "ページで予期しない問題が発生しました。再試行するか、別の機能をお試しください。",
+    "errorReference": "エラー番号"
   },
   "auth": {
     "login": "ログイン",
@@ -172,10 +192,14 @@
       "loading": "読み込み中...",
       "failed": "読み込みに失敗しました",
       "empty": "データなし",
-      "grid": "グリッド",
-      "table": "リスト"
+      "grid": "カード",
+      "table": "テーブル",
+      "archiveTitle": "世界の打ち上げ記録",
+      "archiveDescription": "ステータス、国、年、ミッション項目から過去および計画中の打ち上げを検索します。",
+      "resultCount": "このページのミッション: {count}件"
     },
     "filters": {
+      "title": "ミッションを絞り込む",
       "allStatus": "すべてのステータス",
       "allCountries": "すべての国",
       "allYears": "すべての年",
@@ -208,6 +232,10 @@
       "noUpcoming": "今後30日の予定打ち上げはありません",
       "noUpcomingSummary": "現在のデータベース期間に予定打ち上げはありません。同期スクリプトを実行してデータを更新してください。",
       "waitingDetails": "ミッション詳細の同期待ちです。",
+      "unknownPayload": "不明なペイロード",
+      "countdownStarted": "打ち上げ時刻に到達",
+      "countdownDays": "T-{days}日 {hours}時間",
+      "countdownHours": "T-{hours}時間",
       "dataOffline": "データオフライン",
       "launchTime": "打ち上げ時刻",
       "rocket": "ロケット",
@@ -251,6 +279,17 @@
       "noCountryStats": "国別統計なし",
       "noProviderStats": "機関統計なし",
       "noMissionTypeStats": "ミッション種別統計なし"
+    },
+    "calendar": {
+      "today": "今日",
+      "previousMonth": "前の月",
+      "nextMonth": "次の月",
+      "dailyList": "日別打ち上げ一覧",
+      "moreCount": "+{count}件",
+      "noLaunches": "今月の打ち上げはありません",
+      "dayLaunches": "{date}の打ち上げ",
+      "close": "閉じる",
+      "watchVideo": "打ち上げ映像を見る"
     },
     "detail": {
       "breadcrumb": "打ち上げ",
@@ -394,11 +433,84 @@
   },
   "spacecraft": {
     "title": "宇宙船",
-    "subtitle": "衛星、宇宙ステーション、探査機、有人宇宙船"
+    "subtitle": "衛星、宇宙ステーション、探査機、有人宇宙船",
+    "breadcrumb": "宇宙機",
+    "description": "世界の衛星、宇宙ステーション、深宇宙探査機、有人宇宙船のミッションと軌道情報を閲覧できます。",
+    "loading": "宇宙機データを読み込み中...",
+    "failed": "宇宙機データの読み込みに失敗しました",
+    "empty": "条件に一致する宇宙機はありません",
+    "grid": "カード",
+    "table": "テーブル",
+    "noDescription": "この宇宙機の説明はまだ同期されていません。",
+    "filters": {
+      "allTypes": "すべての種類",
+      "allStatuses": "すべてのステータス",
+      "allOrbits": "すべての軌道",
+      "reset": "リセット",
+      "more": "詳細フィルター",
+      "less": "フィルターを閉じる",
+      "namePlaceholder": "宇宙機名を検索...",
+      "operatorPlaceholder": "運用機関を検索..."
+    },
+    "types": {
+      "SPACE_STATION": "宇宙ステーション",
+      "SATELLITE": "衛星",
+      "PROBE": "探査機",
+      "CREWED_SPACECRAFT": "有人宇宙船",
+      "CARGO_SPACECRAFT": "補給船"
+    },
+    "statuses": {
+      "OPERATIONAL": "運用中",
+      "RETIRED": "退役",
+      "LOST": "喪失"
+    },
+    "orbits": {
+      "LEO": "LEO - 低軌道",
+      "MEO": "MEO - 中軌道",
+      "GEO": "GEO - 静止軌道",
+      "HEO": "HEO - 長楕円軌道",
+      "SSO": "SSO - 太陽同期軌道",
+      "Unknown": "軌道不明"
+    }
   },
   "astronauts": {
     "title": "宇宙飛行士",
-    "subtitle": "宇宙の英雄たちの物語"
+    "subtitle": "宇宙の英雄たちの物語",
+    "breadcrumb": "宇宙飛行士",
+    "description": "世界の宇宙飛行士を所属機関、飛行回数、累計宇宙滞在時間から確認できます。",
+    "loading": "宇宙飛行士データを読み込み中...",
+    "failed": "宇宙飛行士データの読み込みに失敗しました",
+    "empty": "条件に一致する宇宙飛行士はいません",
+    "grid": "カード",
+    "table": "テーブル",
+    "flightCount": "{count}回飛行",
+    "filters": {
+      "allCountries": "すべての国",
+      "allAgencies": "すべての機関",
+      "allStatuses": "すべてのステータス",
+      "reset": "リセット",
+      "more": "詳細フィルター",
+      "less": "フィルターを閉じる",
+      "namePlaceholder": "宇宙飛行士名を検索...",
+      "flightCount": "飛行回数",
+      "minimum": "最小",
+      "maximum": "最大"
+    },
+    "statuses": {
+      "ACTIVE": "現役",
+      "RETIRED": "引退",
+      "DECEASED": "故人"
+    },
+    "countries": {
+      "USA": "米国",
+      "China": "中国",
+      "Russia": "ロシア",
+      "Japan": "日本",
+      "India": "インド",
+      "Germany": "ドイツ",
+      "France": "フランス",
+      "UK": "英国"
+    }
   },
   "industry": {
     "title": "宇宙産業",
@@ -426,9 +538,11 @@
     "technologiesUnit": "件",
     "materialsUnit": "種",
     "equipmentUnit": "種",
-    "marketSize": "世界市場規模",
-    "marketUnit": "億米ドル",
-    "averageGrowthRate": "平均年成長率",
+    "marketSize": "セグメント推計合計",
+    "marketUnit": "十億米ドル",
+    "averageGrowthRate": "セグメント平均成長率",
+    "estimateNotice": "市場規模と成長率は現行分類に基づく内部推計です。セグメントは重複する場合があり、監査済みの世界市場総額ではありません。",
+    "methodology": "データ算定方法",
     "levels": {
       "UPSTREAM": "上流",
       "MIDSTREAM": "中流",
@@ -447,13 +561,102 @@
     "allCountries": "すべての国/地域",
     "updating": "更新中",
     "noCoverage": "この産業帯のデータはありません",
-    "sourceUnavailable": "産業データは一時的に利用できません。分類とナビゲーションは利用できます。"
+    "sourceUnavailable": "産業データは一時的に利用できません。分類とナビゲーションは利用できます。",
+    "companyList": {
+      "industry": "産業",
+      "title": "宇宙企業",
+      "description": "国、企業形態、産業セグメントから世界の宇宙産業チェーン参加企業を閲覧できます。",
+      "allCountries": "すべての国/地域",
+      "allTypes": "すべての企業形態",
+      "segmentActive": "産業セグメントで絞り込み中",
+      "founded": "{year}年設立",
+      "noDescription": "この企業の説明はまだ同期されていません。",
+      "types": {
+        "STATE_OWNED": "国有企業",
+        "PRIVATE": "非公開企業",
+        "PUBLIC": "上場企業",
+        "STARTUP": "スタートアップ"
+      },
+      "countries": {
+        "China": "中国",
+        "USA": "米国",
+        "Russia": "ロシア",
+        "Europe": "欧州",
+        "Japan": "日本",
+        "India": "インド"
+      }
+    },
+    "companyDetail": {
+      "unavailableTitle": "Company data is temporarily unavailable",
+      "unavailableDescription": "The company data service is recovering. Please try again shortly.",
+      "backToCompanies": "Back to companies",
+      "basicInfo": "Company profile",
+      "founded": "Founded {year}",
+      "employees": "Employees: {count}",
+      "revenue": "Revenue: {amount}",
+      "website": "Official website",
+      "segments": "Industry segments",
+      "overview": "Company overview",
+      "products": "Key products",
+      "capabilities": "Core capabilities",
+      "achievements": "Highlights",
+      "dataQuality": "Data quality",
+      "overallScore": "Overall score",
+      "relatedTechnologies": "Related technologies",
+      "peerCompanies": "Companies in the same country",
+      "noDescription": "A localized description is not available yet.",
+      "quality": {
+        "sourceAuthority": "Source authority",
+        "freshness": "Data freshness",
+        "completeness": "Core field completeness",
+        "consistency": "Multi-source consistency",
+        "editorialReview": "Editorial review",
+        "relationshipVerification": "Relationship verification",
+        "score": "{score}/{max} points"
+      }
+    }
   },
   "explore": {
     "title": "宇宙探査",
     "subtitle": "衛星軌道と太陽系の可視化",
     "satellites": "衛星軌道",
     "solarSystem": "太陽系"
+  },
+  "dataHealth": {
+    "breadcrumb": "データ健全性",
+    "title": "データ健全性センター",
+    "description": "各データ領域の状態、レコード数、最終更新時刻、同期状況を確認します。",
+    "overallStatus": "全体状態",
+    "totalRecords": "総レコード数",
+    "healthyDomains": "正常な領域",
+    "snapshotTime": "取得時刻",
+    "domain": "データ領域",
+    "status": "状態",
+    "records": "レコード数",
+    "latestUpdate": "最終更新",
+    "source": "データソース",
+    "refreshInterval": "更新間隔",
+    "domainUnavailable": "クエリに失敗しました",
+    "statusHealthy": "正常",
+    "statusStale": "遅延",
+    "statusEmpty": "空",
+    "statusUnavailable": "利用不可",
+    "statusDegraded": "一部低下",
+    "domainLaunches": "打上げデータ",
+    "domainAgencies": "宇宙機関",
+    "domainRockets": "ロケット",
+    "domainLaunchSites": "発射場",
+    "domainAstronauts": "宇宙飛行士",
+    "domainSpacecraft": "宇宙機",
+    "lastSyncRun": "最新同期: {status}、{changed} 件を更新",
+    "syncSucceeded": "成功",
+    "syncFailed": "失敗",
+    "sourceRegistry": "データソースの説明",
+    "ll2Description": "Launch Library 2 は TheSpaceDevs が維持する世界的なロケット打上げデータベースです。",
+    "syncFrequency": "同期頻度",
+    "syncSchedule": "打上げ 6時間 / 機関 24時間 / ロケット 24時間 / 発射場 7日 / 宇宙飛行士 7日 / 宇宙機 7日",
+    "accuracyNotice": "データ精度に関する注意",
+    "accuracyNoticeText": "打上げ予定は天候や技術的な要因で変更されることがあります。重要な判断では公式情報を確認してください。"
   },
   "legal": {
     "about": "About Us",

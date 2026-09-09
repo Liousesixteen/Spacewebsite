@@ -4,29 +4,18 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { Rocket, Factory, Play } from 'lucide-react';
 import { Button } from '@/components/ui';
-import type { ApodData } from './apod-section';
 
 interface HeroSectionProps {
   locale: string;
-  apod: ApodData | null;
   liveLaunchUrl?: string | null;
 }
 
-export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
+export function HeroSection({ locale, liveLaunchUrl }: HeroSectionProps) {
   const t = useTranslations('home.hero');
 
   return (
     <section className="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden">
-      {/* APOD background image */}
-      {apod && (
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${apod.url})` }}
-        />
-      )}
-
-      {/* Subtle gradient overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-space-900/90 via-space-900/60 to-space-900/95" />
+      <div className="absolute inset-0 bg-gradient-to-b from-space-900 via-space-900/85 to-space-900" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
@@ -66,13 +55,6 @@ export function HeroSection({ locale, apod, liveLaunchUrl }: HeroSectionProps) {
           )}
         </div>
 
-        {/* APOD attribution */}
-        {apod && (
-          <p className="text-xs text-star-dim/30 max-w-lg mx-auto">
-            NASA APOD &mdash; {apod.title}
-            {apod.copyright && ` (${apod.copyright})`}
-          </p>
-        )}
       </div>
 
       {/* Clean scroll indicator */}

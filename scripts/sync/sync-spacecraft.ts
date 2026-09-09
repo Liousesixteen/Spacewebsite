@@ -7,6 +7,7 @@
 import { SpacecraftType } from '@prisma/client';
 import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
+import { runTrackedSync } from './lib/sync-run';
 import { mapSpacecraftStatus, parseDate, slugify, descOrEmpty, num } from './lib/utils';
 
 interface LL2NestedRef {
@@ -53,6 +54,10 @@ function mapType(typeName: string | null | undefined, crewed: boolean): Spacecra
 }
 
 export async function syncSpacecraft(): Promise<{ added: number; updated: number; skipped: number }> {
+  return runTrackedSync('Launch Library 2: Spacecraft', syncSpacecraftImpl);
+}
+
+async function syncSpacecraftImpl(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[spacecraft] Fetching spacecraft from LL2...');
   const list = await fetchLL2List<LL2Spacecraft>('/spacecraft/', { limit: 100, mode: 'detailed' }, 500);
   console.log(`[spacecraft] Got ${list.length} spacecraft`);

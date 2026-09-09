@@ -28,6 +28,10 @@ import { cn } from '@/lib/utils';
 import {
   displayRocketName,
   displayAgencyName,
+  displayCountryName,
+  displayLaunchName,
+  displayLocalizedDescription,
+  displayOrbitName,
   displaySiteName,
   displayMissionType,
 } from '@/lib/display-names';
@@ -71,16 +75,22 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
     );
   }
 
-  // Prioritize China launches for the hero display
-  const heroLaunch = data.chinaNextLaunch ?? data.nextLaunch;
-  const isChinaHero = data.chinaNextLaunch !== null;
+  const heroLaunch = data.nextLaunch;
   const sourceUnavailable = data.sourceStatus === 'unavailable';
-  const headline = getHeadline(heroLaunch, sourceUnavailable, t);
-  const summary = getSummary(heroLaunch, sourceUnavailable, t);
+  const headline = heroLaunch
+    ? displayLaunchName(heroLaunch.name, locale, t('unknownPayload'))
+    : getHeadline(sourceUnavailable, t);
+  const summary = heroLaunch
+    ? displayLocalizedDescription(
+        heroLaunch.missionDescription,
+        locale,
+        t('waitingDetails')
+      )
+    : getSummary(sourceUnavailable, t);
 
   return (
     <section className="mt-8 space-y-4">
-      <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.65fr)_minmax(280px,0.75fr)]">
         <Card variant="elevated" className="overflow-hidden">
           <CardContent className="p-5 sm:p-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -88,13 +98,6 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
                 <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.15em] text-cosmic-cyan">
                   <RadioTower className="h-4 w-4" />
                   {t('control')}
-                </div>
-                <div className="mb-2 flex items-center gap-2">
-                  {isChinaHero && (
-                    <span className="inline-flex items-center gap-1 rounded-md border border-red-400/30 bg-red-400/10 px-2 py-0.5 text-xs font-semibold text-red-400">
-                      🇨🇳 中国发射
-                    </span>
-                  )}
                 </div>
                 <h2 className="text-xl font-semibold text-star-white sm:text-2xl">
                   {headline}
@@ -132,7 +135,7 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
                         status={heroLaunch.status}
                         label={statusT(heroLaunch.status)}
                       />
-                      <Badge variant="hud">{timeToLaunch(heroLaunch.date)}</Badge>
+                      <Badge variant="hud">{timeToLaunch(heroLaunch.date, t)}</Badge>
                     </>
                   )}
                 </div>
@@ -164,7 +167,11 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
                 <MetricLine
                   icon={Globe2}
                   label={t('orbit')}
-                  value={heroLaunch.orbitName || heroLaunch.orbitAbbrev || t('unknown')}
+                  value={displayOrbitName(
+                    heroLaunch.orbitName,
+                    heroLaunch.orbitAbbrev,
+                    locale
+                  ) || t('unknown')}
                 />
                 <MetricLine
                   icon={Database}
@@ -184,32 +191,34 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-2 gap-4">
-          <StatTile
-            icon={Clock3}
-            label={t('next7Days')}
-            value={data.upcoming7Days.length}
-            tone="blue"
-          />
-          <StatTile
-            icon={CalendarClock}
-            label={t('next30Days')}
-            value={data.upcoming30Days.length}
-            tone="cyan"
-          />
-          <StatTile
-            icon={RadioTower}
-            label={t('inFlight')}
-            value={data.inFlight.length}
-            tone="green"
-          />
-          <StatTile
-            icon={CheckCircle2}
-            label={t('recentCompleted')}
-            value={data.recentCompleted.length}
-            tone="amber"
-          />
-        </div>
+        <Card>
+          <CardContent className="grid h-full grid-cols-2 gap-px overflow-hidden p-0">
+            <StatTile
+              icon={Clock3}
+              label={t('next7Days')}
+              value={data.upcoming7Days.length}
+              tone="blue"
+            />
+            <StatTile
+              icon={CalendarClock}
+              label={t('next30Days')}
+              value={data.upcoming30Days.length}
+              tone="cyan"
+            />
+            <StatTile
+              icon={RadioTower}
+              label={t('inFlight')}
+              value={data.inFlight.length}
+              tone="green"
+            />
+            <StatTile
+              icon={CheckCircle2}
+              label={t('recentCompleted')}
+              value={data.recentCompleted.length}
+              tone="amber"
+            />
+          </CardContent>
+        </Card>
       </div>
 
       <ScheduleBoard
@@ -232,7 +241,7 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
           {data.countryCounts.length > 0 ? (
             <CountList
               items={data.countryCounts.slice(0, 7).map((item) => ({
-                label: item.country,
+                label: displayCountryName(item.country, locale),
                 count: item.count,
               }))}
             />
@@ -245,7 +254,7 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
           {data.providerCounts.length > 0 ? (
             <CountList
               items={data.providerCounts.slice(0, 7).map((item) => ({
-                label: item.provider,
+                label: displayAgencyName(item.provider, locale),
                 count: item.count,
               }))}
             />
@@ -258,7 +267,7 @@ export function LaunchMissionControl({ locale }: LaunchMissionControlProps) {
           {data.missionTypeCounts.length > 0 ? (
             <CountList
               items={data.missionTypeCounts.slice(0, 7).map((item) => ({
-                label: item.missionType,
+                label: displayMissionType(item.missionType, locale) || t('unknown'),
                 count: item.count,
               }))}
             />
@@ -395,7 +404,7 @@ function ScheduleBoard({
                         href={`/${locale}/launches/${launch.id}`}
                         className="truncate text-sm font-semibold text-star-white hover:text-cosmic-cyan"
                       >
-                        {launch.name}
+                        {displayLaunchName(launch.name, locale, t('unknownPayload'))}
                       </Link>
                       {tentative && (
                         <Badge variant="warning" className="shrink-0">
@@ -446,21 +455,17 @@ function ScheduleBoard({
 }
 
 function getHeadline(
-  nextLaunch: Launch | null,
   sourceUnavailable: boolean,
   t: ReturnType<typeof useTranslations>
 ) {
-  if (nextLaunch) return nextLaunch.name;
   if (sourceUnavailable) return t('offline');
   return t('noUpcoming');
 }
 
 function getSummary(
-  nextLaunch: Launch | null,
   sourceUnavailable: boolean,
   t: ReturnType<typeof useTranslations>
 ) {
-  if (nextLaunch) return nextLaunch.missionDescription || t('waitingDetails');
   if (sourceUnavailable) return t('offlineSummary');
   return t('noUpcomingSummary');
 }
@@ -480,7 +485,7 @@ function MetricLine({
         <Icon className="h-3.5 w-3.5 text-cosmic-blue" />
         {label}
       </div>
-      <div className="truncate text-sm font-medium text-star-white">{value}</div>
+      <div className="line-clamp-2 text-sm font-medium leading-5 text-star-white">{value}</div>
     </div>
   );
 }
@@ -497,7 +502,7 @@ function StatTile({
   tone: 'blue' | 'cyan' | 'green' | 'amber';
 }) {
   return (
-    <div className="rounded-lg border border-space-600/70 bg-space-800/65 p-4">
+    <div className="min-h-28 bg-space-800/65 p-4 first:border-r first:border-space-600/50 [&:nth-child(3)]:border-r [&:nth-child(3)]:border-t [&:nth-child(4)]:border-t [&:nth-child(3)]:border-space-600/50 [&:nth-child(4)]:border-space-600/50">
       <div className="flex items-center justify-between gap-3">
         <span className="text-sm text-star-dim">{label}</span>
         <Icon
@@ -567,13 +572,13 @@ function CountList({ items }: { items: Array<{ label: string; count: number }> }
   );
 }
 
-function timeToLaunch(date: string) {
+function timeToLaunch(date: string, t: ReturnType<typeof useTranslations>) {
   const diffMs = new Date(date).getTime() - Date.now();
-  if (diffMs <= 0) return 'T+';
+  if (diffMs <= 0) return t('countdownStarted');
 
   const days = Math.floor(diffMs / (24 * 60 * 60 * 1000));
   const hours = Math.floor((diffMs / (60 * 60 * 1000)) % 24);
 
-  if (days > 0) return `T-${days}d ${hours}h`;
-  return `T-${Math.max(1, hours)}h`;
+  if (days > 0) return t('countdownDays', { days, hours });
+  return t('countdownHours', { hours: Math.max(1, hours) });
 }

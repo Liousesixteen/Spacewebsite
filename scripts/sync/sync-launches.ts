@@ -11,6 +11,7 @@ import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
 import { fetchSpaceX } from './lib/spacex-client';
 import { mapLimit, memoizeAsync } from './lib/cache';
+import { notifyFailureStreak } from './lib/sync-run';
 import {
   mapCountryCode,
   mapLaunchSiteStatus,
@@ -171,7 +172,7 @@ async function resolveLaunchSiteId(pad: LL2LaunchPad | null | undefined): Promis
 async function resolveAgencyId(provider: LL2NestedRef | null | undefined): Promise<string | null> {
   const name = provider?.name?.trim();
   if (!name) return null;
-  const externalId = provider.id ? `ll2-agency-${provider.id}` : `ll2-agency-${slugify(name)}`;
+  const externalId = provider?.id ? `ll2-agency-${provider?.id}` : `ll2-agency-${slugify(name)}`;
   if (externalId.endsWith('-')) return null;
 
   const existing = await prisma.agency.findFirst({
@@ -196,7 +197,7 @@ async function resolveAgencyId(provider: LL2NestedRef | null | undefined): Promi
     data: {
       id: externalId,
       name,
-      abbrev: provider.abbrev || null,
+      abbrev: provider?.abbrev || null,
       country,
       externalId,
       source: 'Launch Library 2',
@@ -213,7 +214,7 @@ async function resolveLaunchPadId(
 ): Promise<string | null> {
   const name = pad?.name?.trim();
   if (!name) return null;
-  const externalId = pad.id ? `ll2-pad-${pad.id}` : `ll2-pad-${slugify(name)}`;
+  const externalId = pad?.id ? `ll2-pad-${pad?.id}` : `ll2-pad-${slugify(name)}`;
   if (externalId.endsWith('-')) return null;
 
   const locName = pad?.location?.name || '';
@@ -266,7 +267,7 @@ export async function syncLaunches(): Promise<{ added: number; updated: number; 
     syncRun = await prisma.syncRun.create({
       data: {
         id: syncRunId,
-        source: 'Launch Library 2',
+        source: 'Launch Library 2: Launches',
         status: 'FETCHING',
         version: syncVersion,
       },
@@ -292,7 +293,8 @@ export async function syncLaunches(): Promise<{ added: number; updated: number; 
     }
   };
 
-  console.log('[launches] Fetching upcoming launches from LL2...');
+  try {
+    console.log('[launches] Fetching upcoming launches from LL2...');
   const upcoming = await fetchLL2List<LL2Launch>(
     '/launch/upcoming/',
     { limit: 100, mode: 'detailed' },
@@ -314,7 +316,7 @@ export async function syncLaunches(): Promise<{ added: number; updated: number; 
   });
   const existingLaunchMap = new Map(
     existingLaunches
-      .filter((l): l is { id: string; externalId: string; date: Date; status: string } => Boolean(l.externalId))
+      .filter((l): l is { id: string; externalId: string; date: Date; status: LaunchStatus } => Boolean(l.externalId))
       .map((l) => [l.externalId, l])
   );
 
@@ -559,7 +561,14 @@ const getLaunchPadId = memoizeAsync(
     }
   }
 
-  return { added, updated, skipped };
+    return { added, updated, skipped };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    await updateSyncStatus('FAILED', message);
+    await notifyFailureStreak('Launch Library 2: Launches', message);
+    console.error('[launches] Sync failed:', message);
+    throw error;
+  }
 }
 
 if (require.main === module) {

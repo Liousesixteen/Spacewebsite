@@ -7,6 +7,8 @@ import { useTranslations } from 'next-intl';
 import { Building2, ChevronRight, Filter, Network } from 'lucide-react';
 import type { IndustryCoverage } from '@/lib/api/industry-coverage';
 import { Badge } from '@/components/ui';
+import { displayCountryName } from '@/lib/display-names';
+import { displayIndustryCompanyName, displayIndustrySegment } from '@/lib/industry-display';
 
 interface IndustryCoverageResponse extends IndustryCoverage {
   generatedAt: string;
@@ -59,7 +61,7 @@ export function IndustryChainBrowser({
             <option value="">{t('allCountries')}</option>
             {initialData.countries.map((item) => (
               <option key={item.country} value={item.country}>
-                {item.country} ({item.count})
+                {displayCountryName(item.country, locale)} ({item.count})
               </option>
             ))}
           </select>
@@ -103,41 +105,44 @@ export function IndustryChainBrowser({
                   {t('noCoverage')}
                 </div>
               ) : (
-                level.segments.map((segment) => (
-                  <div key={segment.id} className="px-4 py-4">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <h4 className="text-sm font-medium text-star-white">
-                          {segment.name}
-                        </h4>
-                        <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-star-dim">
-                          {segment.description}
-                        </p>
+                level.segments.map((segment) => {
+                  const displaySegment = displayIndustrySegment(segment, locale);
+                  return (
+                    <div key={segment.id} className="px-4 py-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-medium text-star-white">
+                            {displaySegment.name}
+                          </h4>
+                          <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-star-dim">
+                            {displaySegment.description}
+                          </p>
+                        </div>
+                        <Link
+                          href={`/${locale}/industry/companies?segmentId=${segment.id}${country ? `&country=${encodeURIComponent(country)}` : ''}`}
+                          className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded border border-space-500 text-star-dim transition-colors hover:border-cosmic-blue hover:text-cosmic-cyan"
+                          aria-label={displaySegment.name}
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </Link>
                       </div>
-                      <Link
-                        href={`/${locale}/industry/companies?segmentId=${segment.id}${country ? `&country=${encodeURIComponent(country)}` : ''}`}
-                        className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded border border-space-500 text-star-dim transition-colors hover:border-cosmic-blue hover:text-cosmic-cyan"
-                        aria-label={segment.name}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Link>
+                      {segment.companies.length > 0 && (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {segment.companies.map((company) => (
+                            <Link
+                              key={company.id}
+                              href={`/${locale}/industry/companies/${company.id}`}
+                              className="inline-flex max-w-full items-center gap-1.5 rounded border border-space-600 bg-space-900/55 px-2 py-1 text-xs text-star-dim transition-colors hover:border-cosmic-blue hover:text-star-white"
+                            >
+                              <Building2 className="h-3 w-3 shrink-0" />
+                              <span className="truncate">{displayIndustryCompanyName(company.name, locale)}</span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                    {segment.companies.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        {segment.companies.map((company) => (
-                          <Link
-                            key={company.id}
-                            href={`/${locale}/industry/companies/${company.id}`}
-                            className="inline-flex max-w-full items-center gap-1.5 rounded border border-space-600 bg-space-900/55 px-2 py-1 text-xs text-star-dim transition-colors hover:border-cosmic-blue hover:text-star-white"
-                          >
-                            <Building2 className="h-3 w-3 shrink-0" />
-                            <span className="truncate">{company.name}</span>
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </section>

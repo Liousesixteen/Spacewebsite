@@ -98,7 +98,7 @@ body {
 @layer utilities {
   /* HUD fine-line card */
   .hud-card {
-    @apply bg-space-800 border border-space-600/30 rounded-2xl transition-all duration-300;
+    @apply bg-space-800 border border-space-600/40 rounded-lg transition-all duration-200;
   }
   .hud-card:hover {
     border-color: rgba(59, 130, 246, 0.3);
@@ -107,7 +107,7 @@ body {
 
   /* HUD panel — slightly transparent, fine border */
   .hud-panel {
-    @apply bg-space-800/60 border border-space-600/20 backdrop-blur-sm rounded-xl;
+    @apply bg-space-800/60 border border-space-600/30 backdrop-blur-sm rounded-lg;
   }
 
   .frosted-icon {

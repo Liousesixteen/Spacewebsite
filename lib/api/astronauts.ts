@@ -79,11 +79,18 @@ export async function getAstronaut(id: string): Promise<AstronautDetail> {
   return res.json();
 }
 
-export function formatTimeInSpace(minutes: number): string {
-  if (!minutes || minutes < 0) return '0 小时';
+export function formatTimeInSpace(minutes: number, locale = 'zh-CN'): string {
+  const labels = locale === 'zh-CN'
+    ? { day: '天', hour: '小时' }
+    : locale === 'ja'
+      ? { day: '日', hour: '時間' }
+      : locale === 'ru'
+        ? { day: 'д', hour: 'ч' }
+        : { day: 'd', hour: 'h' };
+  if (!minutes || minutes < 0) return `0 ${labels.hour}`;
   const totalHours = Math.floor(minutes / 60);
   const days = Math.floor(totalHours / 24);
   const hours = totalHours % 24;
-  if (days === 0) return `${hours} 小时`;
-  return `${days} 天 ${hours} 小时`;
+  if (days === 0) return `${hours} ${labels.hour}`;
+  return `${days} ${labels.day} ${hours} ${labels.hour}`;
 }

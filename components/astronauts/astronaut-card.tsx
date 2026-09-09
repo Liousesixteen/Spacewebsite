@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { Flag, Building2, Plane, Clock } from 'lucide-react';
 import { Card, CardContent, Badge, SmartImage, StatusBadge } from '@/components/ui';
 import { formatTimeInSpace, type Astronaut } from '@/lib/api/astronauts';
 import { getAstronautImage } from '@/lib/image-fallbacks';
+import { displayAgencyName, displayCountryName } from '@/lib/display-names';
 
 interface AstronautCardProps {
   astronaut: Astronaut;
@@ -10,6 +12,7 @@ interface AstronautCardProps {
 }
 
 export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
+  const t = useTranslations('astronauts');
   return (
     <Link href={`/${locale}/astronauts/${astronaut.id}`} className="block group">
       <Card variant="elevated" className="h-full cursor-pointer">
@@ -32,7 +35,10 @@ export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
                   {astronaut.name}
                 </h3>
                 <div className="shrink-0">
-                  <StatusBadge status={astronaut.status} />
+                  <StatusBadge
+                    status={astronaut.status}
+                    label={t(`statuses.${astronaut.status}`)}
+                  />
                 </div>
               </div>
             </div>
@@ -42,19 +48,19 @@ export function AstronautCard({ astronaut, locale }: AstronautCardProps) {
           <div className="space-y-2.5 text-sm text-star-dim">
             <div className="flex items-center gap-2.5">
               <Flag className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
-              <span>{astronaut.nationality}</span>
+              <span>{displayCountryName(astronaut.nationality, locale)}</span>
             </div>
             <div className="flex items-center gap-2.5">
               <Building2 className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
-              <span className="truncate">{astronaut.agency}</span>
+              <span className="truncate">{displayAgencyName(astronaut.agency, locale)}</span>
             </div>
             <div className="flex items-center gap-2.5">
               <Plane className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
-              <span>{astronaut.spaceFlights} flights</span>
+              <span>{t('flightCount', { count: astronaut.spaceFlights })}</span>
             </div>
             <div className="flex items-center gap-2.5">
               <Clock className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
-              <span>{formatTimeInSpace(astronaut.totalTimeInSpace)}</span>
+              <span>{formatTimeInSpace(astronaut.totalTimeInSpace, locale)}</span>
             </div>
           </div>
         </CardContent>

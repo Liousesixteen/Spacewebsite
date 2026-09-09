@@ -2,8 +2,10 @@
  * Sync astronauts from Launch Library 2 `/astronaut` endpoint.
  */
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
+import { runTrackedSync } from './lib/sync-run';
 import { mapAstronautStatus, parseDate, parseDurationToMinutes, slugify, descOrEmpty } from './lib/utils';
 
 interface LL2NestedRef {
@@ -40,6 +42,10 @@ function nationalityName(n: LL2Astronaut['nationality']): string {
 }
 
 export async function syncAstronauts(): Promise<{ added: number; updated: number; skipped: number }> {
+  return runTrackedSync('Launch Library 2: Astronauts', syncAstronautsImpl);
+}
+
+async function syncAstronautsImpl(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[astronauts] Fetching astronauts from LL2...');
   const astronauts = await fetchLL2List<LL2Astronaut>('/astronaut/', { limit: 100, mode: 'detailed' }, 1000);
   console.log(`[astronauts] Got ${astronauts.length} astronauts`);
@@ -82,7 +88,7 @@ export async function syncAstronauts(): Promise<{ added: number; updated: number
       totalTimeInSpace: parseDurationToMinutes(a.time_in_space),
       bio: descOrEmpty(a.bio, name),
       photo: a.profile_image || null,
-      socialLinks: Object.keys(socialLinks).length > 0 ? socialLinks : null,
+      socialLinks: Object.keys(socialLinks).length > 0 ? socialLinks : Prisma.JsonNull,
     };
 
     try {

@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "Главная",
+    "catalog": "Космический каталог",
     "launches": "Запуски",
     "countries": "Страны",
     "agencies": "Агентства",
@@ -16,7 +17,12 @@
     "explore": "Исследование",
     "industry": "Отрасль",
     "notifications": "Уведомления",
-    "more": "Ещё"
+    "more": "Ещё",
+    "language": "Язык",
+    "switchToLight": "Включить светлую тему",
+    "switchToDark": "Включить тёмную тему",
+    "openMenu": "Открыть меню",
+    "closeMenu": "Закрыть меню"
   },
   "home": {
     "hero": {
@@ -52,6 +58,10 @@
         "title": "Запуски",
         "description": "Глобальные записи ракетных запусков, статусы и детали"
       },
+      "rockets": {
+        "title": "Ракеты",
+        "description": "Семейства ракет-носителей и ключевые характеристики"
+      },
       "spacecraft": {
         "title": "Космические аппараты",
         "description": "Спутники, станции и зонды — орбиты и миссии"
@@ -59,6 +69,14 @@
       "astronauts": {
         "title": "Космонавты",
         "description": "Космонавты разных стран и их миссии"
+      },
+      "countries": {
+        "title": "Страны и регионы",
+        "description": "Запусковые возможности, агентства и отрасль по странам"
+      },
+      "agencies": {
+        "title": "Космические агентства",
+        "description": "Агентства, ракеты-носители и космодромы мира"
       },
       "industry": {
         "title": "Отрасль",
@@ -110,7 +128,9 @@
     "of": "из",
     "noData": "Нет данных",
     "all": "Все",
-    "tryAgain": "Повторить"
+    "tryAgain": "Повторить",
+    "unexpectedError": "На странице произошла непредвиденная ошибка. Повторите попытку или перейдите в другой раздел.",
+    "errorReference": "Код ошибки"
   },
   "auth": {
     "login": "Войти",
@@ -172,10 +192,14 @@
       "loading": "Загрузка...",
       "failed": "Ошибка загрузки",
       "empty": "Нет данных",
-      "grid": "Сетка",
-      "table": "Список"
+      "grid": "Карточки",
+      "table": "Таблица",
+      "archiveTitle": "Мировой архив запусков",
+      "archiveDescription": "Поиск исторических и запланированных миссий по статусу, стране, году и параметрам.",
+      "resultCount": "Миссий на странице: {count}"
     },
     "filters": {
+      "title": "Фильтры миссий",
       "allStatus": "Все статусы",
       "allCountries": "Все страны",
       "allYears": "Все годы",
@@ -208,6 +232,10 @@
       "noUpcoming": "Нет запланированных запусков на 30 дней",
       "noUpcomingSummary": "В текущем окне базы нет запланированных запусков. Запустите синхронизацию данных.",
       "waitingDetails": "Ожидание деталей миссии.",
+      "unknownPayload": "Неизвестная полезная нагрузка",
+      "countdownStarted": "Время запуска наступило",
+      "countdownDays": "T-{days}д {hours}ч",
+      "countdownHours": "T-{hours}ч",
       "dataOffline": "Данные офлайн",
       "launchTime": "Время запуска",
       "rocket": "Ракета",
@@ -251,6 +279,17 @@
       "noCountryStats": "Нет статистики стран",
       "noProviderStats": "Нет статистики операторов",
       "noMissionTypeStats": "Нет статистики типов миссий"
+    },
+    "calendar": {
+      "today": "Сегодня",
+      "previousMonth": "Предыдущий месяц",
+      "nextMonth": "Следующий месяц",
+      "dailyList": "Запуски по дням",
+      "moreCount": "+{count} миссий",
+      "noLaunches": "В этом месяце запусков нет",
+      "dayLaunches": "Запуски: {date}",
+      "close": "Закрыть",
+      "watchVideo": "Смотреть запись запуска"
     },
     "detail": {
       "breadcrumb": "Запуски",
@@ -394,11 +433,84 @@
   },
   "spacecraft": {
     "title": "Космические аппараты",
-    "subtitle": "Спутники, станции, зонды и пилотируемые корабли"
+    "subtitle": "Спутники, станции, зонды и пилотируемые корабли",
+    "breadcrumb": "Космические аппараты",
+    "description": "Миссии и орбитальные данные спутников, станций, зондов и пилотируемых кораблей со всего мира.",
+    "loading": "Загрузка данных аппаратов...",
+    "failed": "Не удалось загрузить данные аппаратов",
+    "empty": "Аппараты по выбранным фильтрам не найдены",
+    "grid": "Карточки",
+    "table": "Таблица",
+    "noDescription": "Описание этого аппарата ещё не синхронизировано.",
+    "filters": {
+      "allTypes": "Все типы",
+      "allStatuses": "Все статусы",
+      "allOrbits": "Все орбиты",
+      "reset": "Сбросить",
+      "more": "Больше фильтров",
+      "less": "Скрыть фильтры",
+      "namePlaceholder": "Поиск аппарата...",
+      "operatorPlaceholder": "Поиск оператора..."
+    },
+    "types": {
+      "SPACE_STATION": "Космическая станция",
+      "SATELLITE": "Спутник",
+      "PROBE": "Зонд",
+      "CREWED_SPACECRAFT": "Пилотируемый корабль",
+      "CARGO_SPACECRAFT": "Грузовой корабль"
+    },
+    "statuses": {
+      "OPERATIONAL": "Работает",
+      "RETIRED": "Выведен из эксплуатации",
+      "LOST": "Потерян"
+    },
+    "orbits": {
+      "LEO": "LEO - Низкая околоземная орбита",
+      "MEO": "MEO - Средняя околоземная орбита",
+      "GEO": "GEO - Геосинхронная орбита",
+      "HEO": "HEO - Высокоэллиптическая орбита",
+      "SSO": "SSO - Солнечно-синхронная орбита",
+      "Unknown": "Неизвестная орбита"
+    }
   },
   "astronauts": {
     "title": "Космонавты",
-    "subtitle": "Истории космических героев"
+    "subtitle": "Истории космических героев",
+    "breadcrumb": "Космонавты",
+    "description": "Космонавты и астронавты мира: агентства, число полётов и суммарное время в космосе.",
+    "loading": "Загрузка данных космонавтов...",
+    "failed": "Не удалось загрузить данные космонавтов",
+    "empty": "Космонавты по выбранным фильтрам не найдены",
+    "grid": "Карточки",
+    "table": "Таблица",
+    "flightCount": "Полётов: {count}",
+    "filters": {
+      "allCountries": "Все страны",
+      "allAgencies": "Все агентства",
+      "allStatuses": "Все статусы",
+      "reset": "Сбросить",
+      "more": "Больше фильтров",
+      "less": "Скрыть фильтры",
+      "namePlaceholder": "Поиск космонавта...",
+      "flightCount": "Число полётов",
+      "minimum": "Мин.",
+      "maximum": "Макс."
+    },
+    "statuses": {
+      "ACTIVE": "Действующий",
+      "RETIRED": "В отставке",
+      "DECEASED": "Умер"
+    },
+    "countries": {
+      "USA": "США",
+      "China": "Китай",
+      "Russia": "Россия",
+      "Japan": "Япония",
+      "India": "Индия",
+      "Germany": "Германия",
+      "France": "Франция",
+      "UK": "Великобритания"
+    }
   },
   "industry": {
     "title": "Аэрокосмическая отрасль",
@@ -426,9 +538,11 @@
     "technologiesUnit": "шт.",
     "materialsUnit": "типов",
     "equipmentUnit": "типов",
-    "marketSize": "Глобальный рынок",
-    "marketUnit": "100 млн USD",
-    "averageGrowthRate": "Средний рост",
+    "marketSize": "Сумма оценок сегментов",
+    "marketUnit": "млрд USD",
+    "averageGrowthRate": "Средний рост сегментов",
+    "estimateNotice": "Показатели рынка являются внутренними диапазонными оценками. Сегменты могут пересекаться; итог не является аудированной оценкой мирового рынка.",
+    "methodology": "Методика данных",
     "levels": {
       "UPSTREAM": "Верхний уровень",
       "MIDSTREAM": "Средний уровень",
@@ -447,13 +561,102 @@
     "allCountries": "Все страны/регионы",
     "updating": "Обновление",
     "noCoverage": "В этом звене пока нет сегментов",
-    "sourceUnavailable": "Данные отрасли временно недоступны. Классификация и навигация продолжают работать."
+    "sourceUnavailable": "Данные отрасли временно недоступны. Классификация и навигация продолжают работать.",
+    "companyList": {
+      "industry": "Отрасль",
+      "title": "Космические компании",
+      "description": "Участники мировой космической цепочки по стране, типу компании и отраслевому сегменту.",
+      "allCountries": "Все страны/регионы",
+      "allTypes": "Все типы компаний",
+      "segmentActive": "Применён фильтр сегмента",
+      "founded": "Основана в {year}",
+      "noDescription": "Описание этой компании ещё не синхронизировано.",
+      "types": {
+        "STATE_OWNED": "Государственная",
+        "PRIVATE": "Частная",
+        "PUBLIC": "Публичная",
+        "STARTUP": "Стартап"
+      },
+      "countries": {
+        "China": "Китай",
+        "USA": "США",
+        "Russia": "Россия",
+        "Europe": "Европа",
+        "Japan": "Япония",
+        "India": "Индия"
+      }
+    },
+    "companyDetail": {
+      "unavailableTitle": "Company data is temporarily unavailable",
+      "unavailableDescription": "The company data service is recovering. Please try again shortly.",
+      "backToCompanies": "Back to companies",
+      "basicInfo": "Company profile",
+      "founded": "Founded {year}",
+      "employees": "Employees: {count}",
+      "revenue": "Revenue: {amount}",
+      "website": "Official website",
+      "segments": "Industry segments",
+      "overview": "Company overview",
+      "products": "Key products",
+      "capabilities": "Core capabilities",
+      "achievements": "Highlights",
+      "dataQuality": "Data quality",
+      "overallScore": "Overall score",
+      "relatedTechnologies": "Related technologies",
+      "peerCompanies": "Companies in the same country",
+      "noDescription": "A localized description is not available yet.",
+      "quality": {
+        "sourceAuthority": "Source authority",
+        "freshness": "Data freshness",
+        "completeness": "Core field completeness",
+        "consistency": "Multi-source consistency",
+        "editorialReview": "Editorial review",
+        "relationshipVerification": "Relationship verification",
+        "score": "{score}/{max} points"
+      }
+    }
   },
   "explore": {
     "title": "Исследование космоса",
     "subtitle": "Визуализация орбит спутников и Солнечной системы",
     "satellites": "Орбиты спутников",
     "solarSystem": "Солнечная система"
+  },
+  "dataHealth": {
+    "breadcrumb": "Состояние данных",
+    "title": "Центр состояния данных",
+    "description": "Статус доменов данных, число записей, время обновления и состояние синхронизации.",
+    "overallStatus": "Общий статус",
+    "totalRecords": "Всего записей",
+    "healthyDomains": "Рабочие домены",
+    "snapshotTime": "Время снимка",
+    "domain": "Домен данных",
+    "status": "Статус",
+    "records": "Записи",
+    "latestUpdate": "Последнее обновление",
+    "source": "Источник",
+    "refreshInterval": "Интервал обновления",
+    "domainUnavailable": "Сбой запроса",
+    "statusHealthy": "Норма",
+    "statusStale": "Задержка",
+    "statusEmpty": "Пусто",
+    "statusUnavailable": "Недоступно",
+    "statusDegraded": "Частичная деградация",
+    "domainLaunches": "Запуски",
+    "domainAgencies": "Космические агентства",
+    "domainRockets": "Ракеты",
+    "domainLaunchSites": "Космодромы",
+    "domainAstronauts": "Астронавты",
+    "domainSpacecraft": "Космические аппараты",
+    "lastSyncRun": "Последняя синхронизация: {status}, изменено записей: {changed}",
+    "syncSucceeded": "Успешно",
+    "syncFailed": "Ошибка",
+    "sourceRegistry": "Описание источника",
+    "ll2Description": "Launch Library 2 — глобальная база данных запусков ракет, которую поддерживает TheSpaceDevs.",
+    "syncFrequency": "Частота синхронизации",
+    "syncSchedule": "Запуски 6ч / агентства 24ч / ракеты 24ч / космодромы 7д / астронавты 7д / аппараты 7д",
+    "accuracyNotice": "Точность данных",
+    "accuracyNoticeText": "Расписания запусков могут меняться из-за погоды и технических причин. Для критически важных решений сверяйтесь с официальной информацией."
   },
   "legal": {
     "about": "About Us",

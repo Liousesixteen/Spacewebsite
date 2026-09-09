@@ -16,17 +16,20 @@ interface CommentFormProps {
   onSuccess?: () => void;
   autoFocus?: boolean;
   compact?: boolean;
+  locale?: string;
 }
 
 export function CommentForm({
   targetType,
   targetId,
   parentId = null,
-  placeholder = '分享您的想法...',
+  placeholder,
   onSuccess,
   autoFocus,
   compact,
+  locale = 'zh-CN',
 }: CommentFormProps) {
+  const isEnglish = locale === 'en';
   const [content, setContent] = useState('');
   const [error, setError] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -43,14 +46,14 @@ export function CommentForm({
       onSuccess?.();
     },
     onError: (err) => {
-      setError(err instanceof Error ? err.message : '提交失败');
+      setError(err instanceof Error ? err.message : isEnglish ? 'Unable to submit comment' : '提交失败');
     },
   });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!content.trim()) {
-      setError('请输入评论内容');
+      setError(isEnglish ? 'Enter a comment before posting' : '请输入评论内容');
       return;
     }
     mutation.mutate();
@@ -61,7 +64,7 @@ export function CommentForm({
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder={placeholder}
+        placeholder={placeholder ?? (isEnglish ? 'Share your thoughts...' : '分享您的想法...')}
         rows={compact ? 2 : 3}
         autoFocus={autoFocus}
         maxLength={2000}
@@ -71,7 +74,7 @@ export function CommentForm({
       <div className="flex items-center justify-between">
         <span className="text-xs text-star-dim">{content.length}/2000</span>
         <Button type="submit" size="sm" disabled={mutation.isPending}>
-          {mutation.isPending ? '发布中...' : parentId ? '回复' : '发表评论'}
+          {mutation.isPending ? (isEnglish ? 'Posting...' : '发布中...') : parentId ? (isEnglish ? 'Reply' : '回复') : (isEnglish ? 'Post comment' : '发表评论')}
         </Button>
       </div>
     </form>

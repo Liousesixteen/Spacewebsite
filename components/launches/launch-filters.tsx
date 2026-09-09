@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { ChevronDown, ChevronUp, RotateCcw, SlidersHorizontal } from 'lucide-react';
 import { Button } from '@/components/ui';
+import { displaySiteName } from '@/lib/display-names';
 
 export interface LaunchFilterValues {
   status?: string;
@@ -27,35 +28,50 @@ interface LaunchFiltersProps {
 export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
   const t = useTranslations('launches.filters');
   const statusT = useTranslations('launches.status');
+  const locale = useLocale();
   const [expanded, setExpanded] = useState(false);
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 20 }, (_, i) => currentYear - i);
 
   const launchSites = [
-    { value: '', label: t('allLaunchSites') },
-    { value: 'Kennedy', label: '肯尼迪航天中心' },
-    { value: 'Cape Canaveral', label: '卡纳维拉尔角' },
-    { value: 'Vandenberg', label: '范登堡空军基地' },
-    { value: 'Jiuquan', label: '酒泉卫星发射中心' },
-    { value: 'Wenchang', label: '文昌航天发射场' },
-    { value: 'Baikonur', label: '拜科努尔航天发射场' },
-    { value: 'Plesetsk', label: '普列谢茨克航天发射场' },
-    { value: 'Kourou', label: '库鲁航天中心' },
-    { value: 'Tanegashima', label: '种子岛宇宙中心' },
-    { value: 'Satish Dhawan', label: '萨蒂什·达万航天中心' },
+    { value: '', name: '' },
+    { value: 'Kennedy', name: 'Kennedy Space Center' },
+    { value: 'Cape Canaveral', name: 'Cape Canaveral' },
+    { value: 'Vandenberg', name: 'Vandenberg SFB' },
+    { value: 'Jiuquan', name: 'Jiuquan Satellite Launch Center' },
+    { value: 'Wenchang', name: 'Wenchang Space Launch Site' },
+    { value: 'Baikonur', name: 'Baikonur Cosmodrome' },
+    { value: 'Plesetsk', name: 'Plesetsk Cosmodrome' },
+    { value: 'Kourou', name: 'Guiana Space Centre' },
+    { value: 'Tanegashima', name: 'Tanegashima Space Center' },
+    { value: 'Satish Dhawan', name: 'Satish Dhawan Space Centre' },
   ];
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+  const controlClass =
+    'h-10 min-w-0 rounded-md border border-space-500/80 bg-space-700/75 px-3 text-sm text-star-white outline-none transition-colors focus:border-cosmic-blue';
 
   const update = (patch: Partial<LaunchFilterValues>) =>
     onFilterChange({ ...filters, ...patch });
 
   return (
-    <div className="p-4 bg-space-800 rounded-xl border border-space-600">
-      {/* Always visible core filters */}
-      <div className="flex flex-wrap gap-4">
+    <div className="rounded-lg border border-space-600/60 bg-space-800/70 p-4">
+      <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-sm font-medium text-star-white">
+          <SlidersHorizontal className="h-4 w-4 text-cosmic-cyan" />
+          {t('title')}
+          {activeFilterCount > 0 && (
+            <span className="rounded bg-cosmic-blue/15 px-2 py-0.5 font-mono text-xs text-cosmic-blue">
+              {activeFilterCount}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,.8fr)_auto_auto]">
         <select
+          aria-label={t('allStatus')}
           value={filters.status || ''}
           onChange={(e) => update({ status: e.target.value || undefined })}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
+          className={controlClass}
         >
           <option value="">{t('allStatus')}</option>
           <option value="SUCCESS">{statusT('SUCCESS')}</option>
@@ -65,9 +81,10 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
         </select>
 
         <select
+          aria-label={t('allCountries')}
           value={filters.country || ''}
           onChange={(e) => update({ country: e.target.value || undefined })}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
+          className={controlClass}
         >
           <option value="">{t('allCountries')}</option>
           <option value="USA">{t('countries.USA')}</option>
@@ -79,9 +96,10 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
         </select>
 
         <select
+          aria-label={t('allYears')}
           value={filters.year || ''}
           onChange={(e) => update({ year: e.target.value || undefined })}
-          className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
+          className={controlClass}
         >
           <option value="">{t('allYears')}</option>
           {years.map((year) => (
@@ -91,11 +109,22 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
           ))}
         </select>
 
-        <Button variant="ghost" onClick={() => onFilterChange({})}>
+        <Button
+          variant="ghost"
+          onClick={() => onFilterChange({})}
+          disabled={activeFilterCount === 0}
+          className="h-10"
+        >
+          <RotateCcw className="mr-1.5 h-4 w-4" />
           {t('reset')}
         </Button>
 
-        <Button variant="ghost" onClick={() => setExpanded(!expanded)}>
+        <Button
+          variant="ghost"
+          onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          className="h-10"
+        >
           {expanded ? (
             <ChevronUp className="w-4 h-4 mr-1" />
           ) : (
@@ -107,13 +136,13 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
 
       {/* Expandable advanced filters */}
       {expanded && (
-        <div className="flex flex-wrap gap-4 mt-4 pt-4 border-t border-space-600">
+        <div className="mt-4 grid grid-cols-1 gap-3 border-t border-space-600/60 pt-4 sm:grid-cols-2 lg:grid-cols-4">
           <input
             type="text"
             value={filters.rocketName || ''}
             onChange={(e) => update({ rocketName: e.target.value || undefined })}
             placeholder={t('rocketPlaceholder')}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
+            className={controlClass}
           />
 
           <input
@@ -121,7 +150,7 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
             value={filters.provider || ''}
             onChange={(e) => update({ provider: e.target.value || undefined })}
             placeholder={t('providerPlaceholder')}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
+            className={controlClass}
           />
 
           <input
@@ -129,7 +158,7 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
             value={filters.missionType || ''}
             onChange={(e) => update({ missionType: e.target.value || undefined })}
             placeholder={t('allMissionTypes')}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[190px]"
+            className={controlClass}
           />
 
           <input
@@ -137,17 +166,17 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
             value={filters.orbit || ''}
             onChange={(e) => update({ orbit: e.target.value || undefined })}
             placeholder={t('allOrbits')}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[160px]"
+            className={controlClass}
           />
 
           <select
             value={filters.launchSite || ''}
             onChange={(e) => update({ launchSite: e.target.value || undefined })}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
+            className={controlClass}
           >
             {launchSites.map((site) => (
               <option key={site.value} value={site.value}>
-                {site.label}
+                {site.value ? displaySiteName(site.name, locale) : t('allLaunchSites')}
               </option>
             ))}
           </select>
@@ -157,26 +186,26 @@ export function LaunchFilters({ filters, onFilterChange }: LaunchFiltersProps) {
             value={filters.launchPad || ''}
             onChange={(e) => update({ launchPad: e.target.value || undefined })}
             placeholder={t('launchPadPlaceholder')}
-            className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[180px]"
+            className={controlClass}
           />
 
-          <label className="flex items-center gap-2 text-sm text-star-dim">
+          <label className="grid gap-1.5 text-xs text-star-dim">
             <span>{t('fromDate')}</span>
             <input
               type="date"
               value={filters.from || ''}
               onChange={(e) => update({ from: e.target.value || undefined })}
-              className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white focus:outline-none focus:border-cosmic-blue"
+              className={controlClass}
             />
           </label>
 
-          <label className="flex items-center gap-2 text-sm text-star-dim">
+          <label className="grid gap-1.5 text-xs text-star-dim">
             <span>{t('toDate')}</span>
             <input
               type="date"
               value={filters.to || ''}
               onChange={(e) => update({ to: e.target.value || undefined })}
-              className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white focus:outline-none focus:border-cosmic-blue"
+              className={controlClass}
             />
           </label>
         </div>

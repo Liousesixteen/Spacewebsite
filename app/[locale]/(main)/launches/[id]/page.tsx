@@ -379,6 +379,7 @@ export default async function LaunchDetailPage({
               tier={launch.source === 'Launch Library 2' ? 'B' : 'C'}
               factType="OBSERVED"
               lastSyncedAt={launch.lastSyncedAt}
+              locale={locale}
             />
           </div>
         </CardContent>

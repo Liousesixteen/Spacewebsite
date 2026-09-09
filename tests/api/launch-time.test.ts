@@ -16,6 +16,16 @@ test('formatLaunchDateTime formats UTC and named time zones deterministically', 
   );
 });
 
+test('formatLaunchDateTime normalizes legacy and invalid locale values', () => {
+  const date = '2026-07-10T01:30:00.000Z';
+
+  assert.equal(formatLaunchDateTime(date, 'zh_CN', 'UTC'), '2026-07-10 01:30');
+  assert.equal(
+    formatLaunchDateTime(date, {} as unknown as string, 'UTC'),
+    '2026-07-10 01:30'
+  );
+});
+
 test('formatLaunchWindow compacts same-day windows and expands cross-day windows', () => {
   assert.equal(
     formatLaunchWindow(

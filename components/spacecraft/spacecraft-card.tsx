@@ -1,17 +1,11 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
 import { Calendar, Building2, Orbit } from 'lucide-react';
 import { Card, CardContent, Badge, SmartImage, StatusBadge } from '@/components/ui';
 import type { Spacecraft } from '@/lib/api/spacecraft';
 import { getSpacecraftImage } from '@/lib/image-fallbacks';
-
-const typeLabels = {
-  SPACE_STATION: 'Space Station',
-  SATELLITE: 'Satellite',
-  PROBE: 'Probe',
-  CREWED_SPACECRAFT: 'Crewed',
-  CARGO_SPACECRAFT: 'Cargo',
-} as const;
+import { displayAgencyName, displayLocalizedDescription } from '@/lib/display-names';
 
 interface SpacecraftCardProps {
   spacecraft: Spacecraft;
@@ -19,6 +13,7 @@ interface SpacecraftCardProps {
 }
 
 export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
+  const t = useTranslations('spacecraft');
   const image = getSpacecraftImage(
     spacecraft.id,
     spacecraft.images,
@@ -47,14 +42,17 @@ export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
               {spacecraft.name}
             </h3>
             <div className="shrink-0">
-              <StatusBadge status={spacecraft.status} />
+              <StatusBadge
+                status={spacecraft.status}
+                label={t(`statuses.${spacecraft.status}`)}
+              />
             </div>
           </div>
 
           {/* Type badge */}
           <div className="mb-3">
             <Badge variant="info">
-              {typeLabels[spacecraft.type as keyof typeof typeLabels] || spacecraft.type}
+              {t(`types.${spacecraft.type}`)}
             </Badge>
           </div>
 
@@ -62,7 +60,9 @@ export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
           <div className="space-y-2 text-sm text-star-dim">
             <div className="flex items-center gap-2.5">
               <Building2 className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
-              <span className="truncate">{spacecraft.operator}</span>
+              <span className="truncate">
+                {displayAgencyName(spacecraft.operator, locale)}
+              </span>
             </div>
             <div className="flex items-center gap-2.5">
               <Calendar className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
@@ -73,7 +73,9 @@ export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
             <div className="flex items-center gap-2.5">
               <Orbit className="w-4 h-4 text-cosmic-blue/70 shrink-0" />
               <span className="truncate">
-                {spacecraft.orbitType}
+                {t.has(`orbits.${spacecraft.orbitType}`)
+                  ? t(`orbits.${spacecraft.orbitType}`)
+                  : spacecraft.orbitType}
                 {spacecraft.orbitAltitude
                   ? ` · ${spacecraft.orbitAltitude} km`
                   : ''}
@@ -83,7 +85,11 @@ export function SpacecraftCard({ spacecraft, locale }: SpacecraftCardProps) {
 
           {/* Description */}
           <p className="mt-4 text-sm text-star-dim/70 line-clamp-2 leading-relaxed">
-            {spacecraft.description}
+            {displayLocalizedDescription(
+              spacecraft.description,
+              locale,
+              t('noDescription')
+            )}
           </p>
         </CardContent>
       </Card>

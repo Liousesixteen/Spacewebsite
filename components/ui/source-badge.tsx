@@ -39,17 +39,28 @@ const FACT_TYPE_LABELS: Record<FactType, string> = {
   USER_SUBMITTED: '用户提交',
 };
 
+const FACT_TYPE_LABELS_EN: Record<FactType, string> = {
+  OBSERVED: 'Observed',
+  DERIVED: 'Derived',
+  ESTIMATED: 'Estimated',
+  EDITORIAL: 'Editorial',
+  USER_SUBMITTED: 'User submitted',
+};
+
 export function SourceBadge({
   tier,
   factType,
   lastSyncedAt,
+  locale,
   className,
 }: {
   tier?: SourceTier | null;
   factType?: FactType | null;
   lastSyncedAt?: Date | string | null;
+  locale?: string;
   className?: string;
 }) {
+  const isEnglish = locale === 'en';
   const config = tier ? TIER_CONFIG[tier] : null;
   const TierIcon = config?.icon ?? Shield;
 
@@ -66,26 +77,34 @@ export function SourceBadge({
             'inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 font-mono text-[10px] font-semibold',
             config.color
           )}
-          title={`来源等级 ${tier}: ${getTierDescription(tier)}`}
+          title={isEnglish ? `Source tier ${tier}: ${getTierDescription(tier, locale)}` : `来源等级 ${tier}: ${getTierDescription(tier, locale)}`}
         >
           <TierIcon className="h-2.5 w-2.5" />
           {config.label}
         </span>
       )}
       {factType && (
-        <span className="text-star-dim/80">{FACT_TYPE_LABELS[factType]}</span>
+        <span className="text-star-dim/80">{(isEnglish ? FACT_TYPE_LABELS_EN : FACT_TYPE_LABELS)[factType]}</span>
       )}
       {lastSyncedAt && (
         <span className="inline-flex items-center gap-1 text-star-dim/60">
           <Clock className="h-2.5 w-2.5" />
-          {formatRelativeTime(lastSyncedAt)}
+          {formatRelativeTime(lastSyncedAt, locale)}
         </span>
       )}
     </div>
   );
 }
 
-function getTierDescription(tier: SourceTier): string {
+function getTierDescription(tier: SourceTier, locale?: string): string {
+  if (locale === 'en') {
+    switch (tier) {
+      case 'A': return 'Government agency, launch provider, exchange, or regulatory filing';
+      case 'B': return 'Professional database, industry association, or verified commercial data';
+      case 'C': return 'Mainstream media, company release, or research institution';
+      case 'D': return 'Community, aggregator, or unverified information';
+    }
+  }
   switch (tier) {
     case 'A':
       return '权威来源：政府机构、发射商、交易所、监管文件';
@@ -98,10 +117,20 @@ function getTierDescription(tier: SourceTier): string {
   }
 }
 
-function formatRelativeTime(value: Date | string): string {
+function formatRelativeTime(value: Date | string, locale?: string): string {
   const date = typeof value === 'string' ? new Date(value) : value;
   const diffMs = Date.now() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
+
+  if (locale === 'en') {
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffHours = Math.floor(diffMin / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return `${Math.floor(diffDays / 7)}w ago`;
+  }
 
   if (diffMin < 1) return '刚刚';
   if (diffMin < 60) return `${diffMin} 分钟前`;

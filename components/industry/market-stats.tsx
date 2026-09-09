@@ -1,4 +1,5 @@
-import { TrendingUp, Building2, Cpu, Beaker, Wrench } from 'lucide-react';
+import Link from 'next/link';
+import { TrendingUp, Building2, Cpu, Beaker, Wrench, Info } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui';
 
 interface MarketStatsProps {
@@ -9,6 +10,8 @@ interface MarketStatsProps {
   totalEquipment: number;
   marketSize: number;
   averageGrowthRate: number;
+  locale: string;
+  methodologyHref: string;
   labels: {
     segments: string;
     companies: string;
@@ -23,6 +26,8 @@ interface MarketStatsProps {
     marketSize: string;
     marketUnit: string;
     averageGrowthRate: string;
+    estimateNotice: string;
+    methodology: string;
   };
 }
 
@@ -34,8 +39,11 @@ export function MarketStats({
   totalEquipment,
   marketSize,
   averageGrowthRate,
+  locale,
+  methodologyHref,
   labels,
 }: MarketStatsProps) {
+  const marketSizeBillions = marketSize / 10;
   const stats = [
     {
       label: labels.segments,
@@ -105,7 +113,7 @@ export function MarketStats({
               <CardContent className="p-6">
                 <div className="text-sm text-star-dim mb-2">{labels.marketSize}</div>
                 <div className="text-3xl font-bold text-star-white">
-                  ${marketSize.toLocaleString(undefined, { maximumFractionDigits: 1 })}
+                  {new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(marketSizeBillions)}
                   <span className="text-base text-star-dim ml-2">{labels.marketUnit}</span>
                 </div>
               </CardContent>
@@ -121,6 +129,18 @@ export function MarketStats({
               </CardContent>
             </Card>
           )}
+        </div>
+      )}
+
+      {(marketSize > 0 || averageGrowthRate > 0) && (
+        <div className="flex items-start gap-2 rounded-md border border-amber-500/25 bg-amber-500/5 px-4 py-3 text-xs leading-5 text-star-dim">
+          <Info className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
+          <span>
+            {labels.estimateNotice}{' '}
+            <Link href={methodologyHref} className="text-cosmic-cyan hover:underline">
+              {labels.methodology}
+            </Link>
+          </span>
         </div>
       )}
     </div>

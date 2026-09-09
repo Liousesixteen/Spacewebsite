@@ -70,6 +70,7 @@ describe('computeOverallStatus', () => {
       latestSync: null,
       source: 'test',
       expectedRefreshHours: 6,
+      lastRun: null,
       message: null,
     };
   }

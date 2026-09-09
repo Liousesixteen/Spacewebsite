@@ -12,13 +12,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center font-medium transition-all duration-300 rounded-lg',
+          'inline-flex items-center justify-center rounded-md font-medium transition-all duration-200',
           'focus:outline-none focus:ring-2 focus:ring-cosmic-blue focus:ring-offset-2 focus:ring-offset-space-900',
           'disabled:opacity-50 disabled:cursor-not-allowed',
           'active:scale-[0.97]',
           {
-            // Primary: gradient background with glow
-            'bg-gradient-to-r from-cosmic-blue to-cosmic-purple text-white shadow-glow-blue hover:shadow-glow-purple hover:brightness-110':
+            'bg-cosmic-blue text-white shadow-[0_8px_24px_rgba(59,130,246,0.18)] hover:bg-cosmic-blue/85':
               variant === 'primary',
             // Secondary
             'bg-space-600 text-star-white hover:bg-space-500 shadow-card':
@@ -30,7 +29,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             'bg-transparent border border-space-600/60 text-star-white hover:text-cosmic-blue hover:border-cosmic-blue/50 hover:shadow-[0_0_20px_rgba(59,130,246,0.2)]':
               variant === 'outline',
             // Pulse: animated glow for CTAs
-            'bg-gradient-to-r from-cosmic-blue to-cosmic-purple text-white shadow-glow-blue animate-pulse-glow hover:brightness-110':
+            'bg-cosmic-blue text-white shadow-glow-blue animate-pulse-glow hover:bg-cosmic-blue/85':
               variant === 'pulse',
             // HUD: transparent bg, 1px cyan border, monospace font
             'bg-transparent border border-cosmic-cyan/40 text-cosmic-cyan font-mono text-xs tracking-wider uppercase hover:border-cosmic-cyan hover:shadow-[0_0_20px_rgba(0,255,255,0.2)] hover:text-white':

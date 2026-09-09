@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui';
 
@@ -22,13 +23,14 @@ export function AstronautFilters({
   filters,
   onFilterChange,
 }: AstronautFiltersProps) {
+  const t = useTranslations('astronauts');
   const [expanded, setExpanded] = useState(false);
 
   const update = (patch: Partial<AstronautFilterValues>) =>
     onFilterChange({ ...filters, ...patch });
 
   return (
-    <div className="p-4 bg-space-800 rounded-xl border border-space-600">
+    <div className="rounded-lg border border-space-600 bg-space-800 p-4">
       {/* Always visible core filters */}
       <div className="flex flex-wrap gap-4">
         <select
@@ -36,15 +38,15 @@ export function AstronautFilters({
           onChange={(e) => update({ nationality: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部国家</option>
-          <option value="USA">美国</option>
-          <option value="China">中国</option>
-          <option value="Russia">俄罗斯</option>
-          <option value="Japan">日本</option>
-          <option value="India">印度</option>
-          <option value="Germany">德国</option>
-          <option value="France">法国</option>
-          <option value="UK">英国</option>
+          <option value="">{t('filters.allCountries')}</option>
+          <option value="USA">{t('countries.USA')}</option>
+          <option value="China">{t('countries.China')}</option>
+          <option value="Russia">{t('countries.Russia')}</option>
+          <option value="Japan">{t('countries.Japan')}</option>
+          <option value="India">{t('countries.India')}</option>
+          <option value="Germany">{t('countries.Germany')}</option>
+          <option value="France">{t('countries.France')}</option>
+          <option value="UK">{t('countries.UK')}</option>
         </select>
 
         <select
@@ -52,7 +54,7 @@ export function AstronautFilters({
           onChange={(e) => update({ agency: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部机构</option>
+          <option value="">{t('filters.allAgencies')}</option>
           <option value="NASA">NASA</option>
           <option value="CNSA">CNSA</option>
           <option value="Roscosmos">Roscosmos</option>
@@ -66,14 +68,14 @@ export function AstronautFilters({
           onChange={(e) => update({ status: e.target.value || undefined })}
           className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white"
         >
-          <option value="">全部状态</option>
-          <option value="ACTIVE">现役</option>
-          <option value="RETIRED">已退役</option>
-          <option value="DECEASED">已故</option>
+          <option value="">{t('filters.allStatuses')}</option>
+          <option value="ACTIVE">{t('statuses.ACTIVE')}</option>
+          <option value="RETIRED">{t('statuses.RETIRED')}</option>
+          <option value="DECEASED">{t('statuses.DECEASED')}</option>
         </select>
 
         <Button variant="ghost" onClick={() => onFilterChange({})}>
-          重置
+          {t('filters.reset')}
         </Button>
 
         <Button variant="ghost" onClick={() => setExpanded(!expanded)}>
@@ -82,7 +84,7 @@ export function AstronautFilters({
           ) : (
             <ChevronDown className="w-4 h-4 mr-1" />
           )}
-          更多筛选
+          {expanded ? t('filters.less') : t('filters.more')}
         </Button>
       </div>
 
@@ -93,18 +95,18 @@ export function AstronautFilters({
             type="text"
             value={filters.name || ''}
             onChange={(e) => update({ name: e.target.value || undefined })}
-            placeholder="搜索宇航员姓名..."
+            placeholder={t('filters.namePlaceholder')}
             className="bg-space-700 border border-space-500 rounded-lg px-3 py-2 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue min-w-[200px]"
           />
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-star-dim">飞行次数:</span>
+            <span className="text-sm text-star-dim">{t('filters.flightCount')}</span>
             <input
               type="number"
               min={0}
               value={filters.flightsMin || ''}
               onChange={(e) => update({ flightsMin: e.target.value || undefined })}
-              placeholder="最小"
+              placeholder={t('filters.minimum')}
               className="w-20 px-3 py-2 rounded-lg bg-space-700 border border-space-500 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue text-sm"
             />
             <span className="text-star-dim">-</span>
@@ -113,7 +115,7 @@ export function AstronautFilters({
               min={0}
               value={filters.flightsMax || ''}
               onChange={(e) => update({ flightsMax: e.target.value || undefined })}
-              placeholder="最大"
+              placeholder={t('filters.maximum')}
               className="w-20 px-3 py-2 rounded-lg bg-space-700 border border-space-500 text-star-white placeholder:text-star-dim focus:outline-none focus:border-cosmic-blue text-sm"
             />
           </div>

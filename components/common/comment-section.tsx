@@ -26,6 +26,7 @@ export function CommentSection({
   targetId,
   locale = 'zh-CN',
 }: CommentSectionProps) {
+  const isEnglish = locale === 'en';
   const { data: session, status } = useSession();
   const queryKey = ['comments', targetType, targetId];
 
@@ -53,12 +54,12 @@ export function CommentSection({
       <CardContent className="p-6">
         <h2 className="text-lg font-semibold text-star-white mb-6 flex items-center gap-2">
           <MessageSquare className="w-5 h-5 text-cosmic-blue" />
-          评论 ({totalCount})
+          {isEnglish ? `Comments (${totalCount})` : `评论 (${totalCount})`}
         </h2>
 
         {status === 'authenticated' ? (
           <div className="mb-6">
-            <CommentForm targetType={targetType} targetId={targetId} />
+            <CommentForm targetType={targetType} targetId={targetId} locale={locale} />
           </div>
         ) : (
           <div className="mb-6 p-4 bg-space-700 rounded-lg text-center text-sm text-star-dim">
@@ -66,17 +67,17 @@ export function CommentSection({
               href={`/${locale}/login`}
               className="text-cosmic-blue hover:underline"
             >
-              登录
+              {isEnglish ? 'Sign in' : '登录'}
             </Link>{' '}
-            后参与讨论
+            {isEnglish ? ' to join the discussion' : ' 后参与讨论'}
           </div>
         )}
 
         {isLoading ? (
-          <div className="text-sm text-star-dim text-center py-6">加载评论中...</div>
+          <div className="text-sm text-star-dim text-center py-6">{isEnglish ? 'Loading comments...' : '加载评论中...'}</div>
         ) : comments.length === 0 ? (
           <div className="text-sm text-star-dim text-center py-6">
-            还没有评论，来发表第一条吧
+            {isEnglish ? 'No comments yet. Start the conversation.' : '还没有评论，来发表第一条吧'}
           </div>
         ) : (
           <ul className="space-y-6">
@@ -89,6 +90,7 @@ export function CommentSection({
                 currentUserId={session?.user?.id}
                 onDelete={(id) => deleteMutation.mutate(id)}
                 isAuthenticated={status === 'authenticated'}
+                locale={locale}
               />
             ))}
           </ul>
@@ -106,6 +108,7 @@ interface CommentItemProps {
   onDelete: (id: string) => void;
   isAuthenticated: boolean;
   isReply?: boolean;
+  locale: string;
 }
 
 function CommentItem({
@@ -116,10 +119,12 @@ function CommentItem({
   onDelete,
   isAuthenticated,
   isReply = false,
+  locale,
 }: CommentItemProps) {
+  const isEnglish = locale === 'en';
   const [replyOpen, setReplyOpen] = useState(false);
   const isOwn = currentUserId === comment.userId;
-  const displayName = comment.user.name || '用户';
+  const displayName = comment.user.name || (isEnglish ? 'User' : '用户');
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
@@ -157,7 +162,7 @@ function CommentItem({
                 className="flex items-center gap-1 text-star-dim hover:text-cosmic-blue"
               >
                 <Reply className="w-3 h-3" />
-                {replyOpen ? '取消' : '回复'}
+                {replyOpen ? (isEnglish ? 'Cancel' : '取消') : (isEnglish ? 'Reply' : '回复')}
               </button>
             )}
             {isOwn && (
@@ -167,7 +172,7 @@ function CommentItem({
                 className="flex items-center gap-1 text-star-dim hover:text-red-400"
               >
                 <Trash2 className="w-3 h-3" />
-                删除
+                {isEnglish ? 'Delete' : '删除'}
               </button>
             )}
           </div>
@@ -178,10 +183,11 @@ function CommentItem({
                 targetType={targetType}
                 targetId={targetId}
                 parentId={comment.id}
-                placeholder={`回复 ${displayName}...`}
+                placeholder={isEnglish ? `Reply to ${displayName}...` : `回复 ${displayName}...`}
                 onSuccess={() => setReplyOpen(false)}
                 autoFocus
                 compact
+                locale={locale}
               />
             </div>
           )}
@@ -198,6 +204,7 @@ function CommentItem({
                   onDelete={onDelete}
                   isAuthenticated={isAuthenticated}
                   isReply
+                  locale={locale}
                 />
               ))}
             </ul>

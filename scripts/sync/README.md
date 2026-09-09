@@ -48,16 +48,35 @@ email-authenticated key (out of scope for this script).
 
 ## Scheduling
 
-A reasonable cadence is once or twice per day. Example crontab entry running at
-5:17 AM and 5:17 PM local time:
+Production should schedule each domain independently so a slow backfill does not
+delay urgent launch-plan updates. The application exposes a protected endpoint:
 
-```cron
-17 5,17 * * * cd /path/to/Spacewebsite && /usr/local/bin/pnpm sync >> /var/log/spacesync.log 2>&1
+```text
+GET /api/internal/sync?job=launches
+Authorization: Bearer $CRON_SECRET
 ```
 
-For Vercel/Render-style deployments, schedule a serverless cron job that hits
-an internal endpoint which calls the same `syncRockets()` / `syncLaunches()`
-functions exported from these modules.
+Valid jobs are `launches`, `agencies`, `rockets`, `launch-sites`, `astronauts`,
+and `spacecraft`. The endpoint rejects a duplicate in-progress run for the same
+domain. Suggested UTC cadences:
+
+| Job | Cadence |
+| --- | --- |
+| `launches` | Every 6 hours |
+| `agencies`, `rockets` | Daily |
+| `launch-sites`, `astronauts`, `spacecraft` | Weekly |
+
+Configure `CRON_SECRET` in the deployment environment, then use Vercel Cron,
+GitHub Actions, or any scheduler capable of adding the bearer header. For a
+self-hosted deployment, a reasonable fallback is a local cron entry:
+
+```cron
+17 */6 * * * curl -fsS -H "Authorization: Bearer $CRON_SECRET" "https://your-domain.example/api/internal/sync?job=launches"
+```
+
+When `SYNC_ALERT_WEBHOOK_URL` is configured, the system sends one JSON event
+when a source reaches three consecutive failed runs. Successful runs reset the
+streak; notification delivery failures never interrupt data synchronization.
 
 ## Troubleshooting
 

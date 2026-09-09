@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { Rocket } from 'lucide-react';
+import { CalendarDays, Download, LayoutGrid, List, Rocket } from 'lucide-react';
 import { getLaunches } from '@/lib/api/launches';
 import { CountryLaunchSplit } from '@/components/launches/country-launch-split';
 import {
@@ -11,12 +11,11 @@ import {
   type LaunchFilterValues,
 } from '@/components/launches/launch-filters';
 import { LaunchCalendar } from '@/components/launches/launch-calendar';
-import { Download } from 'lucide-react';
 import { LaunchMissionControl } from '@/components/launches/launch-mission-control';
-import { ViewToggle, Pagination, Breadcrumbs, PageHeader } from '@/components/ui';
-import type { ViewMode } from '@/components/ui/view-toggle';
+import { Pagination, Breadcrumbs, PageHeader } from '@/components/ui';
+import { cn } from '@/lib/utils';
 
-type PageViewMode = 'list' | 'calendar';
+type LaunchViewMode = 'grid' | 'table' | 'calendar';
 
 export default function LaunchesPage({
   params: { locale },
@@ -26,8 +25,7 @@ export default function LaunchesPage({
   const t = useTranslations('launches.page');
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<LaunchFilterValues>({});
-  const [pageMode, setPageMode] = useState<PageViewMode>('list');
-  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [viewMode, setViewMode] = useState<LaunchViewMode>('grid');
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['launches', page, filters],
@@ -49,41 +47,33 @@ export default function LaunchesPage({
         title={t('title')}
         description={t('description')}
         actions={
-          <div className="flex flex-wrap items-center gap-3">
-            {/* View mode toggle */}
-            <div className="flex items-center gap-1 bg-space-800/60 backdrop-blur-md rounded-lg border border-space-600/50 p-1">
-              <button
-                onClick={() => setPageMode('list')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                  pageMode === 'list'
-                    ? 'bg-cosmic-blue/20 text-cosmic-blue shadow-glow-blue'
-                    : 'text-star-dim hover:text-star-white'
-                }`}
-              >
-                {t('list')}
-              </button>
-              <button
-                onClick={() => setPageMode('calendar')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                  pageMode === 'calendar'
-                    ? 'bg-cosmic-blue/20 text-cosmic-blue shadow-glow-blue'
-                    : 'text-star-dim hover:text-star-white'
-                }`}
-              >
-                {t('calendar')}
-              </button>
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+            <div className="inline-flex items-center gap-1 rounded-md border border-space-600/60 bg-space-800/70 p-1">
+              {([
+                { mode: 'grid', label: t('grid'), icon: LayoutGrid },
+                { mode: 'table', label: t('table'), icon: List },
+                { mode: 'calendar', label: t('calendar'), icon: CalendarDays },
+              ] as const).map(({ mode, label, icon: Icon }) => (
+                <button
+                  key={mode}
+                  type="button"
+                  onClick={() => setViewMode(mode)}
+                  aria-pressed={viewMode === mode}
+                  className={cn(
+                    'inline-flex h-9 items-center gap-2 rounded px-3 text-sm font-medium transition-colors',
+                    viewMode === mode
+                      ? 'bg-cosmic-blue text-white'
+                      : 'text-star-dim hover:bg-space-700 hover:text-star-white'
+                  )}
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </button>
+              ))}
             </div>
-
-            {pageMode === 'list' && (
-              <ViewToggle
-                mode={viewMode}
-                onChange={setViewMode}
-                labels={{ grid: t('grid'), table: t('table') }}
-              />
-            )}
             <a
               href="/api/launches/export?limit=500"
-              className="flex items-center gap-1.5 rounded-lg border border-space-600/40 bg-space-800/60 px-3 py-1.5 text-xs font-medium text-star-dim hover:text-star-white hover:border-cosmic-blue/50 transition-colors"
+              className="inline-flex h-11 items-center gap-2 rounded-md border border-space-600/50 bg-space-800/60 px-3 text-xs font-medium text-star-dim transition-colors hover:border-cosmic-blue/50 hover:text-star-white"
               download
             >
               <Download className="h-3.5 w-3.5" />
@@ -95,13 +85,17 @@ export default function LaunchesPage({
 
       <LaunchMissionControl locale={locale} />
 
-      {pageMode === 'calendar' ? (
-        <div className="mt-8">
+      {viewMode === 'calendar' ? (
+        <section className="mt-8" aria-label={t('calendar')}>
           <LaunchCalendar locale={locale} />
-        </div>
+        </section>
       ) : (
         <>
-          <div className="mt-8">
+          <section className="mt-10 border-t border-space-600/35 pt-7">
+            <div className="mb-5">
+              <h2 className="text-xl font-semibold text-star-white">{t('archiveTitle')}</h2>
+              <p className="mt-1 text-sm text-star-dim">{t('archiveDescription')}</p>
+            </div>
             <LaunchFilters
               filters={filters}
               onFilterChange={(next) => {
@@ -109,7 +103,7 @@ export default function LaunchesPage({
                 setPage(1);
               }}
             />
-          </div>
+          </section>
 
           {isLoading && (
             <div className="text-center py-12 text-star-dim">{t('loading')}</div>
@@ -124,7 +118,7 @@ export default function LaunchesPage({
               <CountryLaunchSplit
                 launches={data.data}
                 locale={locale}
-                viewMode={viewMode}
+                viewMode={viewMode === 'table' ? 'table' : 'grid'}
               />
 
               <Pagination

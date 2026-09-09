@@ -2,18 +2,26 @@
 
 import { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import {
   ChevronLeft,
   ChevronRight,
   Calendar as CalendarIcon,
   Rocket,
+  MapPin,
   X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui';
+import { Button, StatusBadge } from '@/components/ui';
 import type { Launch } from '@/lib/api/launches';
-
-const WEEKDAYS = ['一', '二', '三', '四', '五', '六', '日'] as const;
+import {
+  displayLaunchName,
+  displayLocalizedDescription,
+  displayRocketName,
+  displaySiteName,
+} from '@/lib/display-names';
+import { normalizeIntlLocale } from '@/lib/i18n/locale';
 
 const STATUS_COLORS: Record<string, string> = {
   SUCCESS: 'bg-green-400',
@@ -21,14 +29,6 @@ const STATUS_COLORS: Record<string, string> = {
   PLANNED: 'bg-cosmic-blue',
   POSTPONED: 'bg-yellow-400',
   IN_FLIGHT: 'bg-cosmic-cyan',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  SUCCESS: '成功',
-  FAILURE: '失败',
-  PLANNED: '计划中',
-  POSTPONED: '推迟',
-  IN_FLIGHT: '飞行中',
 };
 
 function getMonthGrid(year: number, month: number): (Date | null)[][] {
@@ -72,21 +72,34 @@ interface LaunchCalendarProps {
 }
 
 export function LaunchCalendar({ locale }: LaunchCalendarProps) {
+  const t = useTranslations('launches.calendar');
+  const pageT = useTranslations('launches.page');
+  const overviewT = useTranslations('launches.overview');
+  const statusT = useTranslations('launches.status');
   const now = new Date();
   const [viewYear, setViewYear] = useState(now.getFullYear());
   const [viewMonth, setViewMonth] = useState(now.getMonth()); // 0-indexed
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const intlLocale = normalizeIntlLocale(locale);
 
-  const yearStr = viewYear.toString();
-  const monthStr = (viewMonth + 1).toString().padStart(2, '0');
+  const weekdays = useMemo(
+    () =>
+      Array.from({ length: 7 }, (_, index) =>
+        new Intl.DateTimeFormat(intlLocale, {
+          weekday: 'short',
+          timeZone: 'UTC',
+        }).format(new Date(Date.UTC(2024, 0, 1 + index)))
+      ),
+    [intlLocale]
+  );
+  const monthTitle = new Intl.DateTimeFormat(intlLocale, {
+    year: 'numeric',
+    month: 'long',
+  }).format(new Date(viewYear, viewMonth, 1));
 
   const { data, isLoading } = useQuery({
     queryKey: ['launches-calendar', viewYear, viewMonth],
     queryFn: async () => {
-      // Fetch launches for the view month + padding
-      const startOfMonth = new Date(viewYear, viewMonth, 1).toISOString();
-      const endOfMonth = new Date(viewYear, viewMonth + 1, 0, 23, 59, 59).toISOString();
-
       const params = new URLSearchParams({
         year: viewYear.toString(),
         limit: '500',
@@ -159,24 +172,24 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
         <div className="flex items-center gap-3">
           <CalendarIcon className="w-6 h-6 text-cosmic-blue" />
           <h2 className="text-xl font-bold text-star-white">
-            {viewYear} 年 {viewMonth + 1} 月
+            {monthTitle}
           </h2>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" onClick={goToToday}>
-            今天
+            {t('today')}
           </Button>
           <button
             onClick={prevMonth}
             className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
-            aria-label="上个月"
+            aria-label={t('previousMonth')}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={nextMonth}
             className="p-2 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
-            aria-label="下个月"
+            aria-label={t('nextMonth')}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -185,14 +198,14 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
 
       {/* Loading */}
       {isLoading && (
-        <div className="text-center py-12 text-star-dim">加载中...</div>
+        <div className="py-12 text-center text-star-dim">{pageT('loading')}</div>
       )}
 
       {/* Calendar Grid */}
-      <div className="bg-space-800 rounded-xl border border-space-600 overflow-hidden">
+      <div className="hidden overflow-hidden rounded-lg border border-space-600 bg-space-800 md:block">
         {/* Weekday headers */}
         <div className="grid grid-cols-7 border-b border-space-600">
-          {WEEKDAYS.map((day) => (
+          {weekdays.map((day) => (
             <div
               key={day}
               className="py-3 text-center text-sm font-medium text-star-dim"
@@ -247,11 +260,11 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
 
                 {/* Launch dots */}
                 <div className="mt-1 space-y-0.5 max-h-[60px] md:max-h-[80px] overflow-y-auto">
-                  {launches.slice(0, 4).map((launch, i) => (
+                  {launches.slice(0, 4).map((launch) => (
                     <div
                       key={launch.id}
                       className="flex items-center gap-1.5 min-w-0"
-                      title={`${launch.name} - ${STATUS_LABELS[launch.status] || launch.status}`}
+                      title={`${displayLaunchName(launch.name, locale, overviewT('unknownPayload'))} - ${statusT(launch.status)}`}
                     >
                       <span
                         className={cn(
@@ -260,13 +273,13 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
                         )}
                       />
                       <span className="text-xs text-star-dim truncate">
-                        {launch.name}
+                        {displayLaunchName(launch.name, locale, overviewT('unknownPayload'))}
                       </span>
                     </div>
                   ))}
                   {launches.length > 4 && (
                     <span className="text-xs text-cosmic-blue">
-                      +{launches.length - 4} 更多
+                      {t('moreCount', { count: launches.length - 4 })}
                     </span>
                   )}
                 </div>
@@ -278,21 +291,24 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
 
       {/* Mobile: vertical list of days */}
       <div className="mt-6 md:hidden">
-        <h3 className="text-lg font-semibold text-star-white mb-4">每日发射列表</h3>
+        <h3 className="mb-4 text-lg font-semibold text-star-white">{t('dailyList')}</h3>
         {grid.flat().some((c) => c && launchesByDay.has(`${c.getFullYear()}-${c.getMonth()}-${c.getDate()}`)) ? (
-          grid.flat().map((cell, idx) => {
+          grid.flat().map((cell) => {
             if (!cell) return null;
             const dateKey = `${cell.getFullYear()}-${cell.getMonth()}-${cell.getDate()}`;
             const launches = launchesByDay.get(dateKey);
             if (!launches || launches.length === 0) return null;
 
             return (
-              <div key={dateKey} className="mb-4 bg-space-800 rounded-xl border border-space-600 p-4">
+              <div key={dateKey} className="mb-4 rounded-lg border border-space-600 bg-space-800 p-4">
                 <h4 className="text-sm font-bold text-star-white mb-2">
-                  {cell.getMonth() + 1} 月 {cell.getDate()} 日
+                  {new Intl.DateTimeFormat(intlLocale, {
+                    month: 'long',
+                    day: 'numeric',
+                  }).format(cell)}
                   {isToday(cell) && (
                     <span className="ml-2 px-2 py-0.5 rounded-full bg-cosmic-blue/20 text-cosmic-blue text-xs">
-                      今天
+                      {t('today')}
                     </span>
                   )}
                 </h4>
@@ -306,10 +322,12 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
                         )}
                       />
                       <div className="min-w-0">
-                        <div className="text-sm text-star-white truncate">{launch.name}</div>
+                        <div className="truncate text-sm text-star-white">
+                          {displayLaunchName(launch.name, locale, overviewT('unknownPayload'))}
+                        </div>
                         <div className="text-xs text-star-dim">
-                          {STATUS_LABELS[launch.status] || launch.status}
-                          {launch.rocket && ` · ${launch.rocket.name}`}
+                          {statusT(launch.status)}
+                          {launch.rocket && ` · ${displayRocketName(launch.rocket.name, locale)}`}
                         </div>
                       </div>
                     </div>
@@ -319,7 +337,7 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
             );
           })
         ) : (
-          <div className="text-center py-8 text-star-dim">本月暂无发射任务</div>
+          <div className="py-8 text-center text-star-dim">{t('noLaunches')}</div>
         )}
       </div>
 
@@ -330,14 +348,20 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setSelectedDay(null)}
           />
-          <div className="relative bg-space-800 border border-space-600 rounded-2xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl">
+          <div className="relative max-h-[80vh] w-full max-w-lg overflow-y-auto rounded-lg border border-space-600 bg-space-800 p-5 shadow-2xl">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold text-star-white">
-                {selectedDay.getMonth() + 1} 月 {selectedDay.getDate()} 日 发射任务
+                {t('dayLaunches', {
+                  date: new Intl.DateTimeFormat(intlLocale, {
+                    month: 'long',
+                    day: 'numeric',
+                  }).format(selectedDay),
+                })}
               </h3>
               <button
                 onClick={() => setSelectedDay(null)}
                 className="p-1 rounded-lg hover:bg-space-600 text-star-dim hover:text-star-white transition-colors"
+                aria-label={t('close')}
               >
                 <X className="w-5 h-5" />
               </button>
@@ -347,59 +371,49 @@ export function LaunchCalendar({ locale }: LaunchCalendarProps) {
               {selectedLaunches.map((launch) => (
                 <div
                   key={launch.id}
-                  className="p-4 bg-space-700 rounded-xl border border-space-500"
+                  className="rounded-lg border border-space-500 bg-space-700 p-4"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Rocket className="w-4 h-4 text-cosmic-blue" />
-                    <h4 className="font-semibold text-star-white">{launch.name}</h4>
-                    <span
-                      className={cn(
-                        'ml-auto px-2 py-0.5 rounded-full text-xs font-medium',
-                        launch.status === 'SUCCESS'
-                          ? 'bg-green-400/20 text-green-400'
-                          : launch.status === 'FAILURE'
-                          ? 'bg-red-400/20 text-red-400'
-                          : launch.status === 'PLANNED'
-                          ? 'bg-cosmic-blue/20 text-cosmic-blue'
-                          : launch.status === 'POSTPONED'
-                          ? 'bg-yellow-400/20 text-yellow-400'
-                          : 'bg-cosmic-cyan/20 text-cosmic-cyan'
-                      )}
-                    >
-                      {STATUS_LABELS[launch.status] || launch.status}
-                    </span>
+                    <h4 className="min-w-0 flex-1 font-semibold text-star-white">
+                      {displayLaunchName(launch.name, locale, overviewT('unknownPayload'))}
+                    </h4>
+                    <StatusBadge status={launch.status} label={statusT(launch.status)} />
                   </div>
 
                   {launch.missionDescription && (
                     <p className="text-sm text-star-dim mb-2">
-                      {launch.missionDescription.slice(0, 150)}
-                      {launch.missionDescription.length > 150 ? '...' : ''}
+                      {displayLocalizedDescription(
+                        launch.missionDescription,
+                        locale,
+                        overviewT('waitingDetails')
+                      ).slice(0, 150)}
                     </p>
                   )}
 
                   <div className="flex flex-wrap gap-3 text-xs text-star-dim">
                     {launch.rocket && (
-                      <span>
-                        🚀 火箭: {launch.rocket.name}
+                      <span className="inline-flex items-center gap-1.5">
+                        <Rocket className="h-3.5 w-3.5" />
+                        {displayRocketName(launch.rocket.name, locale)}
                       </span>
                     )}
                     {launch.launchSite && (
-                      <span>
-                        📍 发射场: {launch.launchSite.name}
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin className="h-3.5 w-3.5" />
+                        {displaySiteName(launch.launchSite.name, locale)}
                       </span>
                     )}
                   </div>
 
                   {launch.videoUrl && (
-                    <a
-                      href={launch.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-block mt-2 text-xs text-cosmic-blue hover:underline"
-                    >
-                      观看发射录像
+                    <a href={launch.videoUrl} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-xs text-cosmic-blue hover:underline">
+                      {t('watchVideo')}
                     </a>
                   )}
+                  <Link href={`/${locale}/launches/${launch.id}`} className="ml-4 mt-3 inline-block text-xs text-cosmic-blue hover:underline">
+                    {overviewT('viewMission')}
+                  </Link>
                 </div>
               ))}
             </div>

@@ -416,7 +416,7 @@ export default async function RocketDetailPage({
                     style={{ width: `${(quality.total / quality.maxTotal) * 100}%` }} />
                 </div>
               </div>
-              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={rocket.updatedAt} />
+              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={rocket.updatedAt} locale={locale} />
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {quality.dimensions.map((dim: any) => (

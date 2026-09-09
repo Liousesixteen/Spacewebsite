@@ -69,6 +69,8 @@ export default async function IndustryOverviewPage({
           totalEquipment={industryData.totalEquipment}
           marketSize={industryData.marketSize}
           averageGrowthRate={industryData.averageGrowthRate}
+          locale={locale}
+          methodologyHref={`/${locale}/data-sources`}
           labels={{
             segments: t('segments'),
             companies: t('totalCompanies'),
@@ -83,6 +85,8 @@ export default async function IndustryOverviewPage({
             marketSize: t('marketSize'),
             marketUnit: t('marketUnit'),
             averageGrowthRate: t('averageGrowthRate'),
+            estimateNotice: t('estimateNotice'),
+            methodology: t('methodology'),
           }}
         />
       </section>

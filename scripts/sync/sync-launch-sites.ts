@@ -3,8 +3,10 @@
  * Pads are grouped by their parent location (e.g. "Cape Canaveral, FL, USA").
  */
 
+import { Prisma } from '@prisma/client';
 import { prisma } from '../../lib/db/prisma';
 import { fetchLL2List } from './lib/ll2-client';
+import { runTrackedSync } from './lib/sync-run';
 import { mapLaunchSiteStatus, slugify, descOrEmpty } from './lib/utils';
 
 interface LL2Location {
@@ -56,6 +58,10 @@ function num(v: unknown): number | null {
 }
 
 export async function syncLaunchSites(): Promise<{ added: number; updated: number; skipped: number }> {
+  return runTrackedSync('Launch Library 2: Launch Sites', syncLaunchSitesImpl);
+}
+
+async function syncLaunchSitesImpl(): Promise<{ added: number; updated: number; skipped: number }> {
   console.log('[launch-sites] Fetching pads from LL2...');
   const pads = await fetchLL2List<LL2Pad>('/pad/', { limit: 100, mode: 'detailed' }, 500);
   console.log(`[launch-sites] Got ${pads.length} pads`);
@@ -105,7 +111,7 @@ export async function syncLaunchSites(): Promise<{ added: number; updated: numbe
   let updated = 0;
   let skipped = 0;
 
-  for (const site of sites.values()) {
+  for (const site of Array.from(sites.values())) {
     const data = {
       name: site.name,
       country: site.country,
@@ -114,7 +120,7 @@ export async function syncLaunchSites(): Promise<{ added: number; updated: numbe
       longitude: site.longitude,
       operator: 'Various',
       status: mapLaunchSiteStatus('active'),
-      pads: site.pads,
+      pads: site.pads as unknown as Prisma.InputJsonValue,
       description: site.description,
     };
     try {

@@ -3,14 +3,10 @@ import { useTranslations } from 'next-intl';
 import {
   Rocket,
   Satellite,
-  Users,
   Factory,
-  Clock,
-  ArrowLeftRight,
   ArrowRight,
   Globe,
   Building2,
-  Database,
   type LucideIcon,
 } from 'lucide-react';
 import { AnimateIn } from '@/components/ui';
@@ -60,25 +56,18 @@ export function QuickNav({ locale }: QuickNavProps) {
       iconColor: 'text-cosmic-pink',
     },
     {
-      key: 'data',
-      href: `/${locale}/data-sources`,
-      icon: Database,
+      key: 'countries',
+      href: `/${locale}/countries`,
+      icon: Globe,
       gradient: 'from-cosmic-blue/10 to-cosmic-cyan/5',
       iconColor: 'text-cosmic-blue',
     },
     {
-      key: 'timeline',
-      href: `/${locale}/timeline`,
-      icon: Clock,
-      gradient: 'from-cosmic-purple/10 to-cosmic-pink/5',
+      key: 'agencies',
+      href: `/${locale}/agencies`,
+      icon: Building2,
+      gradient: 'from-cosmic-purple/10 to-blue-400/5',
       iconColor: 'text-cosmic-purple',
-    },
-    {
-      key: 'compare',
-      href: `/${locale}/compare`,
-      icon: ArrowLeftRight,
-      gradient: 'from-cosmic-cyan/10 to-cosmic-blue/5',
-      iconColor: 'text-cosmic-cyan',
     },
   ];
 

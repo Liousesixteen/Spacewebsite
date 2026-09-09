@@ -7,6 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:validate": "prisma validate",
+    "db:status": "prisma migrate status",
+    "db:deploy": "prisma migrate deploy",
     "sync": "tsx scripts/sync/index.ts",
     "sync:rockets": "tsx scripts/sync/sync-rockets.ts",
     "sync:launch-sites": "tsx scripts/sync/sync-launch-sites.ts",
@@ -22,8 +25,6 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
     "@prisma/client": "^6.19.3",
-    "@react-three/drei": "^9.122.0",
-    "@react-three/fiber": "^8.18.0",
     "@tanstack/react-query": "^5.100.9",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
@@ -37,7 +38,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^3.6.0",
-    "three": "^0.184.0",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
@@ -45,7 +45,6 @@
     "@types/node": "^20.17.12",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
-    "@types/three": "^0.184.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.28",

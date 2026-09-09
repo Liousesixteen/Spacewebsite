@@ -236,7 +236,7 @@ export default async function AgencyDetailPage({
                   />
                 </div>
               </div>
-              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={agency.lastSyncedAt} />
+              <SourceBadge tier={sourceTier} factType="OBSERVED" lastSyncedAt={agency.lastSyncedAt} locale={locale} />
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {quality.dimensions.map((dim) => (

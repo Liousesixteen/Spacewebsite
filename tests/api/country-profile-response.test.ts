@@ -11,7 +11,7 @@ const profile = {
   country: { slug: 'usa', name: 'United States' },
   industry: { countrySlug: 'usa', companyCount: 1 },
   valueChainLanes: [],
-} as CountryProfile;
+} as unknown as CountryProfile;
 
 test('country profile response returns data with shared-cache headers', async () => {
   const loadProfile: CountryProfileLoader = async () => profile;

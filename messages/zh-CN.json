@@ -5,6 +5,7 @@
   },
   "nav": {
     "home": "首页",
+    "catalog": "航天档案",
     "launches": "发射",
     "countries": "国家",
     "agencies": "机构",
@@ -19,7 +20,12 @@
     "dataSources": "数据来源",
     "notifications": "通知",
     "status": "状态",
-    "more": "更多"
+    "more": "更多",
+    "language": "语言",
+    "switchToLight": "切换到浅色模式",
+    "switchToDark": "切换到深色模式",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单"
   },
   "home": {
     "hero": {
@@ -132,7 +138,9 @@
     "of": "页/共",
     "noData": "暂无数据",
     "all": "全部",
-    "tryAgain": "重试"
+    "tryAgain": "重试",
+    "unexpectedError": "页面遇到意外问题。您可以重试，或返回其他功能继续浏览。",
+    "errorReference": "错误编号"
   },
   "auth": {
     "login": "登录",
@@ -194,10 +202,14 @@
       "loading": "加载中...",
       "failed": "加载失败",
       "empty": "暂无数据",
-    "grid": "网格",
-    "table": "列表"
+    "grid": "卡片",
+    "table": "表格",
+    "archiveTitle": "全球发射记录",
+    "archiveDescription": "按状态、国家、年份与任务字段检索全部历史和计划任务。",
+    "resultCount": "当前页 {count} 个任务"
   },
   "filters": {
+    "title": "筛选任务",
     "allStatus": "全部状态",
     "allCountries": "全部国家",
     "allYears": "全部年份",
@@ -230,6 +242,10 @@
       "noUpcoming": "暂无未来30天计划发射",
       "noUpcomingSummary": "当前数据库窗口内没有计划发射；可运行同步脚本刷新 Launch Library 2 与 SpaceX 数据。",
       "waitingDetails": "等待任务详情同步。",
+      "unknownPayload": "未知载荷",
+      "countdownStarted": "已到发射时间",
+      "countdownDays": "T-{days}天 {hours}时",
+      "countdownHours": "T-{hours}时",
       "dataOffline": "数据离线",
     "launchTime": "发射时间",
     "rocket": "运载火箭",
@@ -273,6 +289,17 @@
     "noCountryStats": "暂无国家统计",
     "noProviderStats": "暂无机构统计",
     "noMissionTypeStats": "暂无任务类型统计"
+  },
+  "calendar": {
+    "today": "今天",
+    "previousMonth": "上个月",
+    "nextMonth": "下个月",
+    "dailyList": "每日发射列表",
+    "moreCount": "+{count} 个任务",
+    "noLaunches": "本月暂无发射任务",
+    "dayLaunches": "{date}发射任务",
+    "close": "关闭",
+    "watchVideo": "观看发射录像"
   },
   "detail": {
     "breadcrumb": "发射数据",
@@ -433,11 +460,84 @@
   },
   "spacecraft": {
     "title": "航天器",
-    "subtitle": "卫星、空间站、探测器与载人飞船"
+    "subtitle": "卫星、空间站、探测器与载人飞船",
+    "breadcrumb": "航天器",
+    "description": "浏览全球卫星、空间站、深空探测器与载人飞船的任务和轨道信息。",
+    "loading": "正在加载航天器数据...",
+    "failed": "航天器数据加载失败",
+    "empty": "暂无符合条件的航天器",
+    "grid": "卡片",
+    "table": "表格",
+    "noDescription": "该航天器的本地化说明尚未同步。",
+    "filters": {
+      "allTypes": "全部类型",
+      "allStatuses": "全部状态",
+      "allOrbits": "全部轨道",
+      "reset": "重置",
+      "more": "更多筛选",
+      "less": "收起筛选",
+      "namePlaceholder": "搜索航天器名称...",
+      "operatorPlaceholder": "搜索运营机构..."
+    },
+    "types": {
+      "SPACE_STATION": "空间站",
+      "SATELLITE": "卫星",
+      "PROBE": "探测器",
+      "CREWED_SPACECRAFT": "载人飞船",
+      "CARGO_SPACECRAFT": "货运飞船"
+    },
+    "statuses": {
+      "OPERATIONAL": "运行中",
+      "RETIRED": "已退役",
+      "LOST": "已失联"
+    },
+    "orbits": {
+      "LEO": "LEO - 近地轨道",
+      "MEO": "MEO - 中地球轨道",
+      "GEO": "GEO - 地球同步轨道",
+      "HEO": "HEO - 高椭圆轨道",
+      "SSO": "SSO - 太阳同步轨道",
+      "Unknown": "未知轨道"
+    }
   },
   "astronauts": {
     "title": "宇航员",
-    "subtitle": "走进太空英雄的故事"
+    "subtitle": "走进太空英雄的故事",
+    "breadcrumb": "宇航员",
+    "description": "查看全球宇航员、航天员与宇航员候选人的机构、飞行次数和累计在轨时间。",
+    "loading": "正在加载宇航员数据...",
+    "failed": "宇航员数据加载失败",
+    "empty": "暂无符合条件的宇航员",
+    "grid": "卡片",
+    "table": "表格",
+    "flightCount": "{count} 次飞行",
+    "filters": {
+      "allCountries": "全部国家",
+      "allAgencies": "全部机构",
+      "allStatuses": "全部状态",
+      "reset": "重置",
+      "more": "更多筛选",
+      "less": "收起筛选",
+      "namePlaceholder": "搜索宇航员姓名...",
+      "flightCount": "飞行次数",
+      "minimum": "最小",
+      "maximum": "最大"
+    },
+    "statuses": {
+      "ACTIVE": "现役",
+      "RETIRED": "已退役",
+      "DECEASED": "已故"
+    },
+    "countries": {
+      "USA": "美国",
+      "China": "中国",
+      "Russia": "俄罗斯",
+      "Japan": "日本",
+      "India": "印度",
+      "Germany": "德国",
+      "France": "法国",
+      "UK": "英国"
+    }
   },
   "industry": {
     "title": "航天产业链",
@@ -465,9 +565,11 @@
     "technologiesUnit": "项",
     "materialsUnit": "种",
     "equipmentUnit": "种",
-    "marketSize": "全球市场规模",
-    "marketUnit": "亿美元",
-    "averageGrowthRate": "平均年增长率",
+    "marketSize": "产业环节市场估算合计",
+    "marketUnit": "十亿美元",
+    "averageGrowthRate": "细分市场平均增长率",
+    "estimateNotice": "市场金额和增速来自当前分类库中的内部区间估算；产业环节可能重叠，不应视为经审计的全球市场总量。",
+    "methodology": "查看数据口径",
     "levels": {
       "UPSTREAM": "上游",
       "MIDSTREAM": "中游",
@@ -486,7 +588,60 @@
     "allCountries": "全部国家/地区",
     "updating": "更新中",
     "noCoverage": "该产业带暂无收录环节",
-    "sourceUnavailable": "产业链数据库暂时不可用，分类框架和导航仍可继续使用。"
+    "sourceUnavailable": "产业链数据库暂时不可用，分类框架和导航仍可继续使用。",
+    "companyList": {
+      "industry": "产业链",
+      "title": "航天企业",
+      "description": "按国家、企业类型与产业环节浏览全球航天产业链参与者。",
+      "allCountries": "全部国家/地区",
+      "allTypes": "全部企业类型",
+      "segmentActive": "已应用产业环节筛选",
+      "founded": "成立于 {year} 年",
+      "noDescription": "该企业的本地化说明尚未同步。",
+      "types": {
+        "STATE_OWNED": "国有企业",
+        "PRIVATE": "民营企业",
+        "PUBLIC": "上市公司",
+        "STARTUP": "初创企业"
+      },
+      "countries": {
+        "China": "中国",
+        "USA": "美国",
+        "Russia": "俄罗斯",
+        "Europe": "欧洲",
+        "Japan": "日本",
+        "India": "印度"
+      }
+    },
+    "companyDetail": {
+      "unavailableTitle": "企业数据暂时不可用",
+      "unavailableDescription": "企业数据服务正在恢复中，请稍后再试。",
+      "backToCompanies": "返回企业列表",
+      "basicInfo": "基本信息",
+      "founded": "成立于 {year} 年",
+      "employees": "员工：{count}",
+      "revenue": "营收：{amount}",
+      "website": "官方网站",
+      "segments": "产业环节",
+      "overview": "企业简介",
+      "products": "主要产品",
+      "capabilities": "核心能力",
+      "achievements": "主要成就",
+      "dataQuality": "数据质量",
+      "overallScore": "综合评分",
+      "relatedTechnologies": "相关技术",
+      "peerCompanies": "同国家企业",
+      "noDescription": "该企业的本地化说明尚未同步。",
+      "quality": {
+        "sourceAuthority": "来源权威性",
+        "freshness": "数据新鲜度",
+        "completeness": "核心字段完整度",
+        "consistency": "多源一致性",
+        "editorialReview": "编辑审核",
+        "relationshipVerification": "关系可验证性",
+        "score": "{score}/{max} 分"
+      }
+    }
   },
   "explore": {
     "title": "深空探索",
@@ -526,9 +681,24 @@
     "source": "数据源",
     "refreshInterval": "刷新周期",
     "domainUnavailable": "查询失败",
+    "statusHealthy": "正常",
+    "statusStale": "延迟",
+    "statusEmpty": "空",
+    "statusUnavailable": "不可用",
+    "statusDegraded": "部分降级",
+    "domainLaunches": "发射数据",
+    "domainAgencies": "航天机构",
+    "domainRockets": "火箭",
+    "domainLaunchSites": "发射场",
+    "domainAstronauts": "宇航员",
+    "domainSpacecraft": "航天器",
+    "lastSyncRun": "最近同步：{status}，变更 {changed} 条",
+    "syncSucceeded": "成功",
+    "syncFailed": "失败",
     "sourceRegistry": "数据源说明",
     "ll2Description": "Launch Library 2 是全球最全面的火箭发射数据库，由 TheSpaceDevs 维护，提供发射任务、机构、火箭、发射场、宇航员和航天器的标准化数据。",
     "syncFrequency": "刷新频率",
+    "syncSchedule": "发射 6小时 / 机构 24小时 / 火箭 24小时 / 发射场 7天 / 宇航员 7天 / 航天器 7天",
     "accuracyNotice": "数据准确性声明",
     "accuracyNoticeText": "发射计划可能因天气、技术问题等原因随时变更。SpaceData 努力保持数据及时更新，但不保证绝对准确。对于关键任务决策，请直接查阅发射机构官方信息。如果您发现任何数据错误，欢迎通过客服渠道报告。"
   },

@@ -37,9 +37,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/countries',
     '/spacecraft',
     '/astronauts',
-    '/explore',
-    '/explore/satellites',
-    '/explore/solar-system',
     '/industry',
     '/industry/companies',
     '/industry/technologies',
@@ -53,8 +50,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/rockets',
     '/notifications',
     '/status',
-    '/timeline',
-    '/compare',
   ];
 
   const staticEntries = LOCALES.flatMap((locale) =>

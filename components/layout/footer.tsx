@@ -17,14 +17,12 @@ export function Footer({ locale }: FooterProps) {
       { label: t('nav.rockets'), href: `/${locale}/rockets` },
       { label: t('nav.spacecraft'), href: `/${locale}/spacecraft` },
       { label: t('nav.industry'), href: `/${locale}/industry` },
-      { label: t('nav.astronauts'), href: `/${locale}/astronauts` },
     ],
     explore: [
       { label: t('nav.countries'), href: `/${locale}/countries` },
       { label: t('nav.agencies'), href: `/${locale}/agencies` },
-      { label: t('nav.timeline'), href: `/${locale}/timeline` },
-      { label: t('nav.compare'), href: `/${locale}/compare` },
-      { label: t('nav.explore'), href: `/${locale}/explore` },
+      { label: t('nav.astronauts'), href: `/${locale}/astronauts` },
+      { label: t('nav.notifications'), href: `/${locale}/notifications` },
     ],
     company: [
       { label: t('legal.about'), href: `/${locale}/about` },
